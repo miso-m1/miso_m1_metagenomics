@@ -14,13 +14,16 @@ library("readxl")       # necessary to import the data from Excel file
 library("dplyr")        # filter and reformat data frames
 library("tibble")       # Needed for converting column to row names
 ```
+
 ## Abstract
+
 Metagenomic data analysis is crucial for understanding microbial communities. This document outlines the statistical methods used to analyze metagenomic datasets, including diversity metrics, differential abundance testing, and multivariate analyses.
 
 ## Introduction
+
 Metagenomics involves the study of genetic material recovered directly from environmental samples. Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality. This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.
 
-## Data 
+## Data
 
 ```{r}
 #| label: load-data
@@ -59,6 +62,7 @@ total = median(sample_sums(carbom))
 ```
 
 ## Statistical summary
+
 ```{r}
 #| label: stats-summary
 #| include: true
@@ -67,3 +71,11 @@ summary(carbom)
 
 ```
 
+```{r}
+theme_set(theme_bw())
+gp.ch = subset_taxa(carbom, Phylum == "Actinobacteria")
+carbom_france = subset_samples(carbom, country == "france")
+carbom_france = prune_samples(axa_sums(carbom_france) > 0, carbom_france)
+plot_bar(gp.ch)
+
+```
