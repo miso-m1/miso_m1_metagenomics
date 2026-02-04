@@ -73,9 +73,14 @@ summary(carbom)
 
 ```{r}
 theme_set(theme_bw())
-gp.ch = subset_taxa(carbom, Phylum == "Actinobacteria")
+gp.ch = subset_samples(carbom, country = "france")
+?subset_samples
 carbom_france = subset_samples(carbom, country == "france")
-carbom_france = prune_samples(axa_sums(carbom_france) > 0, carbom_france)
+carbom_france <- prune_taxa(
+  taxa_sums(carbom_france) > 0,
+  carbom_france
+)
 plot_bar(gp.ch)
-
+p = plot_bar(gp.ch, "disease", fill="Family", facet_grid=gender~country)
+p + geom_bar(aes(color=Family, fill=Family), stat="identity", position="stack")
 ```
