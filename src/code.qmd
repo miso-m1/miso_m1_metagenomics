@@ -73,7 +73,7 @@ summary(carbom)
 
 ```{r}
 theme_set(theme_bw())
-gp.ch = subset_samples(carbom, country = "france")
+gp.ch = subset_taxa(carbom, Phylum == "Bacteroidetes")
 ?subset_samples
 carbom_france = subset_samples(carbom, country == "france")
 carbom_france <- prune_taxa(
@@ -81,6 +81,36 @@ carbom_france <- prune_taxa(
   carbom_france
 )
 plot_bar(gp.ch)
-p = plot_bar(gp.ch, "disease", fill="Family", facet_grid=gender~country)
-p + geom_bar(aes(color=Family, fill=Family), stat="identity", position="stack")
+p = plot_bar(carbom, "disease", fill="Phylum", facet_grid=gender~country) + geom_bar(aes(color=Phylum, fill=Phylum), stat="identity", position="stack")
+
+ggsave(
+  filename = "Phylum abundance between country, sex and disease.png",
+  plot = p,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
+tax <- tax_table(carbom)
+phy <- tax[, "Phylum"]
+mat_bin <- (otu_mat > 0) * 1
+prev <- rowSums(mat_bin) / ncol(mat_bin)
+df_prev <- data.frame(
+  Phylum = phy,
+  Prevalence = prev
+)
+df_prev_phy <- df_prev %>%
+  group_by(Phylum) %>%
+  summarise(Prevalence = mean(Prevalence)) %>%
+  arrange(desc(Prevalence))
+h <- ggplot(df_prev_phy, aes(x = reorder(Phylum, Prevalence), y = Prevalence)) + xlab("Phylum") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal()
+ggsave(
+  filename = "Phylum prevalence.png",
+  plot = h,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
 ```
