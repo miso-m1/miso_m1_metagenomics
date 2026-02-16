@@ -71,6 +71,7 @@ summary(carbom)
 
 ```
 
-## Plots
+```{r}
+typeof(otu_mat)
 
-#plots
+```
