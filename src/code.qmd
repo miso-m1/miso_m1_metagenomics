@@ -73,5 +73,12 @@ summary(carbom)
 
 ```{r}
 typeof(otu_mat)
+#type is double (double precision floating point numbers)
+```
+
+```{r}
+which(colSums(otu_mat != 0) == 0)
+summary(colSums(otu_mat))
+#there is no column of samples with only zeroes.
 
 ```
