@@ -108,9 +108,151 @@ h <- ggplot(df_prev_phy, aes(x = reorder(Phylum, Prevalence), y = Prevalence)) +
   theme_minimal()
 ggsave(
   filename = "Phylum prevalence.png",
+  bg = "white",
   plot = h,
   width = 8,
   height = 6,
   dpi = 300
 )
+```
+
+```{r}
+# Statistiques préliminaires
+taxa <- taxa_names(carbom)
+head(taxa)
+tax_df <- as.data.frame(tax_table(carbom))
+colnames(tax_df)
+ncol(tax_df)
+colSums(is.na(tax_df))
+colSums(tax_df == "")
+tax_df[!complete.cases(tax_df), ]
+str(tax_table(carbom))
+#Ici on voit qu'on a aps de valeurs de taxonomie manquante, que tout les OTUs ont bien les 7 niveaux remplis
+
+#Analyse statistqiue descriptive au nieavu des échantillons 
+otu <- as.data.frame(otu_table(carbom))
+
+# si les taxa ne sont pas en lignes
+if (!taxa_are_rows(carbom)) {
+  otu <- t(otu)
+}
+#somme totale des reads
+library_size <- colSums(otu)
+#Nombre d'OTU observés = richesse brute
+richesse <- colSums(otu > 0)
+#Abondance moyenne par échantillons
+mean_abundance <- colMeans(otu)
+#Ecart-type par échantillons
+sd_abundance <- apply(otu, 2, sd)
+#Tableau récapitulatif
+stats_samples <- data.frame(
+  LibrarySize = library_size,
+  Richness = richesse,
+  MeanAbundance = mean_abundance,
+  SDAbundance = sd_abundance
+)
+```
+
+```{r}
+# 1️⃣ Extraire la matrice OTU
+otu <- as.data.frame(otu_table(carbom))
+if (!taxa_are_rows(carbom)) {
+  otu <- t(otu)
+}
+
+# 2️⃣ Calculer stats par échantillon
+library_size <- colSums(otu)
+richness <- colSums(otu > 0)
+mean_abundance <- colMeans(otu)
+sd_abundance <- apply(otu, 2, sd)
+
+stats_samples <- data.frame(
+  LibrarySize = library_size,
+  Richness = richness,
+  MeanAbundance = mean_abundance,
+  SDAbundance = sd_abundance
+)
+
+# Assigner les noms d'échantillons
+rownames(stats_samples) <- colnames(otu)
+
+# 3️⃣ Fonction pour détecter les outliers IQR
+detect_iqr_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25)
+  Q3 <- quantile(x, 0.75)
+  IQR_val <- IQR(x)
+  lower <- Q1 - 1.5 * IQR_val
+  upper <- Q3 + 1.5 * IQR_val
+  
+  outlier_flag <- (x < lower) | (x > upper)
+  outlier_samples <- names(x)[outlier_flag]
+  
+  list(
+    outlier_flag = outlier_flag,
+    outlier_samples = outlier_samples,
+    lower = lower,
+    upper = upper
+  )
+}
+
+# 4️⃣ Appliquer pour chaque métrique et visualiser
+metrics <- colnames(stats_samples)
+par(mfrow = c(1,1))  # un seul plot  # 2x2 plots
+
+for (m in metrics) {
+  x <- stats_samples[[m]]
+  names(x) <- rownames(stats_samples)
+  res <- detect_iqr_outliers(x)
+  
+  # Marquer les outliers dans le tableau
+  stats_samples[[paste0("Outlier_", m)]] <- res$outlier_flag
+  
+  # Boxplot avec bornes et points outliers
+  boxplot(x, main=paste0(m, " distribution"),
+          ylab=m, outline=FALSE)
+  abline(h=res$lower, col="red", lty=2)
+  abline(h=res$upper, col="red", lty=2)
+  
+  # Ajouter les points outliers et noms
+  if(length(res$outlier_samples) > 0){
+    points(which(res$outlier_flag), x[res$outlier_flag],
+           col="blue", pch=19)
+    text(which(res$outlier_flag), x[res$outlier_flag],
+         labels=res$outlier_samples, pos=4, cex=0.7)
+    cat("Outliers for", m, ":\n")
+    print(res$outlier_samples)
+  } else {
+    cat("No outliers detected for", m, "\n")
+  }
+}
+
+par(mfrow = c(1,1))  # remettre l’affichage normal
+
+# 5️⃣ Tableau final
+stats_samples
+```
+
+```{r}
+par(mfrow=c(1,1))
+boxplot(stats_samples$LibrarySize, main="Library Size")
+boxplot(stats_samples$Richness, main="Observed OTU Richness")
+boxplot(stats_samples$MeanAbundance, main="Mean OTU Abundance")
+boxplot(stats_samples$SDAbundance, main="SD OTU Abundance")
+par(mfrow=c(1,1))
+
+# ordination PCoA Bray-Curtis
+dist_bc <- distance(carbom, method="bray")
+ordination <- ordinate(carbom, method="PCoA", distance=dist_bc)
+
+p <- plot_ordination(carbom, ordination, color="disease")
+
+# affichage à l'écran (optionnel)
+p
+
+# sauvegarde directe
+chemin <- "/Users/paullemonnier/Desktop/Master_MISO/Master 1/S2/Projet BiLille/m1-project/graphs/PCoA_BrayCurtis.png"
+# sauvegarder le graphique ggplot
+ggsave(filename = chemin, plot = p, width = 8, height = 6, dpi = 300)
+
+
 ```
