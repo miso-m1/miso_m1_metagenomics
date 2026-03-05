@@ -1,0 +1,284 @@
+---
+title: "report"
+format: html
+editor: visual
+---
+
+## Abstract
+
+Metagenomic data analysis is crucial for understanding microbial communities. This document outlines the statistical methods used to analyze metagenomic data sets, including diversity metrics, differential abundance testing, and multivariate analyses on the gene content of the human gut microbiome and the enzymes encoded by these genes. The data set retrieved from Kaggle uses the shotgun sequencing method to sequence the genomes of untargeted cells in a community in order to elucidate community composition and function. Since the activities of the vast majority of enzymes found in microbiomes are unknown, the use of shotgun metagenomics discovered how common antibiotic genes are in our gut bacteria.
+
+## Dataset
+https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data
+
+```{r}
+#| label: load packages
+#| include: false
+# Install required packages
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+
+# Core packages
+# BiocManager::install(c("phyloseq", "microbiome", "DESeq2"))
+# install.packages(c("tidyverse", "vegan", "ggplot2", "patchwork", "RColorBrewer"))
+
+# Load libraries
+library(phyloseq)
+library(microbiome)
+library(tidyverse)
+library(vegan)
+library(ggplot2)
+library(patchwork)
+library(RColorBrewer)
+library("readxl")
+```
+
+```{r}
+
+#| label: import-data
+#| include: true
+
+getwd()
+# Import data from Excel
+otu_mat <- read_excel("data/dataset_MISO_project.xlsx", sheet = "OTU_table")
+tax_mat <- read_excel("data/dataset_MISO_project.xlsx", sheet = "Taxonomy")
+sample_metadata <- read_excel("data/dataset_MISO_project.xlsx", sheet = "Sample_data")
+
+# Convert to matrices/dataframes for phyloseq
+# Assuming first column is OTU IDs
+otu_mat <- as.data.frame(otu_mat)
+rownames(otu_mat) <- otu_mat[,1]
+otu_mat <- otu_mat[,-1]
+otu_matrix <- as.matrix(otu_mat)
+
+# Taxonomy table
+tax_mat <- as.data.frame(tax_mat)
+rownames(tax_mat) <- tax_mat[,1]
+tax_mat <- tax_mat[,-1]
+tax_matrix <- as.matrix(tax_mat)
+
+# Sample data
+sample_metadata <- as.data.frame(sample_metadata)
+rownames(sample_metadata) <- sample_metadata[,1]
+sample_metadata <- sample_metadata[,-1]
+
+# Create phyloseq object
+OTU <- otu_table(otu_matrix, taxa_are_rows = TRUE)
+TAX <- tax_table(tax_matrix)
+SAMPLES <- sample_data(sample_metadata)
+
+# Combine into phyloseq object
+physeq <- phyloseq(OTU, TAX, SAMPLES)
+
+# Check the object
+physeq
+```
+
+## Introduction
+
+### What is Metagenomics?
+
+Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, bypassing the need to culture individual organisms in the laboratory . Instead of sequencing the genome of a single isolated species, metagenomics analyzes the collective genomes of entire microbial communities from samples such as soil, water, gut contents, or human skin
+
+Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality. This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.
+
+### What is 16S rRNA?
+
+The 16S ribosomal RNA (16S rRNA) gene is a universal phylogenetic marker found in all bacteria and archaea. It's ideal for microbial community profiling because:
+
+-   Universal presence: Found in all prokaryotes
+
+-   Conserved regions: Allow Polymerase Chain Reaction (PCR) amplification across diverse species
+
+-   Variable regions: Contain sufficient sequence variation to distinguish different taxa
+
+-   Large public databases: Extensive reference libraries (SILVA, Greengenes, RDP) exist for taxonomic assignment
+
+### Alpha Diversity
+
+Alpha diversity measures the diversity within a single sample. Think of it as "within-sample" diversity.
+
+Alpha diversity has two components:
+
+-   Richness: The number of different species/OTUs/ASVs present
+
+-   Evenness: How evenly the abundances are distributed among species
+
+Several key indices are used to quantify alpha diversity: Index, Observed OTUs, Chao1, Shannon (H'), Simpson, Inverse Simpson, Pielou's Evenness.
+
+```{r}
+#| label: alpha-diversity
+#| fig-cap: "Alpha Diversity Metrics by Sample Group"
+
+
+# First, check what variables are available in your sample data
+cat("Available sample variables:\n")
+print(sample_variables(physeq))
+
+# Calculate alpha diversity (using only Shannon and Simpson since your data has decimals)
+alpha_div <- plot_richness(physeq, 
+                           measures = c("Shannon", "Simpson"),
+                           color = "disease")  # Using disease as the grouping variable
+
+# Add boxplot overlay 
+alpha_plot <- alpha_div + 
+  geom_boxplot(aes(fill = disease), alpha = 0.3) +
+  scale_fill_brewer(palette = "Set1") +
+  theme_bw(base_size = 12) +
+  labs(title = "Alpha Diversity by Disease Status",
+       x = "Disease Status",
+       y = "Diversity Index Value") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right")
+
+print(alpha_plot)
+
+
+# Extract alpha diversity values for statistical testing
+alpha_values <- estimate_richness(physeq, measures = c("Shannon", "Simpson"))
+sample_df <- as(sample_data(physeq), "data.frame")
+alpha_values$disease <- sample_df$disease
+
+# Kruskal-Wallis tests
+shannon_test <- kruskal.test(Shannon ~ disease, data = alpha_values)
+simpson_test <- kruskal.test(Simpson ~ disease, data = alpha_values)
+
+# Calculate summary statistics
+alpha_summary <- alpha_values %>%
+  group_by(disease) %>%
+  summarise(
+    n = n(),
+    Shannon_mean = mean(Shannon, na.rm = TRUE),
+    Shannon_sd = sd(Shannon, na.rm = TRUE),
+    Shannon_median = median(Shannon, na.rm = TRUE),
+    Simpson_mean = mean(Simpson, na.rm = TRUE),
+    Simpson_sd = sd(Simpson, na.rm = TRUE),
+    Simpson_median = median(Simpson, na.rm = TRUE)
+  )
+
+# Display summary table
+knitr::kable(alpha_summary, 
+             caption = "Alpha Diversity Summary Statistics by Disease Status",
+             digits = 3)
+
+# Print statistical results
+cat("\n### Statistical Analysis\n")
+cat("**Shannon Diversity:** Kruskal-Wallis chi-squared = ", 
+    round(shannon_test$statistic, 3), ", df = ", shannon_test$parameter,
+    ", p-value = ", format(shannon_test$p.value, digits = 4), "\n\n", sep = "")
+
+cat("**Simpson Diversity:** Kruskal-Wallis chi-squared = ", 
+    round(simpson_test$statistic, 3), ", df = ", simpson_test$parameter,
+    ", p-value = ", format(simpson_test$p.value, digits = 4), "\n", sep = "")
+
+# Interpretation
+cat("\n### Interpretation\n")
+if(shannon_test$p.value < 0.05) {
+  cat("Significant differences in Shannon diversity were observed between disease groups (p < 0.05). ")
+  # Find which group has higher diversity
+  if(alpha_summary$Shannon_mean[2] > alpha_summary$Shannon_mean[1]) {
+    cat("The disease group shows higher microbial diversity compared to controls.\n")
+  } else {
+    cat("The control group shows higher microbial diversity, suggesting dysbiosis (reduced diversity) in the disease state.\n")
+  }
+} else {
+  cat("No significant differences in Shannon diversity were detected between groups (p ≥ 0.05). ")
+  cat("This suggests that overall species diversity is similar regardless of disease status.\n")
+}
+```
+Since the shotgun metagenomic data was normalized (containing decimal values), alpha diversity was assessed using Shannon and Simpson indices, which are appropriate for relative abundance data. Richness-based metrics (Observed OTUs, Chao1) require integer count data and were therefore not included in this analysis. Statistical comparisons between disease groups were performed using the non-parametric Kruskal-Wallis test.
+
+### Beta Diversity
+
+Beta diversity measures the dissimilarity between samples. Think of it as "between-sample" diversity.
+
+Beta diversity answers questions like:
+
+-   Are gut microbiomes more similar within the same individual than between different individuals?
+
+-   Do treatment and control groups harbor distinct microbial communities?
+
+Key Distance Metrics: Bray Curtis, Jaccard, Weighted UniFrac, Unweighted UniFrac
+
+```{r}
+#| label: beta-diversity
+#| fig-cap: "Beta Diversity Ordination Plots"
+
+# Calculate distance matrices
+dist_bray <- distance(physeq, method = "bray")
+dist_jaccard <- distance(physeq, method = "jaccard")
+
+# Perform ordination (PCoA/MDS)
+ord_bray <- ordinate(physeq, method = "MDS", distance = dist_bray)
+ord_jaccard <- ordinate(physeq, method = "MDS", distance = dist_jaccard)
+
+# Create plots
+p1 <- plot_ordination(physeq, ord_bray, color = "disease") +
+  geom_point(size = 3) +
+  stat_ellipse(aes(group = disease), linetype = 2) +
+  theme_bw() +
+  ggtitle("Bray-Curtis Dissimilarity") +
+  theme(legend.position = "bottom")
+print(p1)
+
+p2 <- plot_ordination(physeq, ord_jaccard, color = "disease") +
+  geom_point(size = 3) +
+  stat_ellipse(aes(group = disease), linetype = 2) +
+  theme_bw() +
+  ggtitle("Jaccard Distance") +
+  theme(legend.position = "bottom")
+print(p2)
+
+
+# PERMANOVA tests
+set.seed(123) # For reproducibility
+
+# Bray-Curtis PERMANOVA
+permanova_bray <- adonis2(dist_bray ~ disease, data = sample_df, permutations = 999)
+
+# Jaccard PERMANOVA
+permanova_jaccard <- adonis2(dist_jaccard ~ disease, data = sample_df, permutations = 999)
+
+# Display results
+cat("\n### PERMANOVA Results\n")
+cat("**Bray-Curtis Dissimilarity:**\n")
+cat("R² = ", round(permanova_bray$R2[1], 3), 
+    ", F = ", round(permanova_bray$F[1], 2),
+    ", p-value = ", format(permanova_bray$`Pr(>F)`[1], digits = 4), "\n\n", sep = "")
+
+cat("**Jaccard Distance:**\n")
+cat("R² = ", round(permanova_jaccard$R2[1], 3), 
+    ", F = ", round(permanova_jaccard$F[1], 2),
+    ", p-value = ", format(permanova_jaccard$`Pr(>F)`[1], digits = 4), "\n", sep = "")
+
+# Beta dispersion test (assumption check)
+disp_bray <- betadisper(dist_bray, sample_df$disease)
+disp_test <- permutest(disp_bray)
+
+cat("\n### Beta Dispersion Test (Homogeneity of Variances)\n")
+cat("p-value = ", format(disp_test$tab$`Pr(>F)`[1], digits = 4), "\n")
+if(disp_test$tab$`Pr(>F)`[1] < 0.05) {
+  cat("⚠️ Warning: Groups have significantly different variances. This may affect PERMANOVA interpretation.\n")
+} else {
+  cat("✓ Assumption of homogeneous variances is met.\n")
+}
+
+# Interpretation
+cat("\n### Interpretation\n")
+if(permanova_bray$`Pr(>F)`[1] < 0.05) {
+  cat("The PERMANOVA test reveals **significant differences** in microbial community composition between disease groups (p < 0.05). ")
+  cat("Disease status explains ", round(permanova_bray$R2[1]*100, 1), "% of the variation in the microbiome. ", sep = "")
+  
+  if(permanova_bray$R2[1] > 0.3) {
+    cat("This represents a **strong effect**, indicating that disease substantially alters the overall microbial community structure.\n")
+  } else if(permanova_bray$R2[1] > 0.1) {
+    cat("This represents a **moderate effect**, suggesting that while disease influences the microbiome, other factors also play important roles.\n")
+  } else {
+    cat("This represents a **weak but significant effect**, indicating that disease has a subtle influence on community composition.\n")
+  }
+} else {
+  cat("No significant differences in community composition were detected between disease groups (p ≥ 0.05). ")
+  cat("This suggests that overall microbial community structure is similar regardless of disease status.\n")
+}
+```
+
