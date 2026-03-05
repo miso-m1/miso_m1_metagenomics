@@ -4,12 +4,11 @@ format: html
 editor: visual
 ---
 
-## Abstract
-
+# Abstract
 Metagenomic data analysis is crucial for understanding microbial communities. This document outlines the statistical methods used to analyze metagenomic data sets, including diversity metrics, differential abundance testing, and multivariate analyses on the gene content of the human gut microbiome and the enzymes encoded by these genes. The data set retrieved from Kaggle uses the shotgun sequencing method to sequence the genomes of untargeted cells in a community in order to elucidate community composition and function. Since the activities of the vast majority of enzymes found in microbiomes are unknown, the use of shotgun metagenomics discovered how common antibiotic genes are in our gut bacteria.
 
-## Dataset
-https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data
+# Dataset
+<https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data>
 
 ```{r}
 #| label: load packages
@@ -74,15 +73,15 @@ physeq <- phyloseq(OTU, TAX, SAMPLES)
 physeq
 ```
 
-## Introduction
+# Introduction
 
-### What is Metagenomics?
+## What is Metagenomics?
 
 Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, bypassing the need to culture individual organisms in the laboratory . Instead of sequencing the genome of a single isolated species, metagenomics analyzes the collective genomes of entire microbial communities from samples such as soil, water, gut contents, or human skin
 
 Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality. This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.
 
-### What is 16S rRNA?
+## What is 16S rRNA?
 
 The 16S ribosomal RNA (16S rRNA) gene is a universal phylogenetic marker found in all bacteria and archaea. It's ideal for microbial community profiling because:
 
@@ -94,7 +93,7 @@ The 16S ribosomal RNA (16S rRNA) gene is a universal phylogenetic marker found i
 
 -   Large public databases: Extensive reference libraries (SILVA, Greengenes, RDP) exist for taxonomic assignment
 
-### Alpha Diversity
+## Alpha Diversity
 
 Alpha diversity measures the diversity within a single sample. Think of it as "within-sample" diversity.
 
@@ -104,7 +103,7 @@ Alpha diversity has two components:
 
 -   Evenness: How evenly the abundances are distributed among species
 
-Several key indices are used to quantify alpha diversity: Index, Observed OTUs, Chao1, Shannon (H'), Simpson, Inverse Simpson, Pielou's Evenness.
+Several key indices are used to quantify alpha diversity: Shannon and Simpson
 
 ```{r}
 #| label: alpha-diversity
@@ -118,15 +117,15 @@ print(sample_variables(physeq))
 # Calculate alpha diversity (using only Shannon and Simpson since your data has decimals)
 alpha_div <- plot_richness(physeq, 
                            measures = c("Shannon", "Simpson"),
-                           color = "disease")  # Using disease as the grouping variable
+                           color = "disease")  # Using disease as the grouping variable. Change to another variable if needed.
 
 # Add boxplot overlay 
 alpha_plot <- alpha_div + 
   geom_boxplot(aes(fill = disease), alpha = 0.3) +
   scale_fill_brewer(palette = "Set1") +
   theme_bw(base_size = 12) +
-  labs(title = "Alpha Diversity by Disease Status",
-       x = "Disease Status",
+  labs(title = "Alpha Diversity by disease Status",
+       x = "disease Status",
        y = "Diversity Index Value") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "right")
@@ -139,30 +138,19 @@ alpha_values <- estimate_richness(physeq, measures = c("Shannon", "Simpson"))
 sample_df <- as(sample_data(physeq), "data.frame")
 alpha_values$disease <- sample_df$disease
 
+# ANOVA test 
+anova_shannon <- aov(Shannon ~ disease, data = alpha_values)
+anova_simpson <- aov(Simpson ~ disease, data = alpha_values)
+
+
 # Kruskal-Wallis tests
 shannon_test <- kruskal.test(Shannon ~ disease, data = alpha_values)
 simpson_test <- kruskal.test(Simpson ~ disease, data = alpha_values)
 
-# Calculate summary statistics
-alpha_summary <- alpha_values %>%
-  group_by(disease) %>%
-  summarise(
-    n = n(),
-    Shannon_mean = mean(Shannon, na.rm = TRUE),
-    Shannon_sd = sd(Shannon, na.rm = TRUE),
-    Shannon_median = median(Shannon, na.rm = TRUE),
-    Simpson_mean = mean(Simpson, na.rm = TRUE),
-    Simpson_sd = sd(Simpson, na.rm = TRUE),
-    Simpson_median = median(Simpson, na.rm = TRUE)
-  )
-
-# Display summary table
-knitr::kable(alpha_summary, 
-             caption = "Alpha Diversity Summary Statistics by Disease Status",
-             digits = 3)
 
 # Print statistical results
-cat("\n### Statistical Analysis\n")
+cat("\n### Kruskal-Wallis results\n")
+
 cat("**Shannon Diversity:** Kruskal-Wallis chi-squared = ", 
     round(shannon_test$statistic, 3), ", df = ", shannon_test$parameter,
     ", p-value = ", format(shannon_test$p.value, digits = 4), "\n\n", sep = "")
@@ -171,24 +159,44 @@ cat("**Simpson Diversity:** Kruskal-Wallis chi-squared = ",
     round(simpson_test$statistic, 3), ", df = ", simpson_test$parameter,
     ", p-value = ", format(simpson_test$p.value, digits = 4), "\n", sep = "")
 
-# Interpretation
-cat("\n### Interpretation\n")
-if(shannon_test$p.value < 0.05) {
-  cat("Significant differences in Shannon diversity were observed between disease groups (p < 0.05). ")
-  # Find which group has higher diversity
-  if(alpha_summary$Shannon_mean[2] > alpha_summary$Shannon_mean[1]) {
-    cat("The disease group shows higher microbial diversity compared to controls.\n")
-  } else {
-    cat("The control group shows higher microbial diversity, suggesting dysbiosis (reduced diversity) in the disease state.\n")
-  }
-} else {
-  cat("No significant differences in Shannon diversity were detected between groups (p ≥ 0.05). ")
-  cat("This suggests that overall species diversity is similar regardless of disease status.\n")
-}
-```
-Since the shotgun metagenomic data was normalized (containing decimal values), alpha diversity was assessed using Shannon and Simpson indices, which are appropriate for relative abundance data. Richness-based metrics (Observed OTUs, Chao1) require integer count data and were therefore not included in this analysis. Statistical comparisons between disease groups were performed using the non-parametric Kruskal-Wallis test.
+cat("\n### ANOVA Results\n")
+summary(anova_shannon)
+summary(anova_simpson)
 
-### Beta Diversity
+
+```
+Note: Since the shotgun metagenomic data was normalized (containing decimal values), alpha diversity was assessed using Shannon and Simpson indices, which are appropriate for relative abundance data. Richness-based metrics (Observed OTUs, Chao1) require integer count data and were therefore not included in this analysis. Statistical comparisons between disease groups were performed using the non-parametric Kruskal-Wallis test.
+
+### Interpretation
+Both alpha diversity metrics show highly significant differences among the four disease groups:
+
+- Shannon Diversity: Kruskal-Wallis test (p = 4.21e-14) and ANOVA (p = 2.69e-12) both confirm extremely significant differences
+
+- Simpson Diversity: Kruskal-Wallis test (p = 1.93e-12) and ANOVA (p = 1.82e-06) also show highly significant differences
+
+For Shannon Diversity:
+
+- The disease grouping explains a substantial portion of the variance
+
+- F-statistic = 20.12 indicates strong group separation
+
+- Mean squares: Between groups (3.833) vs. Within groups (0.191) - groups differ by ~20x more than within-group variability, indicating a strong effect of disease status on Shannon diversity
+
+For Simpson Diversity:
+
+- It's more modest but still significant effect
+
+- F-statistic = 10.1
+
+- Mean squares: Between groups (0.062) vs. Within groups (0.006)
+
+Both parametric (ANOVA) and non-parametric (Kruskal-Wallis) tests agree, strengthening confidence in the findings. This is important because Kruskal-Wallis doesn't assume normal distribution while ANOVA does.
+
+Overall, the disease status significantly impacts gut microbiome diversity. Shannon diversity (which emphasizes richness and evenness) shows stronger group differences than Simpson diversity (which emphasizes dominance). This suggests the disease groups differ more in terms of overall species richness and evenness rather than just dominant species
+
+
+
+## Beta Diversity
 
 Beta diversity measures the dissimilarity between samples. Think of it as "between-sample" diversity.
 
@@ -198,11 +206,11 @@ Beta diversity answers questions like:
 
 -   Do treatment and control groups harbor distinct microbial communities?
 
-Key Distance Metrics: Bray Curtis, Jaccard, Weighted UniFrac, Unweighted UniFrac
-
+Key Distance Metrics: Bray Curtis and Jaccard
 ```{r}
 #| label: beta-diversity
 #| fig-cap: "Beta Diversity Ordination Plots"
+#| include: true
 
 # Calculate distance matrices
 dist_bray <- distance(physeq, method = "bray")
@@ -231,8 +239,6 @@ print(p2)
 
 
 # PERMANOVA tests
-set.seed(123) # For reproducibility
-
 # Bray-Curtis PERMANOVA
 permanova_bray <- adonis2(dist_bray ~ disease, data = sample_df, permutations = 999)
 
@@ -257,28 +263,16 @@ disp_test <- permutest(disp_bray)
 
 cat("\n### Beta Dispersion Test (Homogeneity of Variances)\n")
 cat("p-value = ", format(disp_test$tab$`Pr(>F)`[1], digits = 4), "\n")
-if(disp_test$tab$`Pr(>F)`[1] < 0.05) {
-  cat("⚠️ Warning: Groups have significantly different variances. This may affect PERMANOVA interpretation.\n")
-} else {
-  cat("✓ Assumption of homogeneous variances is met.\n")
-}
 
-# Interpretation
-cat("\n### Interpretation\n")
-if(permanova_bray$`Pr(>F)`[1] < 0.05) {
-  cat("The PERMANOVA test reveals **significant differences** in microbial community composition between disease groups (p < 0.05). ")
-  cat("Disease status explains ", round(permanova_bray$R2[1]*100, 1), "% of the variation in the microbiome. ", sep = "")
-  
-  if(permanova_bray$R2[1] > 0.3) {
-    cat("This represents a **strong effect**, indicating that disease substantially alters the overall microbial community structure.\n")
-  } else if(permanova_bray$R2[1] > 0.1) {
-    cat("This represents a **moderate effect**, suggesting that while disease influences the microbiome, other factors also play important roles.\n")
-  } else {
-    cat("This represents a **weak but significant effect**, indicating that disease has a subtle influence on community composition.\n")
-  }
-} else {
-  cat("No significant differences in community composition were detected between disease groups (p ≥ 0.05). ")
-  cat("This suggests that overall microbial community structure is similar regardless of disease status.\n")
-}
 ```
+Interpretation:
+Both beta diversity metrics show significant compositional differences between disease groups:
 
+* Bray-Curtis: R² = 0.087, F = 15.23, p = 0.001
+  + Moderate effect size in microbiome studies
+  + Disease status explains ~8.7% of the variation in microbial community structure (considering both presence/absence and abundance)
+
+* Jaccard: R² = 0.056, F = 9.41, p = 0.001
+  + Smaller but still significant effect
+  + Based purely on presence/absence of species
+  + The lower R² suggests that abundance patterns (captured by Bray-Curtis) differentiate groups better than just species occurrence

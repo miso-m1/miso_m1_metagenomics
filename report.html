@@ -99,13 +99,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="abstract" class="level2">
-<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
 <p>Metagenomic data analysis is crucial for understanding microbial communities. This document outlines the statistical methods used to analyze metagenomic data sets, including diversity metrics, differential abundance testing, and multivariate analyses on the gene content of the human gut microbiome and the enzymes encoded by these genes. The data set retrieved from Kaggle uses the shotgun sequencing method to sequence the genomes of untargeted cells in a community in order to elucidate community composition and function. Since the activities of the vast majority of enzymes found in microbiomes are unknown, the use of shotgun metagenomics discovered how common antibiotic genes are in our gut bacteria.</p>
 </section>
-<section id="dataset" class="level2">
-<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p>https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data</p>
+<section id="dataset" class="level1">
+<h1>Dataset</h1>
+<p><a href="https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data" class="uri">https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data</a></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: import-data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: true</span></span>
@@ -155,15 +155,15 @@ tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
 </div>
 </section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<section id="what-is-metagenomics" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-metagenomics">What is Metagenomics?</h3>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="what-is-metagenomics" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-metagenomics">What is Metagenomics?</h2>
 <p>Metagenomics is the study of genetic material recovered directly from environmental or clinical samples, bypassing the need to culture individual organisms in the laboratory . Instead of sequencing the genome of a single isolated species, metagenomics analyzes the collective genomes of entire microbial communities from samples such as soil, water, gut contents, or human skin</p>
 <p>Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality. This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.</p>
 </section>
-<section id="what-is-16s-rrna" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-16s-rrna">What is 16S rRNA?</h3>
+<section id="what-is-16s-rrna" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-16s-rrna">What is 16S rRNA?</h2>
 <p>The 16S ribosomal RNA (16S rRNA) gene is a universal phylogenetic marker found in all bacteria and archaea. It’s ideal for microbial community profiling because:</p>
 <ul>
 <li><p>Universal presence: Found in all prokaryotes</p></li>
@@ -172,15 +172,15 @@ tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
 <li><p>Large public databases: Extensive reference libraries (SILVA, Greengenes, RDP) exist for taxonomic assignment</p></li>
 </ul>
 </section>
-<section id="alpha-diversity" class="level3">
-<h3 class="anchored" data-anchor-id="alpha-diversity">Alpha Diversity</h3>
+<section id="alpha-diversity" class="level2">
+<h2 class="anchored" data-anchor-id="alpha-diversity">Alpha Diversity</h2>
 <p>Alpha diversity measures the diversity within a single sample. Think of it as “within-sample” diversity.</p>
 <p>Alpha diversity has two components:</p>
 <ul>
 <li><p>Richness: The number of different species/OTUs/ASVs present</p></li>
 <li><p>Evenness: How evenly the abundances are distributed among species</p></li>
 </ul>
-<p>Several key indices are used to quantify alpha diversity: Index, Observed OTUs, Chao1, Shannon (H’), Simpson, Inverse Simpson, Pielou’s Evenness.</p>
+<p>Several key indices are used to quantify alpha diversity: Shannon and Simpson</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, check what variables are available in your sample data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Available sample variables:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -196,7 +196,7 @@ tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate alpha diversity (using only Shannon and Simpson since your data has decimals)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>alpha_div <span class="ot">&lt;-</span> <span class="fu">plot_richness</span>(physeq, </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Shannon"</span>, <span class="st">"Simpson"</span>),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> <span class="st">"disease"</span>)  <span class="co"># Using disease as the grouping variable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> <span class="st">"disease"</span>)  <span class="co"># Using disease as the grouping variable. Change to another variable if needed.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in estimate_richness(physeq, split = TRUE, measures = measures): The data you have provided does not have
 any singletons. This is highly suspicious. Results of richness
@@ -217,8 +217,8 @@ We recommended that you find the un-trimmed data and retry.</code></pre>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> disease), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="sc">+</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Alpha Diversity by Disease Status"</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Disease Status"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Alpha Diversity by disease Status"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"disease Status"</span>,</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Diversity Index Value"</span>) <span class="sc">+</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"right"</span>)</span>
@@ -245,165 +245,106 @@ We recommended that you find the un-trimmed data and retry.</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sample_df <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">sample_data</span>(physeq), <span class="st">"data.frame"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>alpha_values<span class="sc">$</span>disease <span class="ot">&lt;-</span> sample_df<span class="sc">$</span>disease</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kruskal-Wallis tests</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>shannon_test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(Shannon <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>simpson_test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(Simpson <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ANOVA test </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>anova_shannon <span class="ot">&lt;-</span> <span class="fu">aov</span>(Shannon <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>anova_simpson <span class="ot">&lt;-</span> <span class="fu">aov</span>(Simpson <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate summary statistics</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>alpha_summary <span class="ot">&lt;-</span> alpha_values <span class="sc">%&gt;%</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(disease) <span class="sc">%&gt;%</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Shannon_mean =</span> <span class="fu">mean</span>(Shannon, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Shannon_sd =</span> <span class="fu">sd</span>(Shannon, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Shannon_median =</span> <span class="fu">median</span>(Shannon, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Simpson_mean =</span> <span class="fu">mean</span>(Simpson, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Simpson_sd =</span> <span class="fu">sd</span>(Simpson, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Simpson_median =</span> <span class="fu">median</span>(Simpson, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display summary table</span></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(alpha_summary, </span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"Alpha Diversity Summary Statistics by Disease Status"</span>,</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Alpha Diversity Summary Statistics by Disease Status</caption>
-<colgroup>
-<col style="width: 21%">
-<col style="width: 3%">
-<col style="width: 12%">
-<col style="width: 10%">
-<col style="width: 14%">
-<col style="width: 12%">
-<col style="width: 10%">
-<col style="width: 14%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">disease</th>
-<th style="text-align: right;">n</th>
-<th style="text-align: right;">Shannon_mean</th>
-<th style="text-align: right;">Shannon_sd</th>
-<th style="text-align: right;">Shannon_median</th>
-<th style="text-align: right;">Simpson_mean</th>
-<th style="text-align: right;">Simpson_sd</th>
-<th style="text-align: right;">Simpson_median</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">cancer</td>
-<td style="text-align: right;">48</td>
-<td style="text-align: right;">3.105</td>
-<td style="text-align: right;">0.353</td>
-<td style="text-align: right;">3.133</td>
-<td style="text-align: right;">0.912</td>
-<td style="text-align: right;">0.044</td>
-<td style="text-align: right;">0.930</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">cirrhosis</td>
-<td style="text-align: right;">118</td>
-<td style="text-align: right;">2.702</td>
-<td style="text-align: right;">0.444</td>
-<td style="text-align: right;">2.792</td>
-<td style="text-align: right;">0.855</td>
-<td style="text-align: right;">0.090</td>
-<td style="text-align: right;">0.886</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ibd_ulcerative_colitis</td>
-<td style="text-align: right;">148</td>
-<td style="text-align: right;">3.050</td>
-<td style="text-align: right;">0.431</td>
-<td style="text-align: right;">3.139</td>
-<td style="text-align: right;">0.900</td>
-<td style="text-align: right;">0.074</td>
-<td style="text-align: right;">0.924</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">t2d</td>
-<td style="text-align: right;">170</td>
-<td style="text-align: right;">2.802</td>
-<td style="text-align: right;">0.457</td>
-<td style="text-align: right;">2.884</td>
-<td style="text-align: right;">0.876</td>
-<td style="text-align: right;">0.081</td>
-<td style="text-align: right;">0.902</td>
-</tr>
-</tbody>
-</table>
-<p>Alpha Diversity Metrics by Sample Group</p>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print statistical results</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Statistical Analysis</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Kruskal-Wallis tests</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>shannon_test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(Shannon <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>simpson_test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(Simpson <span class="sc">~</span> disease, <span class="at">data =</span> alpha_values)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print statistical results</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Kruskal-Wallis results</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-### Statistical Analysis</code></pre>
+### Kruskal-Wallis results</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Shannon Diversity:** Kruskal-Wallis chi-squared = "</span>, </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(shannon_test<span class="sc">$</span>statistic, <span class="dv">3</span>), <span class="st">", df = "</span>, shannon_test<span class="sc">$</span>parameter,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(shannon_test<span class="sc">$</span>p.value, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Shannon Diversity:** Kruskal-Wallis chi-squared = "</span>, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(shannon_test<span class="sc">$</span>statistic, <span class="dv">3</span>), <span class="st">", df = "</span>, shannon_test<span class="sc">$</span>parameter,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(shannon_test<span class="sc">$</span>p.value, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**Shannon Diversity:** Kruskal-Wallis chi-squared = 65.355, df = 3, p-value = 4.212e-14</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Simpson Diversity:** Kruskal-Wallis chi-squared = "</span>, </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(simpson_test<span class="sc">$</span>statistic, <span class="dv">3</span>), <span class="st">", df = "</span>, simpson_test<span class="sc">$</span>parameter,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(simpson_test<span class="sc">$</span>p.value, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Simpson Diversity:** Kruskal-Wallis chi-squared = "</span>, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(simpson_test<span class="sc">$</span>statistic, <span class="dv">3</span>), <span class="st">", df = "</span>, simpson_test<span class="sc">$</span>parameter,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(simpson_test<span class="sc">$</span>p.value, <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**Simpson Diversity:** Kruskal-Wallis chi-squared = 57.58, df = 3, p-value = 1.932e-12</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpretation</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Interpretation</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### ANOVA Results</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-### Interpretation</code></pre>
+### ANOVA Results</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(shannon_test<span class="sc">$</span>p.value <span class="sc">&lt;</span> <span class="fl">0.05</span>) {</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Significant differences in Shannon diversity were observed between disease groups (p &lt; 0.05). "</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find which group has higher diversity</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(alpha_summary<span class="sc">$</span>Shannon_mean[<span class="dv">2</span>] <span class="sc">&gt;</span> alpha_summary<span class="sc">$</span>Shannon_mean[<span class="dv">1</span>]) {</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"The disease group shows higher microbial diversity compared to controls.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"The control group shows higher microbial diversity, suggesting dysbiosis (reduced diversity) in the disease state.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"No significant differences in Shannon diversity were detected between groups (p ≥ 0.05). "</span>)</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"This suggests that overall species diversity is similar regardless of disease status.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_shannon)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Significant differences in Shannon diversity were observed between disease groups (p &lt; 0.05). The control group shows higher microbial diversity, suggesting dysbiosis (reduced diversity) in the disease state.</code></pre>
+<pre><code>             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+disease       3  11.50   3.833   20.12 2.69e-12 ***
+Residuals   480  91.47   0.191                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_simpson)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+disease       3 0.1862 0.06208    10.1 1.82e-06 ***
+Residuals   480 2.9489 0.00614                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>Since the shotgun metagenomic data was normalized (containing decimal values), alpha diversity was assessed using Shannon and Simpson indices, which are appropriate for relative abundance data. Richness-based metrics (Observed OTUs, Chao1) require integer count data and were therefore not included in this analysis. Statistical comparisons between disease groups were performed using the non-parametric Kruskal-Wallis test.</p>
+<p>Note: Since the shotgun metagenomic data was normalized (containing decimal values), alpha diversity was assessed using Shannon and Simpson indices, which are appropriate for relative abundance data. Richness-based metrics (Observed OTUs, Chao1) require integer count data and were therefore not included in this analysis. Statistical comparisons between disease groups were performed using the non-parametric Kruskal-Wallis test.</p>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
+<p>Both alpha diversity metrics show highly significant differences among the four disease groups:</p>
+<ul>
+<li><p>Shannon Diversity: Kruskal-Wallis test (p = 4.21e-14) and ANOVA (p = 2.69e-12) both confirm extremely significant differences</p></li>
+<li><p>Simpson Diversity: Kruskal-Wallis test (p = 1.93e-12) and ANOVA (p = 1.82e-06) also show highly significant differences</p></li>
+</ul>
+<p>For Shannon Diversity:</p>
+<ul>
+<li><p>The disease grouping explains a substantial portion of the variance</p></li>
+<li><p>F-statistic = 20.12 indicates strong group separation</p></li>
+<li><p>Mean squares: Between groups (3.833) vs.&nbsp;Within groups (0.191) - groups differ by ~20x more than within-group variability, indicating a strong effect of disease status on Shannon diversity</p></li>
+</ul>
+<p>For Simpson Diversity:</p>
+<ul>
+<li><p>It’s more modest but still significant effect</p></li>
+<li><p>F-statistic = 10.1</p></li>
+<li><p>Mean squares: Between groups (0.062) vs.&nbsp;Within groups (0.006)</p></li>
+</ul>
+<p>Both parametric (ANOVA) and non-parametric (Kruskal-Wallis) tests agree, strengthening confidence in the findings. This is important because Kruskal-Wallis doesn’t assume normal distribution while ANOVA does.</p>
+<p>Overall, the disease status significantly impacts gut microbiome diversity. Shannon diversity (which emphasizes richness and evenness) shows stronger group differences than Simpson diversity (which emphasizes dominance). This suggests the disease groups differ more in terms of overall species richness and evenness rather than just dominant species</p>
 </section>
-<section id="beta-diversity" class="level3">
-<h3 class="anchored" data-anchor-id="beta-diversity">Beta Diversity</h3>
+</section>
+<section id="beta-diversity" class="level2">
+<h2 class="anchored" data-anchor-id="beta-diversity">Beta Diversity</h2>
 <p>Beta diversity measures the dissimilarity between samples. Think of it as “between-sample” diversity.</p>
 <p>Beta diversity answers questions like:</p>
 <ul>
 <li><p>Are gut microbiomes more similar within the same individual than between different individuals?</p></li>
 <li><p>Do treatment and control groups harbor distinct microbial communities?</p></li>
 </ul>
-<p>Key Distance Metrics: Bray Curtis, Jaccard, Weighted UniFrac, Unweighted UniFrac</p>
+<p>Key Distance Metrics: Bray Curtis and Jaccard</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate distance matrices</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dist_bray <span class="ot">&lt;-</span> <span class="fu">distance</span>(physeq, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>dist_jaccard <span class="ot">&lt;-</span> <span class="fu">distance</span>(physeq, <span class="at">method =</span> <span class="st">"jaccard"</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform ordination (PCoA/MDS)</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>ord_bray <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(physeq, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_bray)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>ord_jaccard <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(physeq, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_jaccard)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plots</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(physeq, ord_bray, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bray-Curtis Dissimilarity"</span>) <span class="sc">+</span></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate distance matrices</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dist_bray <span class="ot">&lt;-</span> <span class="fu">distance</span>(physeq, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>dist_jaccard <span class="ot">&lt;-</span> <span class="fu">distance</span>(physeq, <span class="at">method =</span> <span class="st">"jaccard"</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform ordination (PCoA/MDS)</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>ord_bray <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(physeq, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_bray)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>ord_jaccard <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(physeq, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_jaccard)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plots</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(physeq, ord_bray, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bray-Curtis Dissimilarity"</span>) <span class="sc">+</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -412,13 +353,13 @@ We recommended that you find the un-trimmed data and retry.</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(physeq, ord_jaccard, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Jaccard Distance"</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(physeq, ord_jaccard, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Jaccard Distance"</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -427,87 +368,67 @@ We recommended that you find the un-trimmed data and retry.</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PERMANOVA tests</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bray-Curtis PERMANOVA</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>permanova_bray <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Jaccard PERMANOVA</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### PERMANOVA Results</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PERMANOVA tests</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Bray-Curtis PERMANOVA</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>permanova_bray <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Jaccard PERMANOVA</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### PERMANOVA Results</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ### PERMANOVA Results</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Bray-Curtis Dissimilarity:**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Bray-Curtis Dissimilarity:**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**Bray-Curtis Dissimilarity:**</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"R² = "</span>, <span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">", F = "</span>, <span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"R² = "</span>, <span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">", F = "</span>, <span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R² = 0.087, F = 15.23, p-value = 0.001</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Jaccard Distance:**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"**Jaccard Distance:**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**Jaccard Distance:**</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"R² = "</span>, <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">", F = "</span>, <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"R² = "</span>, <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">", F = "</span>, <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">", p-value = "</span>, <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R² = 0.056, F = 9.41, p-value = 0.001</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beta dispersion test (assumption check)</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, sample_df<span class="sc">$</span>disease)</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>disp_test <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Beta Dispersion Test (Homogeneity of Variances)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Beta dispersion test (assumption check)</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, sample_df<span class="sc">$</span>disease)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>disp_test <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Beta Dispersion Test (Homogeneity of Variances)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ### Beta Dispersion Test (Homogeneity of Variances)</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"p-value = "</span>, <span class="fu">format</span>(disp_test<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"p-value = "</span>, <span class="fu">format</span>(disp_test<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>p-value =  0.001 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(disp_test<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>] <span class="sc">&lt;</span> <span class="fl">0.05</span>) {</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"⚠️ Warning: Groups have significantly different variances. This may affect PERMANOVA interpretation.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"✓ Assumption of homogeneous variances is met.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>⚠️ Warning: Groups have significantly different variances. This may affect PERMANOVA interpretation.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpretation</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">### Interpretation</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-### Interpretation</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>] <span class="sc">&lt;</span> <span class="fl">0.05</span>) {</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The PERMANOVA test reveals **significant differences** in microbial community composition between disease groups (p &lt; 0.05). "</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Disease status explains "</span>, <span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>]<span class="sc">*</span><span class="dv">100</span>, <span class="dv">1</span>), <span class="st">"% of the variation in the microbiome. "</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="fl">0.3</span>) {</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"This represents a **strong effect**, indicating that disease substantially alters the overall microbial community structure.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="fl">0.1</span>) {</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"This represents a **moderate effect**, suggesting that while disease influences the microbiome, other factors also play important roles.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"This represents a **weak but significant effect**, indicating that disease has a subtle influence on community composition.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"No significant differences in community composition were detected between disease groups (p ≥ 0.05). "</span>)</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"This suggests that overall microbial community structure is similar regardless of disease status.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The PERMANOVA test reveals **significant differences** in microbial community composition between disease groups (p &lt; 0.05). Disease status explains 8.7% of the variation in the microbiome. This represents a **weak but significant effect**, indicating that disease has a subtle influence on community composition.</code></pre>
-</div>
-</div>
+<p>Interpretation: Both beta diversity metrics show significant compositional differences between disease groups:</p>
+<ul>
+<li>Bray-Curtis: R² = 0.087, F = 15.23, p = 0.001
+<ul>
+<li>Moderate effect size in microbiome studies</li>
+<li>Disease status explains ~8.7% of the variation in microbial community structure (considering both presence/absence and abundance)</li>
+</ul></li>
+<li>Jaccard: R² = 0.056, F = 9.41, p = 0.001
+<ul>
+<li>Smaller but still significant effect</li>
+<li>Based purely on presence/absence of species</li>
+<li>The lower R² suggests that abundance patterns (captured by Bray-Curtis) differentiate groups better than just species occurrence</li>
+</ul></li>
+</ul>
 </section>
 </section>
 
