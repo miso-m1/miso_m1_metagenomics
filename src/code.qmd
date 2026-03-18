@@ -82,3 +82,22 @@ summary(colSums(otu_mat))
 #there is no column of samples with only zeroes.
 
 ```
+
+## Taxonomic composition
+
+```{r}
+carbom_phylum <- tax_glom(carbom, taxrank = "Phylum")
+carbom_phylum_per <- transform_sample_counts(carbom_phylum, function(x) x / sum(x))
+plot_bar(carbom_phylum_per, fill = "Phylum") +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Taxonomic composition at Phylum level") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+plot_bar(carbom_phylum_per, x = "disease", fill = "Phylum") +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(title = "Phylum composition by disease group")
+```
