@@ -101,3 +101,19 @@ plot_bar(carbom_phylum_per, x = "disease", fill = "Phylum") +
   theme_minimal() +
   labs(title = "Phylum composition by disease group")
 ```
+
+```{r}
+carbom_genus <- tax_glom(carbom, taxrank = "Genus")
+
+carbom_genus_per <- transform_sample_counts(carbom_genus, function(x) x / sum(x))
+
+# keep top 10 genera to avoid clutter
+top_genera <- names(sort(taxa_sums(carbom_genus_per), decreasing = TRUE))[1:10]
+carbom_genus_top <- prune_taxa(top_genera, carbom_genus_per)
+
+plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(title = "Top 10 Genera Composition by Disease") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
