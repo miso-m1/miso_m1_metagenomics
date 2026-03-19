@@ -117,3 +117,58 @@ plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
   labs(title = "Top 10 Genera Composition by Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+## Alpha Diversity - PCoA by gender
+
+```{r}
+
+pcoa <- ordinate(carbom, method = "PCoA", distance = "bray")
+
+plot_ordination(carbom, pcoa, color = "gender") +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = "PCoA - Bray-Curtis by gender")
+```
+
+## Alpha Diversity - PCoA by gender and disease
+
+```{r}
+pcoagd <- ordinate(carbom, method = "PCoA", distance = "bray")
+
+plot_ordination(carbom, pcoagd, color = "gender", shape = "disease") +
+  geom_point(size = 3) +
+  theme_minimal()
+```
+
+## Number of samples of diseases by gender
+
+Females:
+
+```{r}
+# Extract sample metadata
+meta_df <- data.frame(sample_data(carbom))
+
+# Count diseases per sex
+disease_counts <- meta_df %>%
+  group_by(gender, disease) %>%
+  summarise(Count = n())
+
+ggplot(disease_counts %>% filter(gender == "female"),
+       aes(x = disease, y = Count, fill = disease)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Female Samples per Disease") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Males:
+
+```{r}
+
+ggplot(disease_counts %>% filter(gender == "male"),
+       aes(x = disease, y = Count, fill = disease)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of male Samples per Disease") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
