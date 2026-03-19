@@ -118,7 +118,7 @@ plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Alpha Diversity - PCoA by gender
+## Beta Diversity - PCoA by gender
 
 ```{r}
 
@@ -130,7 +130,7 @@ plot_ordination(carbom, pcoa, color = "gender") +
   labs(title = "PCoA - Bray-Curtis by gender")
 ```
 
-## Alpha Diversity - PCoA by gender and disease
+## Beta Diversity - PCoA by gender and disease
 
 ```{r}
 pcoagd <- ordinate(carbom, method = "PCoA", distance = "bray")
