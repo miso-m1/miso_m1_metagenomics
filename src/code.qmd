@@ -145,10 +145,8 @@ plot_ordination(carbom, pcoagd, color = "gender", shape = "disease") +
 Females:
 
 ```{r}
-# Extract sample metadata
 meta_df <- data.frame(sample_data(carbom))
 
-# Count diseases per sex
 disease_counts <- meta_df %>%
   group_by(gender, disease) %>%
   summarise(Count = n())
