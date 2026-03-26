@@ -1,0 +1,125 @@
+---
+title: "alpha_diversity"
+format: html
+editor: visual
+---
+
+{{< include preliminary.qmd >}}
+
+## **Transforming data**
+
+### Relative Abundance
+
+Data is already normalized with sample sums \~ 100
+
+This is used for Shannon, Simpson and Inverse Simpson as they are robust to sequencing depth if using **relative abundances.**
+
+### Normalize sequencing depth - rarefaction
+
+**Rarefaction** (random subsampling without replacement).
+
+In microbial ecology and amplicon sequencing (e.g., 16S rRNA gene sequencing) where samples often have vastly different numbers of reads. Rarefying aims to **make all samples have the same total number of reads** by randomly drawing a subset of reads from each sample **without replacement**. The chosen target depth is usually the smallest library size among all samples, so that no sample is asked to provide more reads than it originally had. This is only used for observed alpha diversity as rarefaction ensures each sample contributes the same number of reads.
+
+```{r}
+#| label: normalized data  
+#| include: true
+# metagenomics_rel <- transform_sample_counts(metagenomics, function(x) x / sum(x))
+# metagenomics_rel
+
+metagenomics_rare <- rarefy_even_depth(metagenomics, sample.size = min(sample_sums(metagenomics)))
+metagenomics_rare
+```
+
+## Calculate alpha diversity
+
+```{r}
+# alpha diversity for Shannon, Simpson, InvSimpson
+alpha_div <- estimate_richness(metagenomics, measures = c("Shannon", "Simpson", "InvSimpson"))
+p1 <- plot_richness(metagenomics, x = "disease", measures = c("Shannon", "Simpson", "InvSimpson"))
+p1
+ggsave("figures/Alpha/alpha_diversity_shannon_simpson_invSimpson.pdf", p1)
+
+alpha_obs <- estimate_richness(metagenomics_rare, measures = c("Observed"))
+p2 <- plot_richness(metagenomics_rare, measures = c("Observed"))
+p2
+ggsave("figures/Alpha/alpha_diversity_observed.pdf", p2)
+
+alpha_df <- cbind(alpha_div, alpha_obs)
+alpha_df$SampleID <- rownames(alpha_div)
+alpha_df$Disease <- sample_data(metagenomics)$disease
+
+```
+
+## Normality Testing
+
+```{r}
+# Check Normality (Shapiro-Wilk) to decide test 
+shapiro.test(alpha_df$Shannon)
+shapiro.test(alpha_df$Simpson)
+shapiro.test(alpha_df$InvSimpson)
+shapiro.test(alpha_df$Observed)
+
+```
+
+If p-value \> alpha 0.5, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).
+
+```{r}
+kruskal.test(Shannon ~ Disease, data = alpha_df)
+kruskal.test(Observed ~ Disease, data = alpha_df)
+kruskal.test(Simpson ~ Disease, data = alpha_df)
+kruskal.test(InvSimpson ~ Disease, data = alpha_df)
+```
+
+## Alpha Diversity Visualization
+
+```{r}
+p3 <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
+  geom_boxplot() +
+  theme_minimal() +
+  ylab("Shannon Diversity") +
+  xlab("Disease") +
+  ggtitle("Alpha Diversity (Shannon)")
+ggsave("figures/Alpha/alpha_boxplot_shannon.pdf", p3)
+p3
+
+p4 <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
+  geom_boxplot() +
+  theme_minimal() +
+  ylab("Simpson Diversity") +
+  xlab("Disease") +
+  ggtitle("Alpha Diversity (Simpson)")
+ggsave("figures/Alpha/alpha_boxplot_simpson.pdf", p4)
+p4
+
+p5 <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
+  geom_boxplot() +
+  theme_minimal() +
+  ylab("InvSimpson Diversity") +
+  xlab("Disease") +
+  ggtitle("Alpha Diversity (InvSimpson)")
+ggsave("figures/Alpha/alpha_boxplot_InvSimpson.pdf", p5)
+p5
+
+p6 <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
+  geom_boxplot() +
+  theme_minimal() +
+  ylab("Observed Diversity") +
+  xlab("Disease") +
+  ggtitle("Alpha Diversity (Observed)")
+ggsave("figures/Alpha/alpha_boxplot_Observed.pdf", p6)
+p6
+```
+
+## Post-Hoc
+
+Since Kruskal-Wallis tells you there’s a difference **somewhere among the groups**, we may want to do **post-hoc pairwise comparisons** to see which groups differ. For non-parametric tests, we can use:
+
+```{r}
+library(FSA)
+# Pairwise Wilcoxon test with p-value adjustment
+pairwise.wilcox.test(alpha_df$Observed, alpha_df$Disease, p.adjust.method = "BH") 
+pairwise.wilcox.test(alpha_df$Simpson, alpha_df$Disease, p.adjust.method = "BH")
+pairwise.wilcox.test(alpha_df$InvSimpson, alpha_df$Disease, p.adjust.method = "BH")
+pairwise.wilcox.test(alpha_df$Shannon, alpha_df$Disease, p.adjust.method = "BH")
+# p.adjust.method = "BH" → controls for multiple comparisons (Benjamini-Hochberg FDR)
+```
