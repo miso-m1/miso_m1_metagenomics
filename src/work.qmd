@@ -1,10 +1,11 @@
 ---
-  title: "Statistical Analysis of Metagenomic Data"
-  format: html
-  editor: visual
+title: "Preliminary work for the Statistical Analysis of Metagenomic Data"
+format: html
+editor: visual
 ---
 
 ```{r}
+
 #| label: load-packages
 #| include: false
 
@@ -15,18 +16,9 @@ library("dplyr")        # filter and reformat data frames
 library("tibble")       # Needed for converting column to row names
 ```
 
-## Abstract
-
-Metagenomic data analysis is crucial for understanding microbial communities. This document outlines the statistical methods used to analyze metagenomic datasets, including diversity metrics, differential abundance testing, and multivariate analyses.
-
-## Introduction
-
-Metagenomics involves the study of genetic material recovered directly from environmental samples. Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality. This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.
-
 ## Data
 
-```{r}
-#| label: load-data
+```{#| label: load-data}
 #| include: true
 otu_mat<- read_excel("../data/dataset_MISO_project.xlsx", sheet = "OTU_table")
 tax_mat<- read_excel("../data/dataset_MISO_project.xlsx", sheet = "Taxonomy")
@@ -68,19 +60,15 @@ total = median(sample_sums(carbom))
 #| include: true
 
 summary(carbom)
-
 ```
 
 ```{r}
 typeof(otu_mat)
 #type is double (double precision floating point numbers)
-```
 
-```{r}
 which(colSums(otu_mat != 0) == 0)
 summary(colSums(otu_mat))
 #there is no column of samples with only zeroes.
-
 ```
 
 ## Taxonomic composition
@@ -118,28 +106,6 @@ plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Beta Diversity - PCoA by gender
-
-```{r}
-
-pcoa <- ordinate(carbom, method = "PCoA", distance = "bray")
-
-plot_ordination(carbom, pcoa, color = "gender") +
-  geom_point(size = 3) +
-  theme_minimal() +
-  labs(title = "PCoA - Bray-Curtis by gender")
-```
-
-## Beta Diversity - PCoA by gender and disease
-
-```{r}
-pcoagd <- ordinate(carbom, method = "PCoA", distance = "bray")
-
-plot_ordination(carbom, pcoagd, color = "gender", shape = "disease") +
-  geom_point(size = 3) +
-  theme_minimal()
-```
-
 ## Number of samples of diseases by gender
 
 Females:
@@ -162,11 +128,11 @@ ggplot(disease_counts %>% filter(gender == "female"),
 Males:
 
 ```{r}
-
 ggplot(disease_counts %>% filter(gender == "male"),
        aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Number of male Samples per Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
