@@ -39,8 +39,8 @@ sample_names(metagenomics)
 rank_names(metagenomics)
 sample_variables(metagenomics)
 
-metagenomics <- rarefy_even_depth(metagenomics, sample.size = min(sample_sums(metagenomics)))
-metagenomics
+# metagenomics <- rarefy_even_depth(metagenomics, sample.size = min(sample_sums(metagenomics)))
+# metagenomics
 
 # diseases bar plot
 diseases <- samples_df$disease
@@ -64,8 +64,27 @@ country_count
 # ANOVA test to check if basteria abundance differs by disease status
 # Extract the abundance of a specific bacteria (e.g., "Bacteroides fragilis abundance")
 
+# function to test if rarefaction is needed
+# rarefaction is only needed if the sample sizes are different, so we can check the sample sizes first
+# samples size ~ 100
+# The range of samples sizes should be checked to see if they are different enough to warrant rarefaction. If the sample sizes are similar, rarefaction may not be necessary.
+# a good range is if the sample sizes differ by more than 10-20%. If the sample sizes are within this range, rarefaction may not be necessary. However, if the sample sizes differ significantly (e.g., one sample has 100 reads and another has 1000 reads), rarefaction may be needed to ensure that the samples are comparable.
+rarefaction_needed <- function(physeq) {
+  sample_sizes <- sample_sums(physeq)
+  size_range <- range(sample_sizes)
+  size_diff <- size_range[2] - size_range[1]
+  size_diff_percent <- (size_diff / size_range[1]) * 100
+  return(size_diff_percent > 5 && size_diff_percent < 5) # if the difference is greater than and less than 20%, rarefaction is needed
+}
 
-
+# return the sample sizes that are needed for rarefaction
+if (rarefaction_needed(metagenomics)) {
+  print("Rarefaction is needed")
+  min_sample_size <- min(sample_sums(metagenomics))
+  metagenomics <- rarefy_even_depth(metagenomics, sample.size = min_sample_size)
+} else {
+  print("Rarefaction is not needed")
+}
 
 
 

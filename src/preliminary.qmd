@@ -63,11 +63,26 @@ dir.create("figures/Preliminary", showWarnings = FALSE, recursive = TRUE)
 Visualize data
 
 ```{r}
-sample_sums(metagenomics)
+# sample_totals <- sample_sums(metagenomics)
+# p6 <- boxplot(sample_totals, main = "Sample Sizes", ylab = "Sum of Relative Abundance", col = "lightblue")
+# p6
+# ggsave("figures/Preliminary/bar_graph_sample_sums.pdf", p6)
 
+sample_totals <- sample_sums(metagenomics)
+
+# Create data frame for ggplot
+df_sample_totals <- data.frame(Total_reads = sample_totals)
+
+p6 <- ggplot(df_sample_totals, aes(y = Total_reads)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  labs(title = "Sample Sizes", y = "Sample Totals") +
+  theme_minimal()
+
+# Save with ggsave
+ggsave("figures/Preliminary/boxplot_sample_sums.pdf", p6)
 ```
 
-## Bar Plots
+## Bar Plots by Sample Data
 
 ```{r}
 #| label: Bar Plot of bacteria class distribution by sample data
@@ -85,6 +100,17 @@ p1 <- ggplot(country_df, aes(x = country, y = count)) +
 p1
 ggsave("figures/Preliminary/barplot_sample_count_country.pdf", p1)
 
+disease <- samples_df$disease
+disease_count <- table(disease)
+# Convert the table to a data frame for ggplot
+disease_df <- as.data.frame(disease_count)
+colnames(disease_df) <- c("disease", "count")
+p9 <- ggplot(disease_df, aes(x = disease, y = count)) +
+  geom_col(fill = "blue") +
+  labs(title = "Sample count by disease", x = "disease", y = "sample count")
+p9
+ggsave("figures/Preliminary/barplot_sample_count_disease.pdf", p9)
+
 metagenomics_disease <- merge_samples(metagenomics, "disease")
 p2 <- plot_bar(metagenomics_disease, fill = "Class") + 
 geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") + 
@@ -95,7 +121,7 @@ geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") +
     )
 p2
 # save plots in a folder 
-ggsave("figures/Preliminary/bar_graph_disease_Class.pdf", p1)
+ggsave("figures/Preliminary/bar_graph_disease_Class.pdf", p2)
 
 metagenomics_country <- merge_samples(metagenomics, "country")
 p3 <- plot_bar(metagenomics_country, fill = "Class") + 
@@ -106,7 +132,7 @@ geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") +
       y = "Abundance",
     )
 p3
-ggsave("figures/Preliminary/bar_graph_country_Class.pdf", p2)
+ggsave("figures/Preliminary/bar_graph_country_Class.pdf", p3)
 
 metagenomics_gender <- merge_samples(metagenomics, "gender")
 p4 <- plot_bar(metagenomics_gender, fill = "Class") + 
@@ -117,14 +143,13 @@ geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") +
       y = "Abundance",
     )
 p4
-ggsave("figures/Preliminary/bar_graph_gender_Class.pdf", p3)
+ggsave("figures/Preliminary/bar_graph_gender_Class.pdf", p4)
 
 
 # Count occurrences per country and disease
 counts <- samples_df %>%
   count(country, disease)   # handles NA by default (drops them)
 
-# Create a bar plot (stacked)
 p5 <- ggplot(counts, aes(x = country, y = n, fill = disease)) +
   geom_col(position = "stack") +            # stacked bars
   labs(title = "Disease counts by country",
@@ -134,8 +159,31 @@ p5 <- ggplot(counts, aes(x = country, y = n, fill = disease)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 p5
-
 # Save the plot
 ggsave("figures/Preliminary/disease_counts_by_country.pdf", p5)
 
+```
+
+# **Taxnomic barplot**
+
+```{r}
+p7 <- plot_bar(metagenomics, fill = "Phylum") + 
+geom_bar(aes(color=Phylum, fill=Phylum), stat="identity", position="stack") + 
+  labs(
+      title = "Bacteria distribution by Phylum",
+      x = "Samples",
+      y = "Abundance",
+    )
+p7
+ggsave("figures/Preliminary/bar_graph_Phylum.pdf", p7)
+
+# p8 <- plot_bar(metagenomics, fill = "Class") + 
+# geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") + 
+#   labs(
+#       title = "Bacteria distribution by Class",
+#       x = "Samples",
+#       y = "Abundance",
+#     )
+# p8
+# ggsave("figures/Preliminary/bar_graph_Class.pdf", p8)
 ```
