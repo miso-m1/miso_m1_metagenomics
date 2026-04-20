@@ -15,14 +15,27 @@ library("dplyr")        # filter and reformat data frames
 library("tibble")       # Needed for converting column to row names
 ```
 
-## Data
+## User Input
+
+```{r} #| label: user-input}
+
+#Load your dataset into file_path
+file_path <- "../data/dataset_MISO_project.xlsx" 
+
+#Write the name of your variables
+otu_sheet <- "OTU_table" 
+tax_sheet <- "Taxonomy" 
+sample_sheet <- "Sample_data" 
+```
+
+## Load Data
 
 ```{r}
 #| label: load-data
 #| include: true
-otu_mat<- read_excel("../data/dataset_MISO_project.xlsx", sheet = "OTU_table")
-tax_mat<- read_excel("../data/dataset_MISO_project.xlsx", sheet = "Taxonomy")
-samples_df <- read_excel("../data/dataset_MISO_project.xlsx", sheet = "Sample_data")
+otu_mat <- read_excel(file_path, sheet = otu_sheet)
+tax_mat <- read_excel(file_path, sheet = tax_sheet)
+samples_df <- read_excel(file_path, sheet = sample_sheet)
 
 # Convert data frames to matrices and set row names. Phyloseq objects need to have row.names
 otu_mat <- otu_mat %>%
@@ -53,6 +66,21 @@ total = median(sample_sums(carbom))
 # carbom = transform_sample_counts(carbom, standf)
 ```
 
+## User : loading dataset
+
+```{r}
+#| label: user-input
+
+#Load your dataset into file_path
+file_path <- "../data/dataset_MISO_project.xlsx"
+
+#change the variables if needed
+otu_sheet <- "OTU_table"
+tax_sheet <- "Taxonomy"
+sample_sheet <- "Sample_data"
+
+```
+
 ## Statistical summary
 
 ```{r}
@@ -74,6 +102,8 @@ summary(colSums(otu_mat))
 #there is no column of samples with only zeroes.
 
 ```
+
+## Missing values check
 
 ```{r}
 #Check for missing values
