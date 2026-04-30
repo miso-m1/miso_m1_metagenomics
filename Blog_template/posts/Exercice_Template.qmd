@@ -1,0 +1,88 @@
+---
+title: "Exercice "
+author: "Authors.s"
+date: "2025-02-17"
+date-modified: "`r Sys.Date()`"
+format: 
+  html:
+    embed-resources: false
+    toc: true
+    code-fold: true
+    code-summary: "Show the code"
+    code-tools: true
+    toc-location: right
+    page-layout: article
+    code-overflow: wrap
+toc: true
+number-sections: false
+editor: visual
+categories: ["categorie 1", "cotegorie 2"]
+image: ""
+description: "Description"
+---
+
+# Intervenant.e.s
+
+### Rédaction
+
+-   **Clément Poupelin**, [clementjc.poupelin\@gmail.com](mailto:clementjc.poupelin@gmail.com){.email}\
+
+### Relecture
+
+-   
+
+# Setup
+
+:::: panel-tabset
+## Packages
+
+```{r, setup, warning=FALSE, message=FALSE}
+
+```
+
+## Fonctions
+
+::: panel-tabset
+### Fonction 1
+
+
+### Fonction 2
+
+:::
+
+## Seed
+
+::::
+
+# Données
+
+
+
+# Analyse 
+
+::: callout-note
+METTRE LES REMARQUES
+:::
+
+::: callout-warning
+METTRE LES POINTS D'ATTENTION
+:::
+
+:::: success-header
+::: success-icon
+:::
+
+Résultats
+::::
+
+::: success
+METTRE LES CONCLUSIONS 
+:::
+
+# Conclusion
+
+# Session info
+
+```{r}
+# sessioninfo::session_info(pkgs = "attached")
+```

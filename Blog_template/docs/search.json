@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "posts/Exercice_Template.html",
+    "href": "posts/Exercice_Template.html",
+    "title": "Exercice",
+    "section": "",
+    "text": "Intervenant.e.s\n\nRédaction\n\nClément Poupelin, clementjc.poupelin@gmail.com\n\n\n\n\nRelecture\n\n\n\n\n\n\nSetup\n\nPackagesFonctionsSeed\n\n\n\n\n\n\nFonction 1Fonction 2\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDonnées\n\n\nAnalyse\n\n\n\n\n\n\nNote\n\n\n\nMETTRE LES REMARQUES\n\n\n\n\n\n\n\n\nWarning\n\n\n\nMETTRE LES POINTS D’ATTENTION\n\n\n\n\n\n\nRésultats\n\n\nMETTRE LES CONCLUSIONS\n\n\n\nConclusion\n\n\nSession info\n\n\nCode\n# sessioninfo::session_info(pkgs = \"attached\")"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Ce blog est dédié à la reprise et des exercices de Nom du cours enseignée dans le cadre du Master 2 IS à Nantes Université pour l’année universitaire 2023-2024.\nIl s’inscrit dans une démarche pédagogique visant à proposer des analyses claires, bien structurées et reproductibles en lien avec les thématiques abordées durant le cours."
+  },
+  {
+    "objectID": "about.html#contexte",
+    "href": "about.html#contexte",
+    "title": "About",
+    "section": "",
+    "text": "Ce blog est dédié à la reprise et des exercices de Nom du cours enseignée dans le cadre du Master 2 IS à Nantes Université pour l’année universitaire 2023-2024.\nIl s’inscrit dans une démarche pédagogique visant à proposer des analyses claires, bien structurées et reproductibles en lien avec les thématiques abordées durant le cours."
+  },
+  {
+    "objectID": "about.html#objectif",
+    "href": "about.html#objectif",
+    "title": "About",
+    "section": "Objectif",
+    "text": "Objectif\nL’objectif de ce blog est de :\n\nFournir des analyses complètes et rigoureuses en réponse aux exercices abordés en travaux pratiques.\nProposer des solutions détaillées et commentées pour aider à la compréhension des méthodes statistiques.\nFavoriser une approche reproductible et bien documentée en utilisant R et Quarto."
+  },
+  {
+    "objectID": "about.html#intervenant.e.s",
+    "href": "about.html#intervenant.e.s",
+    "title": "About",
+    "section": "Intervenant.e.s",
+    "text": "Intervenant.e.s\nLes rédacteurs et relecteurs des articles sont mentionnés sur chaque document du blog. Le travail collaboratif permet d’assurer la clarté, la rigueur et la qualité des contenus proposés."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Statistique en grande dimension",
+    "section": "",
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n         \n          Modified - Oldest\n        \n         \n          Modified - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nExercice\n\n\n1 min\n\n\n\ncategorie 1\n\n\ncotegorie 2\n\n\n\nDescription\n\n\n\nAuthors.s\n\n\nFeb 17, 2025\n\n\n\n\n\n2/26/25, 11:08:15 PM\n\n\n\n\n\n\n\nNo matching items"
+  }
+]

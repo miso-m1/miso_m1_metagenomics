@@ -1,0 +1,14 @@
+{
+  "hash": "9bd6b37fed8977f7a739046d947bb176",
+  "result": {
+    "markdown": "---\ntitle: \"Exercice \"\nauthor: \"Authors.s\"\ndate: \"2025-02-17\"\ndate-modified: \"2025-02-26\"\nformat: \n  html:\n    embed-resources: false\n    toc: true\n    code-fold: true\n    code-summary: \"Show the code\"\n    code-tools: true\n    toc-location: right\n    page-layout: article\n    code-overflow: wrap\ntoc: true\nnumber-sections: false\neditor: visual\ncategories: [\"categorie 1\", \"cotegorie 2\"]\nimage: \"\"\ndescription: \"Description\"\n---\n\n\n# Intervenant.e.s\n\n### Rédaction\n\n-   **Clément Poupelin**, [clementjc.poupelin\\@gmail.com](mailto:clementjc.poupelin@gmail.com){.email}\\\n\n### Relecture\n\n-   \n\n# Setup\n\n:::: panel-tabset\n## Packages\n\n\n::: {.cell}\n\n:::\n\n\n## Fonctions\n\n::: panel-tabset\n### Fonction 1\n\n\n### Fonction 2\n\n:::\n\n## Seed\n\n::::\n\n# Données\n\n\n\n# Analyse \n\n::: callout-note\nMETTRE LES REMARQUES\n:::\n\n::: callout-warning\nMETTRE LES POINTS D'ATTENTION\n:::\n\n:::: success-header\n::: success-icon\n:::\n\nRésultats\n::::\n\n::: success\nMETTRE LES CONCLUSIONS \n:::\n\n# Conclusion\n\n# Session info\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# sessioninfo::session_info(pkgs = \"attached\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

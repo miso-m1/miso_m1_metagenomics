@@ -1,0 +1,15 @@
+---
+title: "Nom du cours"
+listing:
+  contents: posts
+  fields: [image, title, categories, description, reading-time, author, date, file-modified]
+  sort: "title"
+  type: grid
+  image-height: 6cm
+  grid-columns: 3
+  categories: true
+  sort-ui: true
+  filter-ui: true
+page-layout: full
+title-block-banner: true
+---

@@ -1,0 +1,59 @@
+project:
+  type: website
+  output-dir: docs
+
+
+website:
+  title: Nom du cours
+  site-url: https://github.com/Clement-Poupelin/Blog_template
+  favicon: img/logo_univ_nantes_simple.png
+  navbar:
+    background: light
+    title: Front page
+    logo: img/logo_univ_nantes_complet.png
+    logo-href: https://www.univ-nantes.fr/
+    left:
+      - icon: file-earmark-font-fill
+        text: Feuille de TP
+        href: TP_StatGdeDim.pdf
+        
+    right:
+      - href: https://clement-poupelin.github.io/Blog_template/
+        text: Home
+      - about.qmd
+      - icon: github
+        menu: 
+          - href: https://github.com/Clement-Poupelin
+            text: Clément Poupelin
+          - href: https://github.com/nonomtrt
+            text: Noémie Matrat
+      - icon: linkedin
+        menu: 
+          - href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
+            text: Clément Poupelin
+          - href: https://www.linkedin.com/in/no%C3%A9mie-matrat-86a34a200/
+            text: Noémie Matrat
+      - icon: envelope
+        href: mailto:clementjc.poupelin@gmail.com
+      - icon: person-circle
+        href: http://clement-poupelin.github.io/
+      - icon: instagram
+        href: https://www.instagram.com/clement__poupelin
+
+  page-footer: 
+    background: light
+    left: Copyright 2025, Clément Poupelin
+    right: This blog is built with [Quarto](https://quarto.org/)
+
+
+format:
+
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: custom.css
+    toc: true
+
+    
+editor: visual
