@@ -1,15 +1,15 @@
 ---
 title: "About"
-image: profile.jpg
+image: img/space.jpg
 about:
   template: trestles
   links:
     - icon: linkedin
-      text: Clément Poupelin
-      href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
+      text: Ines Bakli
+      href: https://www.linkedin.com/in/ines-bakli-513b1126b/
     - icon: linkedin
-      text: Noémie Matrat
-      href: http://www.linkedin.com/in/no%C3%A9mie-matrat-86a34a200/
+      text: Paul Lemonnier
+      href: https://www.linkedin.com/in/pl49000/
     - icon: github
       text: Github
       href: https://github.com/Clement-Poupelin/Blog_template
@@ -19,19 +19,36 @@ about:
 
 ## Contexte
 
-Ce blog est dédié à la reprise et des exercices de **Nom du cours** enseignée dans le cadre du **Master 2 IS** à **Nantes Université** pour l'année universitaire **2023-2024**.\
-Il s'inscrit dans une démarche pédagogique visant à proposer des analyses claires, bien structurées et reproductibles en lien avec les thématiques abordées durant le cours.
+Ce projet est consacré à l’analyse statistique de données métagénomiques issues du séquençage 16S rRNA, réalisée dans le cadre d’un travail du Master 1 en Bioinformatique mention MISO à l'Université de Lille.
+
+L’analyse est réalisée à l’aide de workflows reproductibles basés sur **R**, **phyloseq** et **Quarto**, permettant de structurer les étapes de traitement, de visualisation et d’interprétation des données microbiomiques.
 
 ## Objectif
 
 L’objectif de ce blog est de :
 
--   Fournir des analyses **complètes et rigoureuses** en réponse aux exercices abordés en travaux pratiques.
+-   Fournir une analyse complète de données de métagénomique 16S
 
--   Proposer des **solutions détaillées et commentées** pour aider à la compréhension des méthodes statistiques.
+<!-- -->
 
--   Favoriser une approche **reproductible** et **bien documentée** en utilisant **R et Quarto**.
+-    Explorer la composition taxonomique des communautés microbiennes
+
+<!-- -->
+
+-    Étudier la diversité alpha et beta entre groupes d’échantillons
+
+<!-- -->
+
+-    Appliquer des méthodes statistiques adaptées aux données de comptage et à leur structure complexe
+
+<!-- -->
+
+-    Produire des visualisations claires et interprétables (PCoA, barplots taxonomiques, etc.)
+
+<!-- -->
+
+-    Mettre en place une approche reproductible permettant d’adapter le pipeline à différents jeux de données
 
 ## Intervenant.e.s
 
-Les **rédacteurs** et **relecteurs** des articles sont mentionnés sur chaque document du blog. Le travail collaboratif permet d’assurer la clarté, la rigueur et la qualité des contenus proposés.
+Ce projet a été réalisé dans un cadre collaboratifn en mobilisant les compétences acquises en analyse de données biologiques, statistique et bioinformatique.

@@ -6,15 +6,15 @@ project:
 website:
   title: Statistical Analysis of Metagenomic Data
   site-url: ""
-  favicon: img/logo_univ_nantes_simple.png
+  favicon: img/lille_logo.png
   navbar:
     background: light
     title: Statistical Analysis of Metagenomic Data
-    logo: images/lille_logo.png
+    logo: img/lille_logo.png
     logo-href: https://www.univ-lille.fr/
     left:
       - icon: file-earmark-font-fill
-        text: Feuille de TP
+        text: Results
         href: TP_StatGdeDim.pdf
         
     right:
@@ -40,7 +40,7 @@ website:
 
   page-footer: 
     background: light
-    left: Copyright 2026, name here
+    left: Copyright 2026, Ines Bakli
     right: This blog is built with [Quarto](https://quarto.org/)
 
 

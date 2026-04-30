@@ -1,5 +1,5 @@
 ---
-title: "Nom du cours"
+title: "Statistical Analysis of Metagenomic Data"
 listing:
   contents: posts
   fields: [image, title, categories, description, reading-time, author, date, file-modified]

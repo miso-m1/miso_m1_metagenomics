@@ -11,34 +11,34 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Ce blog est dédié à la reprise et des exercices de Nom du cours enseignée dans le cadre du Master 2 IS à Nantes Université pour l’année universitaire 2023-2024.\nIl s’inscrit dans une démarche pédagogique visant à proposer des analyses claires, bien structurées et reproductibles en lien avec les thématiques abordées durant le cours."
+    "text": "Ce projet est consacré à l’analyse statistique de données métagénomiques issues du séquençage 16S rRNA, réalisée dans le cadre d’un travail du Master 1 en Bioinformatique mention MISO à l’Université de Lille.\nL’analyse est réalisée à l’aide de workflows reproductibles basés sur R, phyloseq et Quarto, permettant de structurer les étapes de traitement, de visualisation et d’interprétation des données microbiomiques."
   },
   {
     "objectID": "about.html#contexte",
     "href": "about.html#contexte",
     "title": "About",
     "section": "",
-    "text": "Ce blog est dédié à la reprise et des exercices de Nom du cours enseignée dans le cadre du Master 2 IS à Nantes Université pour l’année universitaire 2023-2024.\nIl s’inscrit dans une démarche pédagogique visant à proposer des analyses claires, bien structurées et reproductibles en lien avec les thématiques abordées durant le cours."
+    "text": "Ce projet est consacré à l’analyse statistique de données métagénomiques issues du séquençage 16S rRNA, réalisée dans le cadre d’un travail du Master 1 en Bioinformatique mention MISO à l’Université de Lille.\nL’analyse est réalisée à l’aide de workflows reproductibles basés sur R, phyloseq et Quarto, permettant de structurer les étapes de traitement, de visualisation et d’interprétation des données microbiomiques."
   },
   {
     "objectID": "about.html#objectif",
     "href": "about.html#objectif",
     "title": "About",
     "section": "Objectif",
-    "text": "Objectif\nL’objectif de ce blog est de :\n\nFournir des analyses complètes et rigoureuses en réponse aux exercices abordés en travaux pratiques.\nProposer des solutions détaillées et commentées pour aider à la compréhension des méthodes statistiques.\nFavoriser une approche reproductible et bien documentée en utilisant R et Quarto."
+    "text": "Objectif\nL’objectif de ce blog est de :\n\nFournir une analyse complète de données de métagénomique 16S\n\n\n\nExplorer la composition taxonomique des communautés microbiennes\n\n\n\nÉtudier la diversité alpha et beta entre groupes d’échantillons\n\n\n\nAppliquer des méthodes statistiques adaptées aux données de comptage et à leur structure complexe\n\n\n\nProduire des visualisations claires et interprétables (PCoA, barplots taxonomiques, etc.)\n\n\n\nMettre en place une approche reproductible permettant d’adapter le pipeline à différents jeux de données"
   },
   {
     "objectID": "about.html#intervenant.e.s",
     "href": "about.html#intervenant.e.s",
     "title": "About",
     "section": "Intervenant.e.s",
-    "text": "Intervenant.e.s\nLes rédacteurs et relecteurs des articles sont mentionnés sur chaque document du blog. Le travail collaboratif permet d’assurer la clarté, la rigueur et la qualité des contenus proposés."
+    "text": "Intervenant.e.s\nCe projet a été réalisé dans un cadre collaboratifn en mobilisant les compétences acquises en analyse de données biologiques, statistique et bioinformatique."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Nom du cours",
+    "title": "Statistical Analysis of Metagenomic Data",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n      \n        Modified - Oldest\n      \n      \n        Modified - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nExercice\n\n1 min\n\n\ncategorie 1\n\ncotegorie 2\n\n\n\nDescription\n\n\n\nAuthors.s\n\n\nFeb 17, 2025\n\n\n\n\n4/30/26, 2:36:11 PM\n\n\n\n\nNo matching items"
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n      \n        Modified - Oldest\n      \n      \n        Modified - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nExercice\n\n1 min\n\n\nIntroduction\n\nPreparatory Analysis\n\nAlpha Diversity Analysis\n\nBeta Diversity Analysis\n\nNetwork Analysis\n\n\n\nDescription\n\n\n\nAuthors.s\n\n\nFeb 17, 2025\n\n\n\n\n4/30/26, 3:49:03 PM\n\n\n\n\nNo matching items"
   }
 ]

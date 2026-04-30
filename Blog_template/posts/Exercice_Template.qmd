@@ -16,7 +16,7 @@ format:
 toc: true
 number-sections: false
 editor: visual
-categories: ["categorie 1", "cotegorie 2"]
+categories: ["Introduction", "Preparatory Analysis", "Alpha Diversity Analysis", "Beta Diversity Analysis", "Network Analysis"]
 image: ""
 description: "Description"
 ---
@@ -45,20 +45,15 @@ description: "Description"
 ::: panel-tabset
 ### Fonction 1
 
-
 ### Fonction 2
-
 :::
 
 ## Seed
-
 ::::
 
 # Données
 
-
-
-# Analyse 
+# Analyse
 
 ::: callout-note
 METTRE LES REMARQUES
@@ -76,7 +71,7 @@ Résultats
 ::::
 
 ::: success
-METTRE LES CONCLUSIONS 
+METTRE LES CONCLUSIONS
 :::
 
 # Conclusion
