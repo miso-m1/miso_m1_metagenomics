@@ -1,1 +1,1 @@
-Sitemap: https://github.com/Clement-Poupelin/Blog_template/sitemap.xml
+Sitemap: /sitemap.xml

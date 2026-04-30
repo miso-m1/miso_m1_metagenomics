@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/Clement-Poupelin/Blog_template/posts/Exercice_Template.html</loc>
-    <lastmod>2025-02-26T22:31:48.484Z</lastmod>
+    <lastmod>2026-04-30T12:36:11.743Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/Clement-Poupelin/Blog_template/about.html</loc>
@@ -10,6 +10,10 @@
   </url>
   <url>
     <loc>https://github.com/Clement-Poupelin/Blog_template/index.html</loc>
-    <lastmod>2025-02-26T22:31:45.815Z</lastmod>
+    <lastmod>2026-04-30T12:36:11.743Z</lastmod>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+    <lastmod>2026-04-30T12:36:11.743Z</lastmod>
   </url>
 </urlset>
