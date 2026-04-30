@@ -10,7 +10,7 @@ website:
   navbar:
     background: light
     title: Statistical Analysis of Metagenomic Data
-    logo: img/logo_univ_nantes_complet.png
+    logo: images/lille_logo.png
     logo-href: https://www.univ-lille.fr/
     left:
       - icon: file-earmark-font-fill
