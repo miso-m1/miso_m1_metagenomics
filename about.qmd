@@ -1,0 +1,58 @@
+---
+title: "About"
+image: img/space.jpg
+about:
+  template: trestles
+  links:
+    - icon: linkedin
+      text: Ines Bakli
+      href: https://www.linkedin.com/in/ines-bakli-513b1126b/
+    - icon: linkedin
+      text: Paul Lemonnier
+      href: https://www.linkedin.com/in/pl49000/
+    - icon: github
+      text: Github
+      href: https://github.com/asnth-bio/miso_m1_project
+---
+
+<!-- Ajouter une description du blog (proche du README) + mettre photo de groupe sympa -->
+
+
+## Background
+
+This project focuses on the statistical analysis of metagenomic data derived from 16S rRNA sequencing, conducted as part of a Master’s 1 thesis in Bioinformatics (MISO track) at the University of Lille.
+
+The analysis is performed using reproducible workflows based on **R**, **phyloseq**, and **Quarto**, which allow for the structuring of the steps involved in processing, visualizing, and interpreting microbiome data.
+
+## Goal
+
+The goal of this blog is to:
+
+-   Provide a comprehensive analysis of 16S metagenomic data
+
+<!-- -->
+
+-   Explore the taxonomic composition of microbial communities
+
+<!-- -->
+
+-   Examine alpha and beta diversity across sample groups
+
+<!-- -->
+
+-   Apply statistical methods suited to count data and their complex structure
+
+<!-- -->
+
+-   Produce clear and interpretable visualizations (PCoA, taxonomic bar plots, etc.)
+
+<!-- -->
+
+-   Establish a reproducible approach to adapt the pipeline to different datasets
+
+## Contributors
+
+This project was carried out collaboratively, drawing on expertise in biological data analysis, statistics, and bioinformatics.
+
+The contributors are Ines Bakli, Paul Lemonnier, and Alden Sneath.
+
