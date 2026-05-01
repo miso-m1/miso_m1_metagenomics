@@ -2,7 +2,6 @@ project:
   type: website
   output-dir: docs
 
-
 website:
   title: Statistical Analysis of Metagenomic Data
   site-url: https://miso-m1.github.io/miso_m1_metagenomics/
