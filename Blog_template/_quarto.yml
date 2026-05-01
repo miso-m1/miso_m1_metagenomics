@@ -5,7 +5,7 @@ project:
 
 website:
   title: Statistical Analysis of Metagenomic Data
-  site-url: ""
+  site-url: "/"
   favicon: img/lille_logo.png
   navbar:
     background: light
@@ -13,18 +13,21 @@ website:
     logo: img/lille_logo.png
     logo-href: https://www.univ-lille.fr/
     left:
-      - icon: file-earmark-font-fill
+      - icon: file-earmark-text-fill
         text: Results
         href: TP_StatGdeDim.pdf
+      - icon: file-earmark-bar-graph-fill
+        text: Plots
+        href: TP_StatGdeDim.pdf  
         
     right:
-      - href: https://clement-poupelin.github.io/Blog_template/
+      - href: ""
         text: Home
       - about.qmd
       - icon: github
         menu: 
-          - href: https://github.com/Clement-Poupelin
-            text: Clément Poupelin
+          - href: https://github.com/asnth-bio
+            text: Alden Sneath
           - href: https://github.com/nonomtrt
             text: Noémie Matrat
       - icon: linkedin
@@ -34,13 +37,13 @@ website:
           - href: https://www.linkedin.com/in/pl49000/
             text: Paul Lemonnier
       - icon: envelope
-        href: mailto:clementjc.poupelin@gmail.com
+        href: mailto:ines.bakli2002@gmail.com
       - icon: person-circle
         href: http://clement-poupelin.github.io/
 
   page-footer: 
     background: light
-    left: Copyright 2026, Ines Bakli
+    left: Copyright 2025, Clément Poupelin
     right: This blog is built with [Quarto](https://quarto.org/)
 
 

@@ -2,7 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/Exercice_Template.html"
+      "/posts/datapreparation.html",
+      "/posts/Exercice_Template.html",
+      "/posts/Introduction.html"
     ]
   }
 ]
