@@ -1,75 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/Clement-Poupelin/Blog_template/posts/Exercice_Template.html</loc>
-    <lastmod>2026-04-30T12:36:11.743Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Introduction.html</loc>
+    <lastmod>2026-05-01T15:59:25.299Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/Clement-Poupelin/Blog_template/about.html</loc>
-    <lastmod>2025-02-26T22:31:45.003Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/datapreparation.html</loc>
+    <lastmod>2026-05-01T15:56:10.989Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/Clement-Poupelin/Blog_template/index.html</loc>
-    <lastmod>2026-04-30T12:36:11.743Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/about.html</loc>
+    <lastmod>2026-05-01T15:25:47.539Z</lastmod>
   </url>
   <url>
-    <loc>/index.html</loc>
-    <lastmod>2026-04-30T13:46:20.689Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/index.html</loc>
+    <lastmod>2026-05-01T15:25:47.661Z</lastmod>
   </url>
   <url>
-    <loc>/about.html</loc>
-    <lastmod>2026-05-01T09:25:44.227Z</lastmod>
-  </url>
-  <url>
-    <loc>/posts/Exercice_Template.html</loc>
-    <lastmod>2026-05-01T09:05:07.212Z</lastmod>
-  </url>
-  <url>
-    <loc>/posts/Introduction.html</loc>
-    <lastmod>2026-05-01T09:35:48.633Z</lastmod>
-  </url>
-  <url>
-    <loc>/docs/docs/main.html</loc>
-    <lastmod>2026-04-20T11:49:57.640Z</lastmod>
-  </url>
-  <url>
-    <loc>/docs/datapreparation.html</loc>
-    <lastmod>2026-05-01T09:41:15.510Z</lastmod>
-  </url>
-  <url>
-    <loc>/posts/datapreparation.html</loc>
-    <lastmod>2026-05-01T09:41:15.510Z</lastmod>
-  </url>
-  <url>
-    <loc>/posts/index.html</loc>
-    <lastmod>2026-05-01T09:52:06.935Z</lastmod>
-  </url>
-  <url>
-    <loc>https://inesbakli.github.io/metagenomics/index.html</loc>
-    <lastmod>2026-04-30T13:46:20.689Z</lastmod>
-  </url>
-  <url>
-    <loc>https://inesbakli.github.io/metagenomics/posts/Introduction.html</loc>
-    <lastmod>2026-05-01T12:39:51.164Z</lastmod>
-  </url>
-  <url>
-    <loc>https://inesbakli.github.io/metagenomics/posts/datapreparation.html</loc>
-    <lastmod>2026-05-01T12:38:05.567Z</lastmod>
-  </url>
-  <url>
-    <loc>https://inesbakli.github.io/metagenomics/about.html</loc>
-    <lastmod>2026-05-01T12:07:04.164Z</lastmod>
-  </url>
-  <url>
-    <loc>https://inesbakli.github.io/metagenomics/posts/Exercice_Template.html</loc>
-    <lastmod>2026-05-01T12:36:00.606Z</lastmod>
-  </url>
-  <url>
-    <loc>https://asnth-bio.github.io/miso_m1_project/posts/Introduction.html</loc>
-    <lastmod>2026-05-01T12:39:51.164Z</lastmod>
-  </url>
-  <url>
-    <loc>https://asnth-bio.github.io/miso_m1_project/index.html</loc>
-    <lastmod>2026-04-30T13:46:20.689Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Exercice_Template.html</loc>
+    <lastmod>2026-05-01T15:25:47.661Z</lastmod>
   </url>
 </urlset>

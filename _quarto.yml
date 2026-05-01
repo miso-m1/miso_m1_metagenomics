@@ -5,7 +5,7 @@ project:
 
 website:
   title: Statistical Analysis of Metagenomic Data
-  site-url: https://asnth-bio.github.io/miso_m1_project/
+  site-url: https://miso-m1.github.io/miso_m1_metagenomics/
   favicon: img/lille_logo.png
   navbar:
     background: light
@@ -21,7 +21,7 @@ website:
         href: TP_StatGdeDim.pdf  
         
     right:
-      - href: https://asnth-bio.github.io/miso_m1_project/
+      - href: https://miso-m1.github.io/miso_m1_metagenomics/
         text: Home
       - about.qmd
       - icon: github

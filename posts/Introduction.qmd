@@ -69,10 +69,6 @@ The analysis is structured into steps:
 
 -   Beta diversity analysis
 
-The full preliminary work is implemented in the following document:
-
-[Data preparation and Analysis](../docs/datapreparation.qmd)
-
 # Packages used
 
 The following R packages were used throughout the analysis
