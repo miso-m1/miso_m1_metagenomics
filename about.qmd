@@ -52,7 +52,7 @@ The goal of this blog is to:
 
 ## Contributors
 
-This project was carried out collaboratively, drawing on expertise in biological data analysis, statistics, and bioinformatics.
+This project was carried out collaboratively, drawing on skills in biological data analysis, statistics, and bioinformatics.
 
 The contributors are Ines Bakli, Paul Lemonnier, and Alden Sneath.
 
