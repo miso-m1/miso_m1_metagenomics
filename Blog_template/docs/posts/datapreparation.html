@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Preparatory work for Statistical Analysis of Metagenomic Data">
 
-<title>Data preparation for Statistical Analysis of Metagenomic Data – Statistical Analysis of Metagenomic Data</title>
+<title>Data preparation – Statistical Analysis of Metagenomic Data</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -301,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="../TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-text-fill" role="img">
 </i> 
-<span class="menu-text">Results</span></a>
+<span class="menu-text">Report</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-bar-graph-fill" role="img">
@@ -311,7 +312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="https://inesbakli.github.io/metagenomics/"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -326,12 +327,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-github">    
         <li>
-    <a class="dropdown-item" href="https://github.com/asnth-bio">
- <span class="dropdown-text">Alden Sneath</span></a>
+    <a class="dropdown-item" href="https://github.com/inesbakli">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://github.com/nonomtrt">
- <span class="dropdown-text">Noémie Matrat</span></a>
+    <a class="dropdown-item" href="https://github.com/Akanhnheanh">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/asnth-bio">
+ <span class="dropdown-text">Alden Sneath</span></a>
   </li>  
     </ul>
   </li>
@@ -352,11 +357,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
-  <li class="nav-item compact">
-    <a class="nav-link" href="mailto:ines.bakli2002@gmail.com"> <i class="bi bi-envelope" role="img">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-envelope" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-envelope" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-envelope">    
+        <li>
+    <a class="dropdown-item" href="mailto:ines.bakli2002@gmail.com">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="mailto:paul.lemonnier@hotmail.fr">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item compact">
     <a class="nav-link" href="http://clement-poupelin.github.io/"> <i class="bi bi-person-circle" role="img">
 </i> 
@@ -374,8 +391,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Data preparation for Statistical Analysis of Metagenomic Data</h1>
-                      </div>
+      <h1 class="title">Data preparation</h1>
+                  <div>
+        <div class="description">
+          Preparatory work for Statistical Analysis of Metagenomic Data
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Preparatory Analysis</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -988,7 +1013,7 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/inesbakli\.github\.io\/metagenomics\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

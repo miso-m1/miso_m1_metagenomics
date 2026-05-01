@@ -12,7 +12,7 @@ about:
       href: https://www.linkedin.com/in/pl49000/
     - icon: github
       text: Github
-      href: https://github.com/Clement-Poupelin/Blog_template
+      href: https://github.com/asnth-bio/miso_m1_project
 ---
 
 <!-- Ajouter une description du blog (proche du README) + mettre photo de groupe sympa -->

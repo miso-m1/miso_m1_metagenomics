@@ -265,7 +265,7 @@ ul.task-list li input[type="checkbox"] {
   <li class="nav-item">
     <a class="nav-link" href="./TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-text-fill" role="img">
 </i> 
-<span class="menu-text">Results</span></a>
+<span class="menu-text">Report</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-bar-graph-fill" role="img">
@@ -275,9 +275,8 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">Home</span>
-    </span>
+    <a class="nav-link" href="https://inesbakli.github.io/metagenomics/"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./about.html" aria-current="page"> 
@@ -291,12 +290,16 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-github">    
         <li>
-    <a class="dropdown-item" href="https://github.com/asnth-bio">
- <span class="dropdown-text">Alden Sneath</span></a>
+    <a class="dropdown-item" href="https://github.com/inesbakli">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://github.com/nonomtrt">
- <span class="dropdown-text">Noémie Matrat</span></a>
+    <a class="dropdown-item" href="https://github.com/Akanhnheanh">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/asnth-bio">
+ <span class="dropdown-text">Alden Sneath</span></a>
   </li>  
     </ul>
   </li>
@@ -317,11 +320,27 @@ ul.task-list li input[type="checkbox"] {
   </li>  
     </ul>
   </li>
-  <li class="nav-item compact">
-    <a class="nav-link" href="mailto:ines.bakli2002@gmail.com"> <i class="bi bi-envelope" role="img">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-envelope" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-envelope" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-envelope">    
+        <li>
+    <a class="dropdown-item" href="mailto:ines.bakli2002@gmail.com">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="mailto:paul.lemonnier@hotmail.fr">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="mailto:paul.lemonnier@hotmail.fr">
+ <span class="dropdown-text">Alden Sneath</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item compact">
     <a class="nav-link" href="http://clement-poupelin.github.io/"> <i class="bi bi-person-circle" role="img">
 </i> 
@@ -370,7 +389,7 @@ ul.task-list li input[type="checkbox"] {
     <i class="bi bi-linkedin"></i>
      <span class="about-link-text">Paul Lemonnier</span>
   </a>
-  <a href="https://github.com/Clement-Poupelin/Blog_template" class="about-link" rel="" target="">
+  <a href="https://github.com/asnth-bio/miso_m1_project" class="about-link" rel="" target="">
     <i class="bi bi-github"></i>
      <span class="about-link-text">Github</span>
   </a>
@@ -501,7 +520,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/inesbakli\.github\.io\/metagenomics\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -1,7 +1,10 @@
 ---
-  title: "Data preparation for Statistical Analysis of Metagenomic Data"
+  title: "Data preparation"
   format: html
   editor: visual
+  categories: ["Preparatory Analysis"]
+  image: "/img/2644373.png"
+  description: "Preparatory work for Statistical Analysis of Metagenomic Data"
 ---
 
 ```{r}

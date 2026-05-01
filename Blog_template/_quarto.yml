@@ -5,7 +5,7 @@ project:
 
 website:
   title: Statistical Analysis of Metagenomic Data
-  site-url: "/"
+  site-url: https://asnth-bio.github.io/miso_m1_project/
   favicon: img/lille_logo.png
   navbar:
     background: light
@@ -14,22 +14,24 @@ website:
     logo-href: https://www.univ-lille.fr/
     left:
       - icon: file-earmark-text-fill
-        text: Results
+        text: Report
         href: TP_StatGdeDim.pdf
       - icon: file-earmark-bar-graph-fill
         text: Plots
         href: TP_StatGdeDim.pdf  
         
     right:
-      - href: ""
+      - href: https://asnth-bio.github.io/miso_m1_project/
         text: Home
       - about.qmd
       - icon: github
         menu: 
+          - href: https://github.com/inesbakli
+            text: Ines Bakli
+          - href: https://github.com/Akanhnheanh
+            text: Paul Lemonnier
           - href: https://github.com/asnth-bio
             text: Alden Sneath
-          - href: https://github.com/nonomtrt
-            text: Noémie Matrat
       - icon: linkedin
         menu: 
           - href: https://www.linkedin.com/in/ines-bakli-513b1126b/
@@ -37,7 +39,11 @@ website:
           - href: https://www.linkedin.com/in/pl49000/
             text: Paul Lemonnier
       - icon: envelope
-        href: mailto:ines.bakli2002@gmail.com
+        menu: 
+          - href: mailto:ines.bakli2002@gmail.com
+            text: Ines Bakli
+          - href: mailto:paul.lemonnier@hotmail.fr
+            text: Paul Lemonnier
       - icon: person-circle
         href: http://clement-poupelin.github.io/
 

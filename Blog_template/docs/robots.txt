@@ -1,1 +1,1 @@
-Sitemap: /sitemap.xml
+Sitemap: https://asnth-bio.github.io/miso_m1_project/sitemap.xml

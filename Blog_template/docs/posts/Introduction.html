@@ -302,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="../TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-text-fill" role="img">
 </i> 
-<span class="menu-text">Results</span></a>
+<span class="menu-text">Report</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../TP_StatGdeDim.pdf"> <i class="bi bi-file-earmark-bar-graph-fill" role="img">
@@ -312,9 +312,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">Home</span>
-    </span>
+    <a class="nav-link" href="https://asnth-bio.github.io/miso_m1_project/"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../about.html"> 
@@ -328,12 +327,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-github">    
         <li>
-    <a class="dropdown-item" href="https://github.com/asnth-bio">
- <span class="dropdown-text">Alden Sneath</span></a>
+    <a class="dropdown-item" href="https://github.com/inesbakli">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://github.com/nonomtrt">
- <span class="dropdown-text">Noémie Matrat</span></a>
+    <a class="dropdown-item" href="https://github.com/Akanhnheanh">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/asnth-bio">
+ <span class="dropdown-text">Alden Sneath</span></a>
   </li>  
     </ul>
   </li>
@@ -354,11 +357,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
-  <li class="nav-item compact">
-    <a class="nav-link" href="mailto:ines.bakli2002@gmail.com"> <i class="bi bi-envelope" role="img">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-envelope" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-envelope" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-envelope">    
+        <li>
+    <a class="dropdown-item" href="mailto:ines.bakli2002@gmail.com">
+ <span class="dropdown-text">Ines Bakli</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="mailto:paul.lemonnier@hotmail.fr">
+ <span class="dropdown-text">Paul Lemonnier</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item compact">
     <a class="nav-link" href="http://clement-poupelin.github.io/"> <i class="bi bi-person-circle" role="img">
 </i> 
@@ -481,7 +496,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Beta diversity analysis</p></li>
 </ul>
 <p>The full preliminary work is implemented in the following document:</p>
-<p><a href="../posts/datapreparation.html">Data Preparation and Analysis</a></p>
+<p><a href="../docs/datapreparation.html">Data preparation and Analysis</a></p>
 </section>
 <section id="packages-used" class="level1">
 <h1>Packages used</h1>
@@ -592,7 +607,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("\/");
+        var filterRegex = new RegExp("https:\/\/asnth-bio\.github\.io\/miso_m1_project\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

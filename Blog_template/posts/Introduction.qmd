@@ -3,7 +3,7 @@ title: "Introduction"
 format: html
 editor: visual
 categories: ["Introduction"]
-image: "/img/helix.jpg"
+image: "/img/doublehelix.png"
 description: "Metagenomics and Project introduction"
 ---
 
