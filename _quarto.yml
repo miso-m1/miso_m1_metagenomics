@@ -31,18 +31,24 @@ website:
             text: Paul Lemonnier
           - href: https://github.com/asnth-bio
             text: Alden Sneath
+          - href: https://github.com/Clement-Poupelin
+            text: Clément Poupelin
       - icon: linkedin
         menu: 
           - href: https://www.linkedin.com/in/ines-bakli-513b1126b/
             text: Ines Bakli
           - href: https://www.linkedin.com/in/pl49000/
             text: Paul Lemonnier
+          - href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
+            text: Clément Poupelin
       - icon: envelope
         menu: 
           - href: mailto:ines.bakli2002@gmail.com
             text: Ines Bakli
           - href: mailto:paul.lemonnier@hotmail.fr
             text: Paul Lemonnier
+          - href: mailto:clementjc.poupelin@gmail.com
+            text: Clément Poupelin
       - icon: person-circle
         href: http://clement-poupelin.github.io/
 
