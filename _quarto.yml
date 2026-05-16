@@ -1,0 +1,71 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: Statistical Analysis of Metagenomic Data
+  site-url: https://miso-m1.github.io/miso_m1_metagenomics/
+  favicon: img/lille_logo.png
+  navbar:
+    background: light
+    title: Statistical Analysis of Metagenomic Data
+    logo: img/lille_logo.png
+    logo-href: https://www.univ-lille.fr/
+    left:
+      - icon: file-earmark-text-fill
+        text: Report
+        href: TP_StatGdeDim.pdf
+      - icon: file-earmark-bar-graph-fill
+        text: Plots
+        href: TP_StatGdeDim.pdf  
+        
+    right:
+      - href: https://miso-m1.github.io/miso_m1_metagenomics/
+        text: Home
+      - about.qmd
+      - icon: github
+        menu: 
+          - href: https://github.com/inesbakli
+            text: Ines Bakli
+          - href: https://github.com/Akanhnheanh
+            text: Paul Lemonnier
+          - href: https://github.com/asnth-bio
+            text: Alden Sneath
+          - href: https://github.com/Clement-Poupelin
+            text: Clément Poupelin
+      - icon: linkedin
+        menu: 
+          - href: https://www.linkedin.com/in/ines-bakli-513b1126b/
+            text: Ines Bakli
+          - href: https://www.linkedin.com/in/pl49000/
+            text: Paul Lemonnier
+          - href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
+            text: Clément Poupelin
+      - icon: envelope
+        menu: 
+          - href: mailto:ines.bakli2002@gmail.com
+            text: Ines Bakli
+          - href: mailto:paul.lemonnier@hotmail.fr
+            text: Paul Lemonnier
+          - href: mailto:clementjc.poupelin@gmail.com
+            text: Clément Poupelin
+      - icon: person-circle
+        href: http://clement-poupelin.github.io/
+
+  page-footer: 
+    background: light
+    left: Copyright 2025, Clément Poupelin
+    right: This blog is built with [Quarto](https://quarto.org/)
+
+
+format:
+
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: custom.css
+    toc: true
+
+    
+editor: visual

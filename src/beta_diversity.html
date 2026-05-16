@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data organizing and preliminary analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="beta_diversity_files/libs/clipboard/clipboard.min.js"></script>
+<script src="beta_diversity_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="beta_diversity_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="beta_diversity_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="beta_diversity_files/libs/quarto-html/popper.min.js"></script>
+<script src="beta_diversity_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="beta_diversity_files/libs/quarto-html/anchor.min.js"></script>
+<link href="beta_diversity_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="beta_diversity_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="beta_diversity_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="beta_diversity_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="beta_diversity_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data organizing and preliminary analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="create-phyloseq-object" class="level2">
+<h2 class="anchored" data-anchor-id="create-phyloseq-object">Create phyloseq object</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"phyloseq"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)      <span class="co"># graphics</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"readxl"</span>)       <span class="co"># necessary to import the data from Excel file</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)        <span class="co"># filter and reformat data frames</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tibble"</span>)       <span class="co"># Needed for converting column to row names</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"readxl"</span>)       <span class="co"># read excel files</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="fu">dirname</span>(<span class="fu">getwd</span>()))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>otu_mat<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/dataset_MISO_project.xlsx"</span>, <span class="at">sheet =</span> <span class="st">"OTU_table"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>tax_mat<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/dataset_MISO_project.xlsx"</span>, <span class="at">sheet =</span> <span class="st">"Taxonomy"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>samples_df <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/dataset_MISO_project.xlsx"</span>, <span class="at">sheet =</span> <span class="st">"Sample_data"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert data frames to matrices and set row names. Phyloseq objects need to have row.names</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>otu_mat <span class="ot">&lt;-</span> otu_mat <span class="sc">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">"OTU_ID"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>tax_mat <span class="ot">&lt;-</span> tax_mat <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">"Tax_ID"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>samples_df <span class="ot">&lt;-</span> samples_df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">"Sample_ID"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Transform into matrixes otu and tax tables (sample table can be left as data frame)</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>otu_mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(otu_mat)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>tax_mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tax_mat)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to phyloseq objects</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>OTU <span class="ot">=</span> <span class="fu">otu_table</span>(otu_mat, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>TAX <span class="ot">=</span> <span class="fu">tax_table</span>(tax_mat)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">sample_data</span>(samples_df)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>metagenomics <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(OTU, TAX, samples)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>metagenomics</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 640 taxa and 484 samples ]
+sample_data() Sample Data:       [ 484 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
+</div>
+</div>
+</section>
+<section id="check-data" class="level2">
+<h2 class="anchored" data-anchor-id="check-data">Check data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_names</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "Sample_1880" "Sample_1881" "Sample_1882" "Sample_1883" "Sample_1884"
+  [6] "Sample_1885" "Sample_1886" "Sample_1887" "Sample_1888" "Sample_1889"
+ [11] "Sample_1890" "Sample_1891" "Sample_1892" "Sample_1893" "Sample_1894"
+ [16] "Sample_1907" "Sample_1908" "Sample_1909" "Sample_1910" "Sample_1911"
+ [21] "Sample_1914" "Sample_2082" "Sample_2083" "Sample_2084" "Sample_2085"
+ [26] "Sample_2086" "Sample_2087" "Sample_2088" "Sample_2089" "Sample_2090"
+ [31] "Sample_2091" "Sample_2092" "Sample_2093" "Sample_2094" "Sample_2095"
+ [36] "Sample_2096" "Sample_2097" "Sample_2098" "Sample_2099" "Sample_2100"
+ [41] "Sample_2101" "Sample_2102" "Sample_2103" "Sample_2104" "Sample_2105"
+ [46] "Sample_2106" "Sample_2107" "Sample_2108" "Sample_2109" "Sample_2110"
+ [51] "Sample_2111" "Sample_2112" "Sample_2113" "Sample_2114" "Sample_2115"
+ [56] "Sample_2116" "Sample_2117" "Sample_2118" "Sample_2119" "Sample_2120"
+ [61] "Sample_2121" "Sample_2122" "Sample_2123" "Sample_2124" "Sample_2125"
+ [66] "Sample_2126" "Sample_2127" "Sample_2128" "Sample_2129" "Sample_2130"
+ [71] "Sample_2131" "Sample_2132" "Sample_2133" "Sample_2134" "Sample_2135"
+ [76] "Sample_2136" "Sample_2137" "Sample_2138" "Sample_2139" "Sample_2140"
+ [81] "Sample_2141" "Sample_2142" "Sample_2143" "Sample_2144" "Sample_2145"
+ [86] "Sample_2146" "Sample_2147" "Sample_2148" "Sample_2149" "Sample_2150"
+ [91] "Sample_2155" "Sample_2160" "Sample_2177" "Sample_2178" "Sample_2221"
+ [96] "Sample_2222" "Sample_2223" "Sample_2224" "Sample_2225" "Sample_2226"
+[101] "Sample_2227" "Sample_2228" "Sample_2229" "Sample_2230" "Sample_2231"
+[106] "Sample_2232" "Sample_2233" "Sample_2235" "Sample_2236" "Sample_2239"
+[111] "Sample_2240" "Sample_2241" "Sample_2242" "Sample_2243" "Sample_2245"
+[116] "Sample_2246" "Sample_2247" "Sample_2248" "Sample_2249" "Sample_2254"
+[121] "Sample_2255" "Sample_2256" "Sample_2258" "Sample_2261" "Sample_2262"
+[126] "Sample_2265" "Sample_2266" "Sample_2267" "Sample_2268" "Sample_2273"
+[131] "Sample_2274" "Sample_2276" "Sample_2278" "Sample_2279" "Sample_2280"
+[136] "Sample_2281" "Sample_2282" "Sample_2283" "Sample_2284" "Sample_2285"
+[141] "Sample_2286" "Sample_2287" "Sample_2288" "Sample_2289" "Sample_2290"
+[146] "Sample_2291" "Sample_2292" "Sample_2294" "Sample_2485" "Sample_2486"
+[151] "Sample_2487" "Sample_2488" "Sample_2489" "Sample_2490" "Sample_2491"
+[156] "Sample_2492" "Sample_2493" "Sample_2494" "Sample_2495" "Sample_2496"
+[161] "Sample_2497" "Sample_2498" "Sample_2499" "Sample_2500" "Sample_2501"
+[166] "Sample_2502" "Sample_2503" "Sample_2504" "Sample_2505" "Sample_2506"
+[171] "Sample_2507" "Sample_2508" "Sample_2509" "Sample_2510" "Sample_2511"
+[176] "Sample_2512" "Sample_2513" "Sample_2514" "Sample_2515" "Sample_2516"
+[181] "Sample_2517" "Sample_2518" "Sample_2519" "Sample_2520" "Sample_2521"
+[186] "Sample_2522" "Sample_2523" "Sample_2524" "Sample_2525" "Sample_2526"
+[191] "Sample_2527" "Sample_2528" "Sample_2529" "Sample_2530" "Sample_2531"
+[196] "Sample_2532" "Sample_2533" "Sample_2534" "Sample_2535" "Sample_2536"
+[201] "Sample_2537" "Sample_2538" "Sample_2539" "Sample_2540" "Sample_2541"
+[206] "Sample_2542" "Sample_2543" "Sample_2544" "Sample_2545" "Sample_2546"
+[211] "Sample_2547" "Sample_2548" "Sample_2549" "Sample_2550" "Sample_2551"
+[216] "Sample_2552" "Sample_2553" "Sample_2554" "Sample_2555" "Sample_2556"
+[221] "Sample_2557" "Sample_2558" "Sample_2559" "Sample_2560" "Sample_2561"
+[226] "Sample_2562" "Sample_2563" "Sample_2564" "Sample_2565" "Sample_2566"
+[231] "Sample_2567" "Sample_2568" "Sample_2569" "Sample_2570" "Sample_2571"
+[236] "Sample_2572" "Sample_2573" "Sample_2574" "Sample_2575" "Sample_2576"
+[241] "Sample_2577" "Sample_2578" "Sample_2579" "Sample_2580" "Sample_2581"
+[246] "Sample_2582" "Sample_2583" "Sample_2584" "Sample_2585" "Sample_2586"
+[251] "Sample_2587" "Sample_2588" "Sample_2589" "Sample_2590" "Sample_2591"
+[256] "Sample_2592" "Sample_2593" "Sample_2594" "Sample_2595" "Sample_2596"
+[261] "Sample_2597" "Sample_2598" "Sample_2599" "Sample_2600" "Sample_2601"
+[266] "Sample_2602" "Sample_3063" "Sample_3064" "Sample_3065" "Sample_3066"
+[271] "Sample_3067" "Sample_3068" "Sample_3069" "Sample_3070" "Sample_3071"
+[276] "Sample_3072" "Sample_3073" "Sample_3074" "Sample_3075" "Sample_3076"
+[281] "Sample_3077" "Sample_3078" "Sample_3079" "Sample_3080" "Sample_3081"
+[286] "Sample_3082" "Sample_3083" "Sample_3084" "Sample_3085" "Sample_3086"
+[291] "Sample_3087" "Sample_3088" "Sample_3089" "Sample_3090" "Sample_3091"
+[296] "Sample_3092" "Sample_3093" "Sample_3094" "Sample_3095" "Sample_3096"
+[301] "Sample_3097" "Sample_3098" "Sample_3135" "Sample_3136" "Sample_3137"
+[306] "Sample_3138" "Sample_3139" "Sample_3140" "Sample_3141" "Sample_3142"
+[311] "Sample_3143" "Sample_3144" "Sample_3145" "Sample_3146" "Sample_3147"
+[316] "Sample_3148" "Sample_3149" "Sample_3150" "Sample_3151" "Sample_3152"
+[321] "Sample_3153" "Sample_3154" "Sample_3155" "Sample_3156" "Sample_3157"
+[326] "Sample_3158" "Sample_3159" "Sample_3160" "Sample_3162" "Sample_3163"
+[331] "Sample_3164" "Sample_3165" "Sample_3170" "Sample_3173" "Sample_3174"
+[336] "Sample_3175" "Sample_3176" "Sample_3177" "Sample_3178" "Sample_3179"
+[341] "Sample_3180" "Sample_3181" "Sample_3182" "Sample_3183" "Sample_3184"
+[346] "Sample_3185" "Sample_3186" "Sample_3187" "Sample_3188" "Sample_3189"
+[351] "Sample_3190" "Sample_3191" "Sample_3192" "Sample_3193" "Sample_3194"
+[356] "Sample_3196" "Sample_3197" "Sample_3198" "Sample_3199" "Sample_3200"
+[361] "Sample_3201" "Sample_3202" "Sample_3203" "Sample_3204" "Sample_3205"
+[366] "Sample_3206" "Sample_3207" "Sample_3208" "Sample_3209" "Sample_3210"
+[371] "Sample_3211" "Sample_3212" "Sample_3213" "Sample_3214" "Sample_3215"
+[376] "Sample_3216" "Sample_3217" "Sample_3218" "Sample_3219" "Sample_3220"
+[381] "Sample_3221" "Sample_3222" "Sample_3223" "Sample_3224" "Sample_3225"
+[386] "Sample_3226" "Sample_3227" "Sample_3228" "Sample_3229" "Sample_3230"
+[391] "Sample_3231" "Sample_3232" "Sample_3233" "Sample_3234" "Sample_3235"
+[396] "Sample_3236" "Sample_3237" "Sample_3238" "Sample_3239" "Sample_3240"
+[401] "Sample_3241" "Sample_3242" "Sample_3243" "Sample_3244" "Sample_3245"
+[406] "Sample_3246" "Sample_3247" "Sample_3248" "Sample_3249" "Sample_3250"
+[411] "Sample_3251" "Sample_3252" "Sample_3253" "Sample_3254" "Sample_3255"
+[416] "Sample_3256" "Sample_3257" "Sample_3258" "Sample_3259" "Sample_3260"
+[421] "Sample_3261" "Sample_3262" "Sample_3263" "Sample_3264" "Sample_3265"
+[426] "Sample_3266" "Sample_3267" "Sample_3268" "Sample_3269" "Sample_3270"
+[431] "Sample_3271" "Sample_3272" "Sample_3273" "Sample_3274" "Sample_3275"
+[436] "Sample_3276" "Sample_3480" "Sample_3482" "Sample_3488" "Sample_3492"
+[441] "Sample_3493" "Sample_3495" "Sample_3496" "Sample_3501" "Sample_3504"
+[446] "Sample_3507" "Sample_3509" "Sample_3519" "Sample_3520" "Sample_3522"
+[451] "Sample_3526" "Sample_3527" "Sample_3528" "Sample_3529" "Sample_3536"
+[456] "Sample_3537" "Sample_3538" "Sample_3543" "Sample_3545" "Sample_3551"
+[461] "Sample_3552" "Sample_3553" "Sample_3556" "Sample_3558" "Sample_3559"
+[466] "Sample_3561" "Sample_3562" "Sample_3563" "Sample_3568" "Sample_3570"
+[471] "Sample_3572" "Sample_3576" "Sample_3578" "Sample_3580" "Sample_3586"
+[476] "Sample_3591" "Sample_3592" "Sample_3593" "Sample_3594" "Sample_3595"
+[481] "Sample_3596" "Sample_3601" "Sample_3609" "Sample_3610"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_names</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_variables</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "dataset_name"          "bodysite"              "disease"              
+[4] "age"                   "gender"                "country"              
+[7] "sequencing_technology" "pubmedid"             </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures/Preliminary"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Visualize data</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample_totals &lt;- sample_sums(metagenomics)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># p6 &lt;- boxplot(sample_totals, main = "Sample Sizes", ylab = "Sum of Relative Abundance", col = "lightblue")</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># p6</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Preliminary/bar_graph_sample_sums.pdf", p6)</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>sample_totals <span class="ot">&lt;-</span> <span class="fu">sample_sums</span>(metagenomics)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frame for ggplot</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>df_sample_totals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Total_reads =</span> sample_totals)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_sample_totals, <span class="fu">aes</span>(<span class="at">y =</span> Total_reads)) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sample Sizes"</span>, <span class="at">y =</span> <span class="st">"Sample Totals"</span>) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Save with ggsave</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/boxplot_sample_sums.pdf"</span>, p6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+</section>
+<section id="bar-plots-by-sample-data" class="level2">
+<h2 class="anchored" data-anchor-id="bar-plots-by-sample-data">Bar Plots by Sample Data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>country <span class="ot">&lt;-</span> samples_df<span class="sc">$</span>country</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>country_count <span class="ot">&lt;-</span> <span class="fu">table</span>(country)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the table to a data frame for ggplot</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>country_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(country_count)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(country_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"country"</span>, <span class="st">"count"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(country_df, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sample count by country"</span>, <span class="at">x =</span> <span class="st">"country"</span>, <span class="at">y =</span> <span class="st">"sample count"</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/barplot_sample_count_country.pdf"</span>, p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>disease <span class="ot">&lt;-</span> samples_df<span class="sc">$</span>disease</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>disease_count <span class="ot">&lt;-</span> <span class="fu">table</span>(disease)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the table to a data frame for ggplot</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>disease_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(disease_count)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(disease_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"disease"</span>, <span class="st">"count"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>p9 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(disease_df, <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sample count by disease"</span>, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">y =</span> <span class="st">"sample count"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>p9</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/barplot_sample_count_disease.pdf"</span>, p9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>metagenomics_disease <span class="ot">&lt;-</span> <span class="fu">merge_samples</span>(metagenomics, <span class="st">"disease"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_disease, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">color=</span>Class, <span class="at">fill=</span>Class), <span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Bacteria class distribution by diseases"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"Disease"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Abundance"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+ℹ Please use tidy evaluation idioms with `aes()`.
+ℹ See also `vignette("ggplot2-in-packages")` for more information.
+ℹ The deprecated feature was likely used in the phyloseq package.
+  Please report the issue at &lt;https://github.com/joey711/phyloseq/issues&gt;.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save plots in a folder </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/bar_graph_disease_Class.pdf"</span>, p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>metagenomics_country <span class="ot">&lt;-</span> <span class="fu">merge_samples</span>(metagenomics, <span class="st">"country"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_country, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">color=</span>Class, <span class="at">fill=</span>Class), <span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Bacteria class distribution by country"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Abundance"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>p3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/bar_graph_country_Class.pdf"</span>, p3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>metagenomics_gender <span class="ot">&lt;-</span> <span class="fu">merge_samples</span>(metagenomics, <span class="st">"gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion
+Warning in asMethod(object): NAs introduced by coercion</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_gender, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">color=</span>Class, <span class="at">fill=</span>Class), <span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Bacteria class distribution by gender"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Abundance"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>p4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/bar_graph_gender_Class.pdf"</span>, p4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count occurrences per country and disease</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> samples_df <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(country, disease)   <span class="co"># handles NA by default (drops them)</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(counts, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> n, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span>            <span class="co"># stacked bars</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Disease counts by country"</span>,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of samples"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Disease"</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>p5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/Bar%20Plot%20of%20bacteria%20class%20distribution%20by%20sample%20data-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the plot</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/disease_counts_by_country.pdf"</span>, p5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+</section>
+<section id="taxnomic-barplot" class="level1">
+<h1><strong>Taxnomic barplot</strong></h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">color=</span>Phylum, <span class="at">fill=</span>Phylum), <span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Bacteria distribution by Phylum"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"Samples"</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Abundance"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>p7</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Preliminary/bar_graph_Phylum.pdf"</span>, p7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># p8 &lt;- plot_bar(metagenomics, fill = "Class") + </span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_bar(aes(color=Class, fill=Class), stat="identity", position="stack") + </span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   labs(</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#       title = "Bacteria distribution by Class",</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">#       x = "Samples",</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">#       y = "Abundance",</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># p8</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Preliminary/bar_graph_Class.pdf", p8)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="beta-diversity" class="level2">
+<h2 class="anchored" data-anchor-id="beta-diversity">Beta Diversity</h2>
+<p>Beta diversity quantifies the dissimilarity between pairs of samples. It answers how different are the microbial communities across groups. We examine whether gut microbiomes differ significantly between disease groups using common distance metrics:</p>
+<p><strong>Bray-Curtis</strong> - Considers both presence/absence and relative abundance. The sum of lesser counts for species present in both communities divided by the sum of all counts in both communities. This can be thought of as a quantitative version of the Sørensen index.</p>
+<p><span class="math display">\[
+BC = \frac{\sum_{i=1}^{n} |p^a_{i} - p^b_{i}|}{\sum_{i=1}^{n} (p^a_{i} + p^b_{i})}
+\]</span></p>
+<p><span class="math inline">\(n\)</span> = total number of species</p>
+<p><span class="math inline">\(p^a_{i} and p^b_{i}\)</span> = are the relative frequencies of species <span class="math inline">\(i\)</span> in plots <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span></p>
+<p><strong>Jaccard</strong> - Considers only presence/absence. The number of species common to both communities divided by the number of species in either community.</p>
+<p><span class="math display">\[
+J=(B+C)/(A+B+C)
+\]</span></p>
+<p><strong>Sorensen</strong> - This Index focuses exclusively on shared presence and addresses “how similar are two communities?”. Two times the number of species common to both communities divided by the sum of the number of species in each community.</p>
+<p><span class="math display">\[
+S=(B+C)/(2A+B+C)
+\]</span></p>
+<p><span class="math inline">\(A\)</span> = the number of species shared by two communities</p>
+<p><span class="math inline">\(B, C\)</span> = are the number of species unique to each of the two communities</p>
+<p>We then visualise sample similarities via Principal Coordinate Analysis (PCoA) and test for group differences using PERMANOVA. A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test.</p>
+<section id="distance-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="distance-matrices">Distance Matrices</h3>
+<p>We compute distance matrices from the normalised counts</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.1     ✔ readr     2.2.0
+✔ lubridate 1.9.5     ✔ stringr   1.6.0
+✔ purrr     1.2.1     ✔ tidyr     1.3.2
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"phyloseq"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"vegan"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: permute</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bray-Curtis (abundance‑sensitive)</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>dist_bray <span class="ot">&lt;-</span> <span class="fu">distance</span>(metagenomics, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Jaccard (presence/absence only)</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>dist_jaccard <span class="ot">&lt;-</span> <span class="fu">distance</span>(metagenomics, <span class="at">method =</span> <span class="st">"jaccard"</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert abundance matrix to presence/absence (0/1)</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co"># pa_matrix &lt;- ifelse(otu_table(metagenomics) &gt; 0, 1, 0)</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Bray–Curtis on binary data gives Sørensen</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_sorensen &lt;- vegdist(pa_matrix, method = "bray")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="ordination-pcoa" class="level2">
+<h2 class="anchored" data-anchor-id="ordination-pcoa">Ordination (PCoA)</h2>
+<p>PCoA (also called metric MDS) projects the high‑dimensional distance matrix into two dimensions, allowing us to visualize how samples cluster by disease status.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform PCoA on distance matrices</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>ord_bray <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_bray)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>p_bray <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, ord_bray, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">level =</span> <span class="fl">0.95</span>) <span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bray-Curtis Dissimilarity"</span>) <span class="sc">+</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>p_bray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Beta/PCA_distance_bray.pdf"</span>, p_bray)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>ord_jaccard <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"MDS"</span>, <span class="at">distance =</span> dist_jaccard)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>p_jaccard <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, ord_jaccard, <span class="at">color =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="fu">aes</span>(<span class="at">group =</span> disease), <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">level =</span> <span class="fl">0.95</span>) <span class="sc">+</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Jaccard Distance"</span>) <span class="sc">+</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>p_jaccard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="beta_diversity_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/Beta/PCA_distance_jaccard.pdf"</span>, p_jaccard)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ord_sorensen &lt;- ordinate(metagenomics, method = "MDS", distance = dist_sorensen)</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># p_sorensen &lt;- plot_ordination(metagenomics, ord_sorensen, color = "disease") +</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   geom_point(size = 3, alpha = 0.8) +</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   theme_bw(base_size = 12) +</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ggtitle("Sorensen Distance") +</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   theme(legend.position = "bottom")</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="co"># p_jaccard</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="statistical-testing-permanova" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-testing-permanova">Statistical Testing: PERMANOVA</h2>
+<section id="checking-assumption-homogeneity-of-multivariate-dispersion" class="level3">
+<h3 class="anchored" data-anchor-id="checking-assumption-homogeneity-of-multivariate-dispersion">Checking Assumption: Homogeneity of Multivariate Dispersion</h3>
+<p>PERMANOVA is sensitive to differences in within‑group dispersion (variance). We test this using <code>betadisper()</code> (multivariate analogue of Levene’s test).</p>
+<p>We performed <strong><code>betadisper()</code></strong> on both Bray‑Curtis and Jaccard distance matrices, followed by a permutation test. The test evaluates whether the within‑group dispersion (variance around the group median) differs significantly among the four disease groups.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"vegan"</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, samples_df<span class="sc">$</span>disease)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="st">"figures/Beta/boxplot_betaDisperson_bray.pdf"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_bray)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>disp_jaccard <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_jaccard, samples_df<span class="sc">$</span>disease)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="st">"figures/Beta/boxplot_betaDisperson_jaccard.pdf"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_jaccard)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutation test for homogeneity</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>disp_test_bray <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>disp_test_bray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq  Mean Sq      F N.Perm Pr(&gt;F)    
+Groups      3 0.29385 0.097948 18.158    999  0.001 ***
+Residuals 480 2.58921 0.005394                         
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>disp_test_jaccard <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_jaccard, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>disp_test_jaccard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq  Mean Sq      F N.Perm Pr(&gt;F)    
+Groups      3 0.12773 0.042578 18.513    999  0.001 ***
+Residuals 480 1.10393 0.002300                         
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Both tests are highly significant (p &lt; 0.001), meaning: Only 1 out of 1000 permutations produced an F‑statistic as extreme as the one observed.</p>
+<p>This is very strong evidence that the groups do NOT have equal multivariate dispersions. The assumption of homogeneity of variances is violated for both distance metrics.</p>
+<p><strong>PERMANOVA</strong></p>
+<p>PERMANOVA (adonis2) is used to test whether the centroids of the groups (disease status) are significantly different in the multivariate space defined by the distance metrics.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bray-Curtis</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>permanova_bray <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_bray <span class="sc">~</span> disease, </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> samples_df, </span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_bray)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = dist_bray ~ disease, data = samples_df, permutations = 999)
+          Df SumOfSqs      R2      F Pr(&gt;F)    
+Model      3   13.545 0.08694 15.235  0.001 ***
+Residual 480  142.253 0.91306                  
+Total    483  155.798 1.00000                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Jaccard</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_jaccard <span class="sc">~</span> disease, </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> samples_df, </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_jaccard)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = dist_jaccard ~ disease, data = samples_df, permutations = 999)
+          Df SumOfSqs      R2      F Pr(&gt;F)    
+Model      3   10.497 0.05553 9.4077  0.001 ***
+Residual 480  178.528 0.94447                  
+Total    483  189.025 1.00000                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><strong>Bray Curtis</strong></p>
+<p>Model (disease) explains <strong>6.4%</strong> of the total variation in community composition (abundance‑sensitive).</p>
+<p>Residual (unexplained) = 93.6%.</p>
+<p>F = 10.97 – large relative to null permutations.</p>
+<p>p = 0.001 – significant at α = 0.001.</p>
+<p><strong>Jaccard</strong></p>
+<ul>
+<li><p>Disease explains 4.0% of variation (presence/absence only).</p></li>
+<li><p>Residuals = 96%</p></li>
+<li><p>F = 6.65 – also large.</p></li>
+<li><p>p = 0.001 – significant.</p></li>
+</ul>
+<p>Both metrics show a statistically significant association between disease status and microbial community dissimilarity. The effect sizes (R²) are small. Bray‑Curtis explains more variation than Jaccard (6.4% vs 4.0%), suggesting that abundance differences are more discriminative than just presence/absence.</p>
+<p>Both PERMANOVA and beta dispersion tests were significant (p = 0.001 for both Bray‑Curtis and Jaccard). This indicates that disease status is associated with differences in both the average microbial community composition and the within‑group variability.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(<span class="st">"Bray-Curtis"</span>, <span class="st">"Jaccard"</span>),</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>)),</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>                <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>)),</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Dispersion p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(disp_test_bray<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>PERMANOVA and beta dispersion test results</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">R2</th>
+<th style="text-align: right;">F</th>
+<th style="text-align: left;">p.value</th>
+<th style="text-align: left;">Dispersion.p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bray-Curtis</td>
+<td style="text-align: right;">0.087</td>
+<td style="text-align: right;">15.23</td>
+<td style="text-align: left;">0.001</td>
+<td style="text-align: left;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jaccard</td>
+<td style="text-align: right;">0.056</td>
+<td style="text-align: right;">9.41</td>
+<td style="text-align: left;">0.001</td>
+<td style="text-align: left;">0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Pairwise Comparisons of Dispersion</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(disp_bray)   <span class="co"># shows which disease pairs have different spreads</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = distances ~ group, data = df)
+
+$group
+                                         diff          lwr          upr
+cirrhosis-cancer                  0.016682210 -0.015732867  0.049097288
+ibd_ulcerative_colitis-cancer    -0.032517958 -0.063968723 -0.001067194
+t2d-cancer                        0.025310339 -0.005638034  0.056258711
+ibd_ulcerative_colitis-cirrhosis -0.049200169 -0.072568279 -0.025832058
+t2d-cirrhosis                     0.008628128 -0.014059308  0.031315564
+t2d-ibd_ulcerative_colitis        0.057828297  0.036541374  0.079115220
+                                     p adj
+cirrhosis-cancer                 0.5462791
+ibd_ulcerative_colitis-cancer    0.0395764
+t2d-cancer                       0.1518545
+ibd_ulcerative_colitis-cirrhosis 0.0000005
+t2d-cirrhosis                    0.7606789
+t2d-ibd_ulcerative_colitis       0.0000000</code></pre>
+</div>
+</div>
+<p>IBD has significantly lower dispersion than cirrhosis (IBD is more homogeneous).</p>
+<p>T2D has significantly higher dispersion than IBD (T2D is more heterogeneous).</p>
+<p>No evidence that cancer differs from others, nor cirrhosis vs T2D.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(disp_jaccard)   <span class="co"># shows which disease pairs have different spreads</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = distances ~ group, data = df)
+
+$group
+                                         diff          lwr           upr
+cirrhosis-cancer                  0.010222026 -0.010943737  0.0313877892
+ibd_ulcerative_colitis-cancer    -0.021306792 -0.041842897 -0.0007706877
+t2d-cancer                        0.017179482 -0.003028580  0.0373875449
+ibd_ulcerative_colitis-cirrhosis -0.031528818 -0.046787270 -0.0162703667
+t2d-cirrhosis                     0.006957456 -0.007856542  0.0217714546
+t2d-ibd_ulcerative_colitis        0.038486275  0.024586756  0.0523857932
+                                     p adj
+cirrhosis-cancer                 0.5984418
+ibd_ulcerative_colitis-cancer    0.0385892
+t2d-cancer                       0.1269799
+ibd_ulcerative_colitis-cirrhosis 0.0000009
+t2d-cirrhosis                    0.6202797
+t2d-ibd_ulcerative_colitis       0.0000000</code></pre>
+</div>
+</div>
+<p>IBD less variable than cirrhosis.</p>
+<p>T2D more variable than IBD.</p>
+<p>Cancer not different from any</p>
+<p>Cirrhosis vs T2D not different.</p>
+</section>
+</section>
+<section id="taxon-abundance-with-heat-trees" class="level2">
+<h2 class="anchored" data-anchor-id="taxon-abundance-with-heat-trees">Taxon abundance with heat trees</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

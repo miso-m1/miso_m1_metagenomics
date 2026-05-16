@@ -1,0 +1,15 @@
+{
+  "hash": "61c0eedbfe7dec756cf8abebd62bc386",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"ignore this\"\nauthor: \"Authors.s\"\ndate: \"2025-02-17\"\ndate-modified: \"2026-05-01\"\nformat: \n  html:\n    embed-resources: false\n    toc: true\n    code-fold: true\n    code-summary: \"Show the code\"\n    code-tools: true\n    toc-location: right\n    page-layout: article\n    code-overflow: wrap\ntoc: true\nnumber-sections: false\neditor: visual\ncategories: [\"Introduction\", \"Preparatory Analysis\", \"Alpha Diversity Analysis\", \"Beta Diversity Analysis\", \"Network Analysis\"]\nimage: \"\"\ndescription: \"Description\"\n---\n\n# Intervenant.e.s\n\n### Rédaction\n\n-   **Clément Poupelin**, [clementjc.poupelin\\@gmail.com](mailto:clementjc.poupelin@gmail.com){.email}\\\n\n### Relecture\n\n-   \n\n# Setup\n\n:::: panel-tabset\n## Packages\n\n\n::: {.cell}\n\n:::\n\n\n## Fonctions\n\n::: panel-tabset\n### Fonction 1\n\n### Fonction 2\n:::\n\n## Seed\n::::\n\n# Données\n\n# Analyse\n\n::: callout-note\nMETTRE LES REMARQUES\n:::\n\n::: callout-warning\nMETTRE LES POINTS D'ATTENTION\n:::\n\n:::: success-header\n::: success-icon\n:::\n\nRésultats\n::::\n\n::: success\nMETTRE LES CONCLUSIONS\n:::\n\n# Conclusion\n\n# Session info\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# sessioninfo::session_info(pkgs = \"attached\")\n```\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

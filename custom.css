@@ -1,0 +1,98 @@
+/* css styles */
+
+/******************************************************************************/
+
+/* Option de mise en forme pour le yml */
+/* Agrandir le logo dans la navbar */
+.navbar-brand img {
+    max-height: 60px; /* Ajuste la hauteur selon tes préférences */
+    width: auto; /* Garde les proportions */
+}
+
+/* Agrandir le titre dans la navbar */
+.navbar-brand {
+    /*font-size: 1.2em; /* Augmente la taille du texte */
+    display: none;
+    /* font-weight: bold; /* Met en gras */
+}
+
+/* Agrandir le titre principal du site */
+h1.title {
+    font-size: 2.2em; /* Ajuste la taille selon tes besoins */
+    font-weight: bold; /* Met en gras */
+    /* text-align: center; /* Centre le titre (optionnel) */
+}
+
+
+/******************************************************************************/
+
+
+/* Création de Callout-Box */
+.result-header {
+  background-color: #d175b8; 
+  color: white; 
+  font-weight: bold;
+  padding: 4px 6px;
+  display: flex;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.result {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  border: 6px solid #d175b8;
+  border-left-width: .5em;
+  border-right-width: .1em;
+  border-bottom-width: .1em;
+  border-top-width: 0em;
+  border-radius: 10px;
+  color: #ebddf1;
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+}
+
+.success-header {
+  background-color: #dff0d8; 
+  color: #3f6634; 
+  border-left: 6px solid #3f6634;
+  border-left-width: .5em;
+  border-right-width: .1em;
+  border-bottom-width: .0em;
+  border-top-width: .1em;
+  font-weight: bold;
+  padding: 4px 6px;
+  display: flex;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.success-icon {
+  height: 1.2rem;
+  width: 1.2rem;
+  display: inline-block;
+  content: "";
+  background-repeat: no-repeat;
+  background-size: 1.2rem 1.2rem;
+  margin-top: .2rem;
+  padding-right: 1.25rem;
+  background-image: url('img/education.png');
+}
+
+
+.success {
+  padding: .5em .5em .5em .5em;
+  margin-bottom: 10px;
+  border-left: 6px solid #3f6634;
+  border-right: 6px solid #dff0d8;
+  border-top: 6px solid #dff0d8;
+  border-bottom: 6px solid #dff0d8;
+  border-left-width: .5em;
+  border-right-width: .1em;
+  border-bottom-width: .1em;
+  border-top-width: 0em;
+  border-radius: 10px;
+  color: #8fd175;
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+}
+

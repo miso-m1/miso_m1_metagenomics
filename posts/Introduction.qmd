@@ -1,0 +1,88 @@
+---
+title: "Introduction"
+format: html
+editor: visual
+categories: ["Introduction"]
+image: "/img/doublehelix.png"
+description: "Metagenomics and Project introduction"
+---
+
+## Introduction
+
+### What is Metagenomics?
+
+Metagenomics involves the study of genetic material recovered directly from environmental samples. Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality.
+
+Unlike traditional microbiology, which focuses on isolated species, metagenomics analyzes the collective genomes of all microorganisms present in a sample. These microbial communities, referred to as the *microbiota*, form part of a broader system known as the *microbiome*, which also includes their interactions, metabolites, and environmental context.
+
+This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.
+
+### 16S rRNA Metagenomics
+
+16S rRNA metagenomics, also known as metabarcoding or amplicon sequencing, is a widely used approach to study bacterial communities. It relies on sequencing the 16S ribosomal RNA gene, a highly conserved genetic marker found in all bacteria and archaea.
+
+This gene contains both conserved regions, which allow universal amplification via PCR, and hypervariable regions, which provide species-specific signatures. As a result, sequencing the 16S rRNA gene enables the identification and classification of bacteria present in a sample, providing a taxonomic census of microbial communities.
+
+The typical workflow includes DNA extraction, PCR amplification of the marker gene, high-throughput sequencing, and taxonomic assignment using reference databases such as SILVA or Greengenes. However, this approach provides relative abundance data rather than absolute quantification and may be influenced by biases such as gene copy number variation.
+
+### Bioinformatics and Data Structure
+
+Metagenomic data processing involves several computational tools such as QIIME, DADA2, and FROGS, which perform sequence filtering, clustering (OTUs) or denoising (ASVs), and taxonomic assignment.
+
+Downstream analysis is commonly performed in R using the **phyloseq** package, which provides a unified framework for handling microbiome data.
+
+### Diversity Analysis
+
+Microbial diversity is typically assessed at multiple levels:
+
+#### Alpha Diversity
+
+Alpha diversity measures the diversity within a single sample. It reflects both:
+
+-   **Richness**: the number of taxa present
+
+-   **Evenness**: the distribution of abundances among taxa
+
+Common indices include Shannon and Simpson. Statistical comparisons between groups can be performed using methods such as ANOVA or non-parametric equivalents.
+
+#### Beta Diversity
+
+Beta diversity measures differences in microbial composition between samples. It is based on ecological distance matrices such as Bray-Curtis or UniFrac.
+
+These distances can be visualized using ordination methods such as Principal Coordinates Analysis (PCoA) or Non-metric Multidimensional Scaling (NMDS), which project samples into a reduced-dimensional space.
+
+To assess statistical significance between groups, methods such as PERMANOVA (Permutational Analysis of Variance) are used. This non-parametric approach evaluates whether differences in microbial composition between groups are greater than expected by chance.
+
+### Data Normalization and Rarefaction
+
+Metagenomic datasets often exhibit variability in sequencing depth across samples. Historically, rarefaction was used to standardize library sizes by subsampling reads. However, this method discards data, reduces statistical power, and can introduce bias.
+
+## Workflow Overview
+
+The analysis is structured into steps:
+
+-   Data import and formatting
+
+-   Quality control and preprocessing
+
+-   Alpha diversity analysis
+
+-   Beta diversity analysis
+
+# Packages used
+
+The following R packages were used throughout the analysis
+
+```{r}
+#| echo: true
+packages <- c(   "phyloseq",   "ggplot2",   "dplyr",   "readxl",   "tibble" ) 
+packages
+```
+
+# Reproducibility
+
+This project follows a modular structure, allowing the pipeline to be applied to different datasets with minimal modifications. The analysis relies on the `phyloseq` framework, ensuring consistent data handling and reproducible results.
+
+# Conclusion
+
+This workflow provides a structured and reproducible approach to metagenomic data analysis, from preprocessing to statistical interpretation. The use of tools and visualization techniques facilitates the exploration of microbial structure and variation across experimental conditions.
