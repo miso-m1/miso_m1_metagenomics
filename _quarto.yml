@@ -16,8 +16,11 @@ website:
         text: Report
         href: TP_StatGdeDim.pdf
       - icon: file-earmark-bar-graph-fill
-        text: Plots
-        href: TP_StatGdeDim.pdf  
+        text: Presentation
+        href: Presentation.qmd
+      - icon: file-earmark-source-fill
+        text: Sources
+        href: resources/
         
     right:
       - href: https://miso-m1.github.io/miso_m1_metagenomics/
@@ -47,6 +50,8 @@ website:
             text: Ines Bakli
           - href: mailto:paul.lemonnier@hotmail.fr
             text: Paul Lemonnier
+          - href: mailto:alden@acsweb.com
+            text: Alden Sneath
           - href: mailto:clementjc.poupelin@gmail.com
             text: Clément Poupelin
       - icon: person-circle
