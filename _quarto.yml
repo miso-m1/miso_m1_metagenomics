@@ -12,18 +12,18 @@ website:
     logo: img/lille_logo.png
     logo-href: https://www.univ-lille.fr/
     left:
-      - icon: file-earmark-house-fill
+      - icon: house-fills
         text: Home
         href: index.qmd
       - icon: file-earmark-text-fill
         text: Report
-        href: TP_StatGdeDim.pdf
+        href: report.qmd
       - icon: file-earmark-bar-graph-fill
         text: Presentation
-        href: Presentation.qmd
-      - icon: file-earmark-book-half
+        href: Presentation.html
+      - icon: book-fill
         text: Sources
-        href: resources/
+        href: resources.qmd
 
     right:
       # - icon: file-earmark-house-fill
@@ -58,8 +58,8 @@ website:
             text: Alden Sneath
           - href: mailto:clementjc.poupelin@gmail.com
             text: Clément Poupelin
-      - icon: person-circle
-        href: http://clement-poupelin.github.io/
+      # - icon: person-circle
+      #   href: http://clement-poupelin.github.io/
 
   page-footer:
     background: light
