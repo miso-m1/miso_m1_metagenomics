@@ -12,22 +12,26 @@ website:
     logo: img/lille_logo.png
     logo-href: https://www.univ-lille.fr/
     left:
+      - icon: file-earmark-house-fill
+        text: Home
+        href: index.qmd
       - icon: file-earmark-text-fill
         text: Report
         href: TP_StatGdeDim.pdf
       - icon: file-earmark-bar-graph-fill
         text: Presentation
         href: Presentation.qmd
-      - icon: file-earmark-source-fill
+      - icon: file-earmark-book-half
         text: Sources
         href: resources/
-        
+
     right:
-      - href: https://miso-m1.github.io/miso_m1_metagenomics/
-        text: Home
+      # - icon: file-earmark-house-fill
+      #   href: https://miso-m1.github.io/miso_m1_metagenomics/
+      #   text: Home
       - about.qmd
       - icon: github
-        menu: 
+        menu:
           - href: https://github.com/inesbakli
             text: Ines Bakli
           - href: https://github.com/Akanhnheanh
@@ -37,7 +41,7 @@ website:
           - href: https://github.com/Clement-Poupelin
             text: Clément Poupelin
       - icon: linkedin
-        menu: 
+        menu:
           - href: https://www.linkedin.com/in/ines-bakli-513b1126b/
             text: Ines Bakli
           - href: https://www.linkedin.com/in/pl49000/
@@ -45,7 +49,7 @@ website:
           - href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
             text: Clément Poupelin
       - icon: envelope
-        menu: 
+        menu:
           - href: mailto:ines.bakli2002@gmail.com
             text: Ines Bakli
           - href: mailto:paul.lemonnier@hotmail.fr
@@ -57,7 +61,7 @@ website:
       - icon: person-circle
         href: http://clement-poupelin.github.io/
 
-  page-footer: 
+  page-footer:
     background: light
     left: Copyright 2025, Clément Poupelin
     right: This blog is built with [Quarto](https://quarto.org/)
@@ -66,11 +70,11 @@ website:
 format:
 
   html:
-    theme: 
+    theme:
       light: flatly
       dark: darkly
     css: custom.css
     toc: true
 
-    
+
 editor: visual
