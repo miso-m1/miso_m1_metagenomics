@@ -4,8 +4,6 @@ format: html
 editor: visual
 ---
 
-## Getting Started
-
 Welcome to our blog on the statistical analysis of metagenomic data. This website presents the different steps of our analysis pipeline, from data preparation to interpretation and network analysis.
 
 The project was carried out as part of the Master’s program in Bioinformatics at [[Université de Lille]{.underline}](https://www.univ-lille.fr/).
