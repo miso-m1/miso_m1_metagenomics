@@ -1,0 +1,17 @@
+---
+page-layout: full
+---
+
+## 📄 Project Resources and Documents
+
+-   [Microbiome definition re-visited: old concepts and new challenges](resources/s40168-020-00875-0.pdf)
+
+-   [phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data](resources/pone.0061217.pdf)
+
+-   [PERMANOVA](resources/PERMANOVA_-_Department_of_Statistics.pdf)
+
+-   [Waste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible](resources/pcbi.1003531.pdf)
+
+-   [Mesures de la Biodiversité](resources/Mesures_de_la_Biodiversite.pdf)
+
+-   [Guide pratique à destination des biologistes, bioinformaticiens et statisticiens qui souhaitent s’initier aux analyses métabarcoding](resources/article.pdf)
