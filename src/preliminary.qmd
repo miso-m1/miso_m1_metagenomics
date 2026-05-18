@@ -19,11 +19,9 @@ library("dplyr")        # filter and reformat data frames
 library("tibble")       # Needed for converting column to row names
 library("readxl")       # read excel files
 
-setwd(dirname(getwd()))
-
-otu_mat<- read_excel("data/dataset_MISO_project.xlsx", sheet = "OTU_table")
-tax_mat<- read_excel("data/dataset_MISO_project.xlsx", sheet = "Taxonomy")
-samples_df <- read_excel("data/dataset_MISO_project.xlsx", sheet = "Sample_data")
+otu_mat<- read_excel("dataset_MISO_project.xlsx", sheet = "OTU_table")
+tax_mat<- read_excel("dataset_MISO_project.xlsx", sheet = "Taxonomy")
+samples_df <- read_excel("dataset_MISO_project.xlsx", sheet = "Sample_data")
 
 # Convert data frames to matrices and set row names. Phyloseq objects need to have row.names
 otu_mat <- otu_mat %>%
