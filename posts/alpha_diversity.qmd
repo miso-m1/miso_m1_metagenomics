@@ -1,5 +1,5 @@
 ---
-  title: "Alpha Diversity"
+  title: "2.1: Alpha Diversity"
   format: html
   editor: visual
   categories: ["Diversity Analysis"]

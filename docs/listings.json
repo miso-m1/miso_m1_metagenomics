@@ -2,10 +2,10 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Introduction.html",
+      "/posts/datapreparation.html",
       "/posts/alpha_diversity.html",
       "/posts/beta_diversity.html",
-      "/posts/datapreparation.html",
-      "/posts/Introduction.html",
       "/posts/Network.html"
     ]
   }

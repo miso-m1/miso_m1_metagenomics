@@ -1,5 +1,5 @@
 ---
-  title: "Metagenomic Network"
+  title: "3: Metagenomic Network Analysis"
   format: html
   editor: visual
   categories: ["Network Analysis"]
