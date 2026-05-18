@@ -58,16 +58,16 @@ OTU = otu_table(otu_mat, taxa_are_rows = TRUE)
 TAX = tax_table(tax_mat)
 samples = sample_data(samples_df)
 
-carbom <- phyloseq(OTU, TAX, samples)
-carbom
+metagenomics <- phyloseq(OTU, TAX, samples)
+metagenomics
 
-sample_names(carbom)
-rank_names(carbom)
-sample_variables(carbom)
+sample_names(metagenomics)
+rank_names(metagenomics)
+sample_variables(metagenomics)
 
-total = median(sample_sums(carbom))
+total = median(sample_sums(metagenomics))
 # standf = function(x, t=total) round(t * (x / sum(x)))
-# carbom = transform_sample_counts(carbom, standf)
+# metagenomics = transform_sample_counts(metagenomics, standf)
 ```
 
 ## Statistical summary
@@ -76,7 +76,7 @@ total = median(sample_sums(carbom))
 #| label: stats-summary
 #| include: true
 
-summary(carbom)
+summary(metagenomics)
 
 ```
 
@@ -112,7 +112,7 @@ Visualizing the total number of sequencing reads obtained for each sample
 
 ```{r}
 
-sample_depth <- sample_sums(carbom)
+sample_depth <- sample_sums(metagenomics)
 
 summary(sample_depth)
 
@@ -132,7 +132,7 @@ Sequencing depth across samples is fairly consistent, with most samples summing 
 However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.
 
 ```{r}
-sample_sums(carbom)[sample_sums(carbom) < 90]
+sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 ```
 
 It seems that Sample_3482 is the problematic sample. Should we get rid of it?
@@ -140,9 +140,9 @@ It seems that Sample_3482 is the problematic sample. Should we get rid of it?
 ## Taxonomic composition
 
 ```{r}
-carbom_phylum <- tax_glom(carbom, taxrank = "Phylum")
-carbom_phylum_per <- transform_sample_counts(carbom_phylum, function(x) x / sum(x))
-plot_bar(carbom_phylum_per, fill = "Phylum") +
+metagenomics_phylum <- tax_glom(metagenomics, taxrank = "Phylum")
+metagenomics_phylum_per <- transform_sample_counts(metagenomics_phylum, function(x) x / sum(x))
+plot_bar(metagenomics_phylum_per, fill = "Phylum") +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Taxonomic composition at Phylum level") +
@@ -150,22 +150,22 @@ plot_bar(carbom_phylum_per, fill = "Phylum") +
 ```
 
 ```{r}
-plot_bar(carbom_phylum_per, x = "disease", fill = "Phylum") +
+plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Phylum composition by disease group")
 ```
 
 ```{r}
-carbom_genus <- tax_glom(carbom, taxrank = "Genus")
+metagenomics_genus <- tax_glom(metagenomics, taxrank = "Genus")
 
-carbom_genus_per <- transform_sample_counts(carbom_genus, function(x) x / sum(x))
+metagenomics_genus_per <- transform_sample_counts(metagenomics_genus, function(x) x / sum(x))
 
 # keep top 10 genera to avoid clutter
-top_genera <- names(sort(taxa_sums(carbom_genus_per), decreasing = TRUE))[1:10]
-carbom_genus_top <- prune_taxa(top_genera, carbom_genus_per)
+top_genera <- names(sort(taxa_sums(metagenomics_genus_per), decreasing = TRUE))[1:10]
+metagenomics_genus_top <- prune_taxa(top_genera, metagenomics_genus_per)
 
-plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
+plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Top 10 Genera Composition by Disease") +
@@ -176,9 +176,9 @@ plot_bar(carbom_genus_top, x = "disease", fill = "Genus") +
 
 ```{r}
 
-pcoa <- ordinate(carbom, method = "PCoA", distance = "bray")
+pcoa <- ordinate(metagenomics, method = "PCoA", distance = "bray")
 
-plot_ordination(carbom, pcoa, color = "gender") +
+plot_ordination(metagenomics, pcoa, color = "gender") +
   geom_point(size = 3) +
   theme_minimal() +
   labs(title = "PCoA - Bray-Curtis by gender")
@@ -187,9 +187,9 @@ plot_ordination(carbom, pcoa, color = "gender") +
 ## Beta Diversity - PCoA by gender and disease
 
 ```{r}
-pcoagd <- ordinate(carbom, method = "PCoA", distance = "bray")
+pcoagd <- ordinate(metagenomics, method = "PCoA", distance = "bray")
 
-plot_ordination(carbom, pcoagd, color = "gender", shape = "disease") +
+plot_ordination(metagenomics, pcoagd, color = "gender", shape = "disease") +
   geom_point(size = 3) +
   theme_minimal()
 ```
@@ -197,7 +197,7 @@ plot_ordination(carbom, pcoagd, color = "gender", shape = "disease") +
 ## Distribution of samples by gender
 
 ```{r}
-meta_df <- data.frame(sample_data(carbom))
+meta_df <- data.frame(sample_data(metagenomics))
 
 gender_counts <- meta_df %>%
   group_by(gender) %>%
@@ -209,7 +209,7 @@ print(gender_counts)
 There is more data for males than females.
 
 ```{r}
-meta_df <- data.frame(sample_data(carbom))
+meta_df <- data.frame(sample_data(metagenomics))
 
 gender_counts <- meta_df %>%
   group_by(gender) %>%
@@ -228,7 +228,7 @@ ggplot(gender_counts, aes(x = gender, y = Count, fill = gender)) +
 Females:
 
 ```{r}
-meta_df <- data.frame(sample_data(carbom))
+meta_df <- data.frame(sample_data(metagenomics))
 
 disease_counts <- meta_df %>%
   group_by(gender, disease) %>%
@@ -259,12 +259,12 @@ ggplot(disease_counts %>% filter(gender == "male"),
 The taxonomic composition at the class level was compared between genders using relative abundance profiles. Only the most abundant classes (top 10) were retained to improve visualization clarity.
 
 ```{r}
-carbom_class <- tax_glom(carbom, taxrank = "Class")
-carbom_class_per <- transform_sample_counts(carbom_class, function(x) x / sum(x))
-top_classes <- names(sort(taxa_sums(carbom_class_per), decreasing = TRUE))[1:10]
-carbom_class_top <- prune_taxa(top_classes, carbom_class_per)
+metagenomics_class <- tax_glom(metagenomics, taxrank = "Class")
+metagenomics_class_per <- transform_sample_counts(metagenomics_class, function(x) x / sum(x))
+top_classes <- names(sort(taxa_sums(metagenomics_class_per), decreasing = TRUE))[1:10]
+metagenomics_class_top <- prune_taxa(top_classes, metagenomics_class_per)
 
-plot_bar(carbom_class_top, x = "gender", fill = "Class") +
+plot_bar(metagenomics_class_top, x = "gender", fill = "Class") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Bacterial TOP 10 Classes Distribution by Gender") +
@@ -275,7 +275,7 @@ The same analysis but with all the bacterial classes:
 
 ```{r}
 
-plot_bar(carbom_class, x = "gender", fill = "Class") +
+plot_bar(metagenomics_class, x = "gender", fill = "Class") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Bacterial Class Distribution by Gender") +
