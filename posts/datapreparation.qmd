@@ -3,7 +3,7 @@
   format: html
   editor: visual
   categories: ["Preparatory Analysis"]
-  image: "/img/2644373.png"
+  image: "/img/dataPrep.jpg"
   description: "Preparatory work for Statistical Analysis of Metagenomic Data"
 ---
 

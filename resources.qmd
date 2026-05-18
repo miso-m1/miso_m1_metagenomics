@@ -2,7 +2,9 @@
 page-layout: full
 ---
 
-## 📄 Project Resources and Documents
+## 📄 Project Sources
+
+### Documents
 
 -   [Microbiome definition re-visited: old concepts and new challenges](resources/s40168-020-00875-0.pdf)
 
@@ -15,3 +17,13 @@ page-layout: full
 -   [Mesures de la Biodiversité](resources/Mesures_de_la_Biodiversite.pdf)
 
 -   [Guide pratique à destination des biologistes, bioinformaticiens et statisticiens qui souhaitent s’initier aux analyses métabarcoding](resources/article.pdf)
+
+### Links
+
+-   <https://clement.poupelin.pages-forge.inrae.fr/blog_open16s/>
+
+-   <https://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html>
+
+-   <https://joey711.github.io/phyloseq/>
+
+-   <https://cran.r-project.org/web/packages/vegan/index.html>

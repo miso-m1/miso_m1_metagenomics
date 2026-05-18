@@ -102,7 +102,7 @@
     "href": "resources.html",
     "title": "Statistical Analysis of Metagenomic Data",
     "section": "",
-    "text": "Microbiome definition re-visited: old concepts and new challenges\nphyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data\nPERMANOVA\nWaste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible\nMesures de la Biodiversité\nGuide pratique à destination des biologistes, bioinformaticiens et statisticiens qui souhaitent s’initier aux analyses métabarcoding"
+    "text": "Microbiome definition re-visited: old concepts and new challenges\nphyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data\nPERMANOVA\nWaste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible\nMesures de la Biodiversité\nGuide pratique à destination des biologistes, bioinformaticiens et statisticiens qui souhaitent s’initier aux analyses métabarcoding\n\n\n\n\n\nhttps://clement.poupelin.pages-forge.inrae.fr/blog_open16s/\nhttps://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html\nhttps://joey711.github.io/phyloseq/\nhttps://cran.r-project.org/web/packages/vegan/index.html"
   },
   {
     "objectID": "resources.html#project-resources-and-documents",
@@ -431,7 +431,7 @@
     "href": "index.html",
     "title": "Statistical Analysis of Metagenomic Data",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n      \n        Modified - Oldest\n      \n      \n        Modified - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nAlpha Diversity\n\n\n\nDiversity Analysis\n\n\n\nAlpha Diversity Analysis on Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 1:25:31 AM\n\n\n\n\n\n\n\n\n\n\n\nBeta Diversity\n\n\n\nDiversity Analysis\n\n\n\nBeta Diversity Analysis on Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 2:49:27 AM\n\n\n\n\n\n\n\n\n\n\n\nData preparation\n\n\n\nPreparatory Analysis\n\n\n\nPreparatory work for Statistical Analysis of Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 10:22:55 AM\n\n\n\n\n\n\n\n\n\n\n\nIntroduction\n\n\n\nIntroduction\n\n\n\nMetagenomics and Project introduction\n\n\n\n\n\n\n\n\n5/18/26, 2:03:57 AM\n\n\n\n\n\n\n\n\n\n\n\nMetagenomic Network\n\n\n\nNetwork Analysis\n\n\n\nNetwork Analysis of Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 1:16:23 AM\n\n\n\n\nNo matching items"
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n      \n        Modified - Oldest\n      \n      \n        Modified - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nAlpha Diversity\n\n\n\nDiversity Analysis\n\n\n\nAlpha Diversity Analysis on Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 1:25:31 AM\n\n\n\n\n\n\n\n\n\n\n\nBeta Diversity\n\n\n\nDiversity Analysis\n\n\n\nBeta Diversity Analysis on Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 2:49:27 AM\n\n\n\n\n\n\n\n\n\n\n\nData preparation\n\n\n\nPreparatory Analysis\n\n\n\nPreparatory work for Statistical Analysis of Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 11:40:36 AM\n\n\n\n\n\n\n\n\n\n\n\nIntroduction\n\n\n\nIntroduction\n\n\n\nMetagenomics and Project introduction\n\n\n\n\n\n\n\n\n5/18/26, 2:03:57 AM\n\n\n\n\n\n\n\n\n\n\n\nMetagenomic Network\n\n\n\nNetwork Analysis\n\n\n\nNetwork Analysis of Metagenomic Data\n\n\n\n\n\n\n\n\n5/18/26, 1:16:23 AM\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "report.html",
@@ -586,5 +586,12 @@
     "title": "Data organizing and preliminary analysis",
     "section": "Taxon abundance with heat trees",
     "text": "Taxon abundance with heat trees"
+  },
+  {
+    "objectID": "resources.html#project-sources",
+    "href": "resources.html#project-sources",
+    "title": "Statistical Analysis of Metagenomic Data",
+    "section": "",
+    "text": "Microbiome definition re-visited: old concepts and new challenges\nphyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data\nPERMANOVA\nWaste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible\nMesures de la Biodiversité\nGuide pratique à destination des biologistes, bioinformaticiens et statisticiens qui souhaitent s’initier aux analyses métabarcoding\n\n\n\n\n\nhttps://clement.poupelin.pages-forge.inrae.fr/blog_open16s/\nhttps://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html\nhttps://joey711.github.io/phyloseq/\nhttps://cran.r-project.org/web/packages/vegan/index.html"
   }
 ]
