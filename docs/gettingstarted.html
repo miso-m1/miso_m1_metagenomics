@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Metagenomics and Project introduction">
 
-<title>Introduction – Statistical Analysis of Metagenomic Data</title>
+<title>Getting Started – Statistical Analysis of Metagenomic Data</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,66 +23,31 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../img/lille_logo.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-65374b318c0134d157d194ac18a362cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./img/lille_logo.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-65374b318c0134d157d194ac18a362cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -113,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../custom.css">
+<link rel="stylesheet" href="custom.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -281,13 +245,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="https://www.univ-lille.fr/" class="navbar-brand navbar-brand-logo">
-    <img src="../img/lille_logo.png" alt="" class="navbar-logo light-content">
-    <img src="../img/lille_logo.png" alt="" class="navbar-logo dark-content">
+    <img src="./img/lille_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./img/lille_logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="https://www.univ-lille.fr/">
     <span class="navbar-title">Statistical Analysis of Metagenomic Data</span>
@@ -300,29 +264,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> <i class="bi bi-house-fills" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-fills" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../gettingstarted.html"> <i class="bi bi-file-earmark-text-fill" role="img">
+    <a class="nav-link active" href="./gettingstarted.html" aria-current="page"> <i class="bi bi-file-earmark-text-fill" role="img">
 </i> 
 <span class="menu-text">Getting Started</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../Presentation.html"> <i class="bi bi-file-earmark-bar-graph-fill" role="img">
+    <a class="nav-link" href="./Presentation.html"> <i class="bi bi-file-earmark-bar-graph-fill" role="img">
 </i> 
 <span class="menu-text">Presentation</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../resources.html"> <i class="bi bi-book-fill" role="img">
+    <a class="nav-link" href="./resources.html"> <i class="bi bi-book-fill" role="img">
 </i> 
 <span class="menu-text">Sources</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -405,31 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Introduction</h1>
-                  <div>
-        <div class="description">
-          Metagenomics and Project introduction
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">Introduction</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -437,100 +377,93 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#how-to-navigate-the-blog" id="toc-how-to-navigate-the-blog" class="nav-link" data-scroll-target="#how-to-navigate-the-blog">How to Navigate the Blog</a>
   <ul class="collapse">
-  <li><a href="#what-is-metagenomics" id="toc-what-is-metagenomics" class="nav-link" data-scroll-target="#what-is-metagenomics">What is Metagenomics?</a></li>
-  <li><a href="#s-rrna-metagenomics" id="toc-s-rrna-metagenomics" class="nav-link" data-scroll-target="#s-rrna-metagenomics">16S rRNA Metagenomics</a></li>
-  <li><a href="#bioinformatics-and-data-structure" id="toc-bioinformatics-and-data-structure" class="nav-link" data-scroll-target="#bioinformatics-and-data-structure">Bioinformatics and Data Structure</a></li>
-  <li><a href="#diversity-analysis" id="toc-diversity-analysis" class="nav-link" data-scroll-target="#diversity-analysis">Diversity Analysis</a></li>
-  <li><a href="#data-normalization-and-rarefaction" id="toc-data-normalization-and-rarefaction" class="nav-link" data-scroll-target="#data-normalization-and-rarefaction">Data Normalization and Rarefaction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">0. Introduction</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">1. Data Preparation</a></li>
+  <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity">2.1 Alpha Diversity</a></li>
+  <li><a href="#beta-diversity" id="toc-beta-diversity" class="nav-link" data-scroll-target="#beta-diversity">2.2 Beta Diversity</a></li>
+  <li><a href="#metagenomic-network-analysis" id="toc-metagenomic-network-analysis" class="nav-link" data-scroll-target="#metagenomic-network-analysis">3. Metagenomic Network Analysis</a></li>
   </ul></li>
-  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview">Workflow Overview</a></li>
-  <li><a href="#packages-used" id="toc-packages-used" class="nav-link" data-scroll-target="#packages-used">Packages used</a></li>
+  <li><a href="#additional-resources" id="toc-additional-resources" class="nav-link" data-scroll-target="#additional-resources">Additional Resources</a></li>
   <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
-
-
-
-
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<section id="what-is-metagenomics" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-metagenomics">What is Metagenomics?</h3>
-<p>Metagenomics involves the study of genetic material recovered directly from environmental samples. Analyzing such data requires specialized statistical techniques to account for its complexity and high dimensionality.</p>
-<p>Unlike traditional microbiology, which focuses on isolated species, metagenomics analyzes the collective genomes of all microorganisms present in a sample. These microbial communities, referred to as the <em>microbiota</em>, form part of a broader system known as the <em>microbiome</em>, which also includes their interactions, metabolites, and environmental context.</p>
-<p>This document provides an overview of the statistical methods commonly employed in metagenomic data analysis.</p>
-</section>
-<section id="s-rrna-metagenomics" class="level3">
-<h3 class="anchored" data-anchor-id="s-rrna-metagenomics">16S rRNA Metagenomics</h3>
-<p>16S rRNA metagenomics, also known as metabarcoding or amplicon sequencing, is a widely used approach to study bacterial communities. It relies on sequencing the 16S ribosomal RNA gene, a highly conserved genetic marker found in all bacteria and archaea.</p>
-<p>This gene contains both conserved regions, which allow universal amplification via PCR, and hypervariable regions, which provide species-specific signatures. As a result, sequencing the 16S rRNA gene enables the identification and classification of bacteria present in a sample, providing a taxonomic census of microbial communities.</p>
-<p>The typical workflow includes DNA extraction, PCR amplification of the marker gene, high-throughput sequencing, and taxonomic assignment using reference databases such as SILVA or Greengenes. However, this approach provides relative abundance data rather than absolute quantification and may be influenced by biases such as gene copy number variation.</p>
-</section>
-<section id="bioinformatics-and-data-structure" class="level3">
-<h3 class="anchored" data-anchor-id="bioinformatics-and-data-structure">Bioinformatics and Data Structure</h3>
-<p>Metagenomic data processing involves several computational tools such as QIIME, DADA2, and FROGS, which perform sequence filtering, clustering (OTUs) or denoising (ASVs), and taxonomic assignment.</p>
-<p>Downstream analysis is commonly performed in R using the <strong>phyloseq</strong> package, which provides a unified framework for handling microbiome data.</p>
-</section>
-<section id="diversity-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="diversity-analysis">Diversity Analysis</h3>
-<p>Microbial diversity is typically assessed at multiple levels:</p>
-<section id="alpha-diversity" class="level4">
-<h4 class="anchored" data-anchor-id="alpha-diversity">Alpha Diversity</h4>
-<p>Alpha diversity measures the diversity within a single sample. It reflects both:</p>
-<ul>
-<li><p><strong>Richness</strong>: the number of taxa present</p></li>
-<li><p><strong>Evenness</strong>: the distribution of abundances among taxa</p></li>
-</ul>
-<p>Common indices include Shannon and Simpson. Statistical comparisons between groups can be performed using methods such as ANOVA or non-parametric equivalents.</p>
-</section>
-<section id="beta-diversity" class="level4">
-<h4 class="anchored" data-anchor-id="beta-diversity">Beta Diversity</h4>
-<p>Beta diversity measures differences in microbial composition between samples. It is based on ecological distance matrices such as Bray-Curtis or UniFrac.</p>
-<p>These distances can be visualized using ordination methods such as Principal Coordinates Analysis (PCoA) or Non-metric Multidimensional Scaling (NMDS), which project samples into a reduced-dimensional space.</p>
-<p>To assess statistical significance between groups, methods such as PERMANOVA (Permutational Analysis of Variance) are used. This non-parametric approach evaluates whether differences in microbial composition between groups are greater than expected by chance.</p>
-</section>
-</section>
-<section id="data-normalization-and-rarefaction" class="level3">
-<h3 class="anchored" data-anchor-id="data-normalization-and-rarefaction">Data Normalization and Rarefaction</h3>
-<p>Metagenomic datasets often exhibit variability in sequencing depth across samples. Historically, rarefaction was used to standardize library sizes by subsampling reads. However, this method discards data, reduces statistical power, and can introduce bias.</p>
-</section>
-</section>
-<section id="workflow-overview" class="level2">
-<h2 class="anchored" data-anchor-id="workflow-overview">Workflow Overview</h2>
-<p>The analysis is structured into steps:</p>
-<ul>
-<li><p>Data import and formatting</p></li>
-<li><p>Quality control and preprocessing</p></li>
-<li><p>Alpha diversity analysis</p></li>
-<li><p>Beta diversity analysis</p></li>
-</ul>
-</section>
-<section id="packages-used" class="level1">
-<h1>Packages used</h1>
-<p>The following R packages were used throughout the analysis</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(   <span class="st">"phyloseq"</span>,   <span class="st">"ggplot2"</span>,   <span class="st">"dplyr"</span>,   <span class="st">"readxl"</span>,   <span class="st">"tibble"</span> ) </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>packages</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "phyloseq" "ggplot2"  "dplyr"    "readxl"   "tibble"  </code></pre>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Getting Started</h1>
 </div>
-</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>Welcome to our blog on the statistical analysis of metagenomic data. This website presents the different steps of our analysis pipeline, from data preparation to interpretation and network analysis.</p>
+<p>The project was carried out as part of the Master’s program in Bioinformatics at <a href="https://www.univ-lille.fr/"><u>Université de Lille</u></a>.</p>
 </section>
-<section id="reproducibility" class="level1">
-<h1>Reproducibility</h1>
-<p>This project follows a modular structure, allowing the pipeline to be applied to different datasets with minimal modifications. The analysis relies on the <code>phyloseq</code> framework, ensuring consistent data handling and reproducible results.</p>
+<section id="how-to-navigate-the-blog" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-navigate-the-blog">How to Navigate the Blog</h2>
+<p>The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:</p>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">0. Introduction</h3>
+<p>This post presents the context, the objectives of the study, and the structure of the project.</p>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
-<p>This workflow provides a structured and reproducible approach to metagenomic data analysis, from preprocessing to statistical interpretation. The use of tools and visualization techniques facilitates the exploration of microbial structure and variation across experimental conditions.</p>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">1. Data Preparation</h3>
+<p>This section explains how the dataset was imported, cleaned and transformed before the study.</p>
+</section>
+<section id="alpha-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity">2.1 Alpha Diversity</h3>
+<p>This post explores within-sample diversity using diversity indices and visualizations.</p>
+</section>
+<section id="beta-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="beta-diversity">2.2 Beta Diversity</h3>
+<p>This section investigates differences between samples and groups using distance metrics and ordination methods.</p>
+</section>
+<section id="metagenomic-network-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="metagenomic-network-analysis">3. Metagenomic Network Analysis</h3>
+<p>The network analysis focuses on relationships between microbial taxa through co-occurrence network approaches.</p>
+</section>
+</section>
+<section id="additional-resources" class="level2">
+<h2 class="anchored" data-anchor-id="additional-resources">Additional Resources</h2>
+<p>Several resources are available through the navigation bar at the top of the website:</p>
+<ul>
+<li><strong>Navigation Guide</strong>: How to navigate the blog, what you’re reading right now :).</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>Presentation</strong>: slides summarizing the project and main results.</p></li>
+<li><p><strong>Sources</strong>: references and resources used throughout the analyses.</p></li>
+<li><p><strong>About</strong>: information about the contributors and the context of the project.</p></li>
+<li><p><strong>Social Links</strong>: direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.</p></li>
+</ul>
+</section>
+<section id="reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility">Reproducibility</h2>
+<p>This website was developed using:</p>
+<ul>
+<li><p><a href="https://quarto.org/">Quarto</a> for website generation and reproducible reporting.</p></li>
+<li><p><a href="https://www.r-project.org/">R Project for Statistical Computing</a> for data analysis and visualization.</p></li>
+</ul>
 
 
 </section>

@@ -16,8 +16,8 @@ website:
         text: Home
         href: index.qmd
       - icon: file-earmark-text-fill
-        text: Report
-        href: report.qmd
+        text: Getting Started
+        href: gettingstarted.qmd
       - icon: file-earmark-bar-graph-fill
         text: Presentation
         href: Presentation.html
