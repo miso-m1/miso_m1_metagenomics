@@ -2,17 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="Preparatory work for Statistical Analysis of Metagenomic Data">
 
-<title>Data preparation – Statistical Analysis of Metagenomic Data</title>
+<title>1: Data preparation – Statistical Analysis of Metagenomic Data</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -72,18 +69,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../img/lille_logo.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-65374b318c0134d157d194ac18a362cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-46dfdc4933501eb0228b819ce2b9b0b9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -408,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Data preparation</h1>
+      <h1 class="title">1: Data preparation</h1>
                   <div>
         <div class="description">
           Preparatory work for Statistical Analysis of Metagenomic Data
@@ -437,17 +435,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#user-input" id="toc-user-input" class="nav-link active" data-scroll-target="#user-input">User Input</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#user-input" id="toc-user-input" class="nav-link" data-scroll-target="#user-input">User Input</a></li>
   <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load Data</a></li>
   <li><a href="#statistical-summary" id="toc-statistical-summary" class="nav-link" data-scroll-target="#statistical-summary">Statistical summary</a></li>
   <li><a href="#missing-values-check" id="toc-missing-values-check" class="nav-link" data-scroll-target="#missing-values-check">Missing values check</a></li>
   <li><a href="#distribution-of-sequencing-depth." id="toc-distribution-of-sequencing-depth." class="nav-link" data-scroll-target="#distribution-of-sequencing-depth.">Distribution of Sequencing Depth.</a></li>
   <li><a href="#taxonomic-composition" id="toc-taxonomic-composition" class="nav-link" data-scroll-target="#taxonomic-composition">Taxonomic composition</a></li>
+  <li><a href="#beta-diversity---pcoa" id="toc-beta-diversity---pcoa" class="nav-link" data-scroll-target="#beta-diversity---pcoa">Beta Diversity - PCoA</a></li>
   <li><a href="#beta-diversity---pcoa-by-gender" id="toc-beta-diversity---pcoa-by-gender" class="nav-link" data-scroll-target="#beta-diversity---pcoa-by-gender">Beta Diversity - PCoA by gender</a></li>
   <li><a href="#beta-diversity---pcoa-by-gender-and-disease" id="toc-beta-diversity---pcoa-by-gender-and-disease" class="nav-link" data-scroll-target="#beta-diversity---pcoa-by-gender-and-disease">Beta Diversity - PCoA by gender and disease</a></li>
   <li><a href="#distribution-of-samples-by-gender" id="toc-distribution-of-samples-by-gender" class="nav-link" data-scroll-target="#distribution-of-samples-by-gender">Distribution of samples by gender</a></li>
   <li><a href="#number-of-samples-of-diseases-by-gender" id="toc-number-of-samples-of-diseases-by-gender" class="nav-link" data-scroll-target="#number-of-samples-of-diseases-by-gender">Number of samples of diseases by gender</a></li>
   <li><a href="#distribution-of-bacterial-class-by-gender" id="toc-distribution-of-bacterial-class-by-gender" class="nav-link" data-scroll-target="#distribution-of-bacterial-class-by-gender">Distribution of bacterial class by gender</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -459,8 +461,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:</p>
+<ul>
+<li>importing OTU, taxonomy, and metadata tables,</li>
+<li>creating a phyloseq object,</li>
+<li>checking for missing values,</li>
+<li>verifying sequencing depth consistency,</li>
+<li>exploring taxonomic composition,</li>
+<li>and visualizing global similarities between samples.</li>
+</ul>
+<p>These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.</p>
 <section id="user-input" class="level2">
 <h2 class="anchored" data-anchor-id="user-input">User Input</h2>
+<p>In this section, users can load their own dataset.<br>
+<br>
+The workflow expects:<br>
+- an OTU abundance table,<br>
+- a taxonomy table,<br>
+- and a sample metadata table.<br>
+<br>
+All three tables are stored in an Excel file and imported separately using their sheet names. You can replace the file path and sheet names below with your own dataset.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load your dataset into file_path</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">"../data/dataset_MISO_project.xlsx"</span> </span>
@@ -473,6 +495,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
+<p>The imported tables are converted into a `phyloseq` object. `phyloseq` is a R package for microbiome analysis that allows abundance data, taxonomy, and sample metadata to be stored together in a single structured object.</p>
+<p>This makes it easier to perform analyses and visualize the microbial data.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>otu_mat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(file_path, <span class="at">sheet =</span> otu_sheet)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tax_mat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(file_path, <span class="at">sheet =</span> tax_sheet)</span>
@@ -496,175 +520,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">sample_data</span>(samples_df)</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>metagenomics <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(OTU, TAX, samples)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>metagenomics</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>phyloseq-class experiment-level object
-otu_table()   OTU Table:         [ 640 taxa and 484 samples ]
-sample_data() Sample Data:       [ 484 samples by 8 sample variables ]
-tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_names</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "Sample_1880" "Sample_1881" "Sample_1882" "Sample_1883" "Sample_1884"
-  [6] "Sample_1885" "Sample_1886" "Sample_1887" "Sample_1888" "Sample_1889"
- [11] "Sample_1890" "Sample_1891" "Sample_1892" "Sample_1893" "Sample_1894"
- [16] "Sample_1907" "Sample_1908" "Sample_1909" "Sample_1910" "Sample_1911"
- [21] "Sample_1914" "Sample_2082" "Sample_2083" "Sample_2084" "Sample_2085"
- [26] "Sample_2086" "Sample_2087" "Sample_2088" "Sample_2089" "Sample_2090"
- [31] "Sample_2091" "Sample_2092" "Sample_2093" "Sample_2094" "Sample_2095"
- [36] "Sample_2096" "Sample_2097" "Sample_2098" "Sample_2099" "Sample_2100"
- [41] "Sample_2101" "Sample_2102" "Sample_2103" "Sample_2104" "Sample_2105"
- [46] "Sample_2106" "Sample_2107" "Sample_2108" "Sample_2109" "Sample_2110"
- [51] "Sample_2111" "Sample_2112" "Sample_2113" "Sample_2114" "Sample_2115"
- [56] "Sample_2116" "Sample_2117" "Sample_2118" "Sample_2119" "Sample_2120"
- [61] "Sample_2121" "Sample_2122" "Sample_2123" "Sample_2124" "Sample_2125"
- [66] "Sample_2126" "Sample_2127" "Sample_2128" "Sample_2129" "Sample_2130"
- [71] "Sample_2131" "Sample_2132" "Sample_2133" "Sample_2134" "Sample_2135"
- [76] "Sample_2136" "Sample_2137" "Sample_2138" "Sample_2139" "Sample_2140"
- [81] "Sample_2141" "Sample_2142" "Sample_2143" "Sample_2144" "Sample_2145"
- [86] "Sample_2146" "Sample_2147" "Sample_2148" "Sample_2149" "Sample_2150"
- [91] "Sample_2155" "Sample_2160" "Sample_2177" "Sample_2178" "Sample_2221"
- [96] "Sample_2222" "Sample_2223" "Sample_2224" "Sample_2225" "Sample_2226"
-[101] "Sample_2227" "Sample_2228" "Sample_2229" "Sample_2230" "Sample_2231"
-[106] "Sample_2232" "Sample_2233" "Sample_2235" "Sample_2236" "Sample_2239"
-[111] "Sample_2240" "Sample_2241" "Sample_2242" "Sample_2243" "Sample_2245"
-[116] "Sample_2246" "Sample_2247" "Sample_2248" "Sample_2249" "Sample_2254"
-[121] "Sample_2255" "Sample_2256" "Sample_2258" "Sample_2261" "Sample_2262"
-[126] "Sample_2265" "Sample_2266" "Sample_2267" "Sample_2268" "Sample_2273"
-[131] "Sample_2274" "Sample_2276" "Sample_2278" "Sample_2279" "Sample_2280"
-[136] "Sample_2281" "Sample_2282" "Sample_2283" "Sample_2284" "Sample_2285"
-[141] "Sample_2286" "Sample_2287" "Sample_2288" "Sample_2289" "Sample_2290"
-[146] "Sample_2291" "Sample_2292" "Sample_2294" "Sample_2485" "Sample_2486"
-[151] "Sample_2487" "Sample_2488" "Sample_2489" "Sample_2490" "Sample_2491"
-[156] "Sample_2492" "Sample_2493" "Sample_2494" "Sample_2495" "Sample_2496"
-[161] "Sample_2497" "Sample_2498" "Sample_2499" "Sample_2500" "Sample_2501"
-[166] "Sample_2502" "Sample_2503" "Sample_2504" "Sample_2505" "Sample_2506"
-[171] "Sample_2507" "Sample_2508" "Sample_2509" "Sample_2510" "Sample_2511"
-[176] "Sample_2512" "Sample_2513" "Sample_2514" "Sample_2515" "Sample_2516"
-[181] "Sample_2517" "Sample_2518" "Sample_2519" "Sample_2520" "Sample_2521"
-[186] "Sample_2522" "Sample_2523" "Sample_2524" "Sample_2525" "Sample_2526"
-[191] "Sample_2527" "Sample_2528" "Sample_2529" "Sample_2530" "Sample_2531"
-[196] "Sample_2532" "Sample_2533" "Sample_2534" "Sample_2535" "Sample_2536"
-[201] "Sample_2537" "Sample_2538" "Sample_2539" "Sample_2540" "Sample_2541"
-[206] "Sample_2542" "Sample_2543" "Sample_2544" "Sample_2545" "Sample_2546"
-[211] "Sample_2547" "Sample_2548" "Sample_2549" "Sample_2550" "Sample_2551"
-[216] "Sample_2552" "Sample_2553" "Sample_2554" "Sample_2555" "Sample_2556"
-[221] "Sample_2557" "Sample_2558" "Sample_2559" "Sample_2560" "Sample_2561"
-[226] "Sample_2562" "Sample_2563" "Sample_2564" "Sample_2565" "Sample_2566"
-[231] "Sample_2567" "Sample_2568" "Sample_2569" "Sample_2570" "Sample_2571"
-[236] "Sample_2572" "Sample_2573" "Sample_2574" "Sample_2575" "Sample_2576"
-[241] "Sample_2577" "Sample_2578" "Sample_2579" "Sample_2580" "Sample_2581"
-[246] "Sample_2582" "Sample_2583" "Sample_2584" "Sample_2585" "Sample_2586"
-[251] "Sample_2587" "Sample_2588" "Sample_2589" "Sample_2590" "Sample_2591"
-[256] "Sample_2592" "Sample_2593" "Sample_2594" "Sample_2595" "Sample_2596"
-[261] "Sample_2597" "Sample_2598" "Sample_2599" "Sample_2600" "Sample_2601"
-[266] "Sample_2602" "Sample_3063" "Sample_3064" "Sample_3065" "Sample_3066"
-[271] "Sample_3067" "Sample_3068" "Sample_3069" "Sample_3070" "Sample_3071"
-[276] "Sample_3072" "Sample_3073" "Sample_3074" "Sample_3075" "Sample_3076"
-[281] "Sample_3077" "Sample_3078" "Sample_3079" "Sample_3080" "Sample_3081"
-[286] "Sample_3082" "Sample_3083" "Sample_3084" "Sample_3085" "Sample_3086"
-[291] "Sample_3087" "Sample_3088" "Sample_3089" "Sample_3090" "Sample_3091"
-[296] "Sample_3092" "Sample_3093" "Sample_3094" "Sample_3095" "Sample_3096"
-[301] "Sample_3097" "Sample_3098" "Sample_3135" "Sample_3136" "Sample_3137"
-[306] "Sample_3138" "Sample_3139" "Sample_3140" "Sample_3141" "Sample_3142"
-[311] "Sample_3143" "Sample_3144" "Sample_3145" "Sample_3146" "Sample_3147"
-[316] "Sample_3148" "Sample_3149" "Sample_3150" "Sample_3151" "Sample_3152"
-[321] "Sample_3153" "Sample_3154" "Sample_3155" "Sample_3156" "Sample_3157"
-[326] "Sample_3158" "Sample_3159" "Sample_3160" "Sample_3162" "Sample_3163"
-[331] "Sample_3164" "Sample_3165" "Sample_3170" "Sample_3173" "Sample_3174"
-[336] "Sample_3175" "Sample_3176" "Sample_3177" "Sample_3178" "Sample_3179"
-[341] "Sample_3180" "Sample_3181" "Sample_3182" "Sample_3183" "Sample_3184"
-[346] "Sample_3185" "Sample_3186" "Sample_3187" "Sample_3188" "Sample_3189"
-[351] "Sample_3190" "Sample_3191" "Sample_3192" "Sample_3193" "Sample_3194"
-[356] "Sample_3196" "Sample_3197" "Sample_3198" "Sample_3199" "Sample_3200"
-[361] "Sample_3201" "Sample_3202" "Sample_3203" "Sample_3204" "Sample_3205"
-[366] "Sample_3206" "Sample_3207" "Sample_3208" "Sample_3209" "Sample_3210"
-[371] "Sample_3211" "Sample_3212" "Sample_3213" "Sample_3214" "Sample_3215"
-[376] "Sample_3216" "Sample_3217" "Sample_3218" "Sample_3219" "Sample_3220"
-[381] "Sample_3221" "Sample_3222" "Sample_3223" "Sample_3224" "Sample_3225"
-[386] "Sample_3226" "Sample_3227" "Sample_3228" "Sample_3229" "Sample_3230"
-[391] "Sample_3231" "Sample_3232" "Sample_3233" "Sample_3234" "Sample_3235"
-[396] "Sample_3236" "Sample_3237" "Sample_3238" "Sample_3239" "Sample_3240"
-[401] "Sample_3241" "Sample_3242" "Sample_3243" "Sample_3244" "Sample_3245"
-[406] "Sample_3246" "Sample_3247" "Sample_3248" "Sample_3249" "Sample_3250"
-[411] "Sample_3251" "Sample_3252" "Sample_3253" "Sample_3254" "Sample_3255"
-[416] "Sample_3256" "Sample_3257" "Sample_3258" "Sample_3259" "Sample_3260"
-[421] "Sample_3261" "Sample_3262" "Sample_3263" "Sample_3264" "Sample_3265"
-[426] "Sample_3266" "Sample_3267" "Sample_3268" "Sample_3269" "Sample_3270"
-[431] "Sample_3271" "Sample_3272" "Sample_3273" "Sample_3274" "Sample_3275"
-[436] "Sample_3276" "Sample_3480" "Sample_3482" "Sample_3488" "Sample_3492"
-[441] "Sample_3493" "Sample_3495" "Sample_3496" "Sample_3501" "Sample_3504"
-[446] "Sample_3507" "Sample_3509" "Sample_3519" "Sample_3520" "Sample_3522"
-[451] "Sample_3526" "Sample_3527" "Sample_3528" "Sample_3529" "Sample_3536"
-[456] "Sample_3537" "Sample_3538" "Sample_3543" "Sample_3545" "Sample_3551"
-[461] "Sample_3552" "Sample_3553" "Sample_3556" "Sample_3558" "Sample_3559"
-[466] "Sample_3561" "Sample_3562" "Sample_3563" "Sample_3568" "Sample_3570"
-[471] "Sample_3572" "Sample_3576" "Sample_3578" "Sample_3580" "Sample_3586"
-[476] "Sample_3591" "Sample_3592" "Sample_3593" "Sample_3594" "Sample_3595"
-[481] "Sample_3596" "Sample_3601" "Sample_3609" "Sample_3610"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_names</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_variables</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "dataset_name"          "bodysite"              "disease"              
-[4] "age"                   "gender"                "country"              
-[7] "sequencing_technology" "pubmedid"             </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>total <span class="ot">=</span> <span class="fu">median</span>(<span class="fu">sample_sums</span>(metagenomics))</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># standf = function(x, t=total) round(t * (x / sum(x)))</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># metagenomics = transform_sample_counts(metagenomics, standf)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#sample_names(metagenomics)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#rank_names(metagenomics)</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#sample_variables(metagenomics)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>total <span class="ot">=</span> <span class="fu">median</span>(<span class="fu">sample_sums</span>(metagenomics))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># standf = function(x, t=total) round(t * (x / sum(x)))</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># metagenomics = transform_sample_counts(metagenomics, standf)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="statistical-summary" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-summary">Statistical summary</h2>
+<p>A first summary of the dataset provides general information about:<br>
+- the number of samples,<br>
+- the number of taxa,<br>
+- sequencing depth,<br>
+- and metadata variables available for analysis.<br>
+<br>
+This helps verify that the dataset was imported correctly.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(metagenomics)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Length    Class     Mode 
        1 phyloseq       S4 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(otu_mat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(otu_mat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "double"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#type is double (double precision floating point numbers)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>We can verify that the OTU table is stored as a numeric matrix of type `double`, meaning the abundance values are represented as decimal numbers.</p>
+<p>We also checked whether some samples contained only zero values. Such samples can be problematic because they do not contain any detected microbial signal and may affect analyses, if they do exist, we should consider ignoring those samples.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">colSums</span>(otu_mat <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">colSums</span>(otu_mat <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>named integer(0)</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">colSums</span>(otu_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">colSums</span>(otu_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   101.8   199.1   199.9   198.2   200.0   200.0 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#there is no column of samples with only zeroes.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>No sample composed only of zeroes was found.</p>
 </section>
 <section id="missing-values-check" class="level2">
 <h2 class="anchored" data-anchor-id="missing-values-check">Missing values check</h2>
+<p>Missing values can bias analyses and lead to incorrect statistical results.<br>
+<br>
+We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check for missing values</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(otu_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check for missing values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(otu_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(tax_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(tax_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(samples_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(samples_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#visualize missingness</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(samples_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#visualize missingness</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(samples_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         dataset_name              bodysite               disease 
                     0                     0                     0 
@@ -673,28 +596,30 @@ tax_table()   Taxonomy Table:    [ 640 taxa by 7 taxonomic ranks ]</code></pre>
 sequencing_technology              pubmedid 
                     0                     0 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#There is no missing values.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>We can see that there is no missing values.</p>
 </section>
 <section id="distribution-of-sequencing-depth." class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-sequencing-depth.">Distribution of Sequencing Depth.</h2>
-<p>Visualizing the total number of sequencing reads obtained for each sample</p>
+<p>Sequencing depth corresponds to the total number of reads obtained for each sample.<br>
+<br>
+Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sample_depth <span class="ot">&lt;-</span> <span class="fu">sample_sums</span>(metagenomics)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_depth)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sample_depth <span class="ot">&lt;-</span> <span class="fu">sample_sums</span>(metagenomics)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_depth)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   50.91   99.57   99.94   99.09  100.00  100.00 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">depth =</span> sample_depth), <span class="fu">aes</span>(<span class="at">x =</span> depth)) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Sequencing Depth"</span>,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Reads per sample"</span>,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">depth =</span> sample_depth), <span class="fu">aes</span>(<span class="at">x =</span> depth)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Sequencing Depth"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Reads per sample"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -706,7 +631,7 @@ sequencing_technology              pubmedid
 <p>Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been normalized to relative abundances.</p>
 <p>However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let’s try to identify it.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_sums</span>(metagenomics)[<span class="fu">sample_sums</span>(metagenomics) <span class="sc">&lt;</span> <span class="dv">90</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_sums</span>(metagenomics)[<span class="fu">sample_sums</span>(metagenomics) <span class="sc">&lt;</span> <span class="dv">90</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sample_2148 Sample_2280 Sample_2516 Sample_3079 Sample_3482 Sample_3493 
    89.41782    84.62723    86.69817    89.79545    50.90540    85.95933 
@@ -714,18 +639,22 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
    88.59328    84.47117    88.53511    87.91809    89.17386 </code></pre>
 </div>
 </div>
-<p>It seems that Sample_3482 is the problematic sample. Should we get rid of it?</p>
+<p>Most samples show similar sequencing depth values, suggesting that the dataset was already normalized before analysis.<br>
+<br>
+One sample (`Sample_3482`) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.</p>
 </section>
 <section id="taxonomic-composition" class="level2">
 <h2 class="anchored" data-anchor-id="taxonomic-composition">Taxonomic composition</h2>
+<p>Taxonomic composition plots allow visualization of the relative abundance of microbial groups across samples.</p>
+<p>These representations help identify dominant bacterial taxa and observe potential differences between disease groups or other metadata categories.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Phylum"</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_phylum, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Taxonomic composition at Phylum level"</span>) <span class="sc">+</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Phylum"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_phylum, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Taxonomic composition at Phylum level"</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
 ℹ Please use tidy evaluation idioms with `aes()`.
@@ -742,10 +671,10 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Phylum composition by disease group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Phylum composition by disease group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -754,20 +683,21 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
+<p>To improve readability, only the 10 most abundant genera were retained in the following visualization.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>metagenomics_genus <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Genus"</span>)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_genus, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># keep top 10 genera to avoid clutter</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>top_genera <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_genus_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_genera, metagenomics_genus_per)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_genus_top, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 10 Genera Composition by Disease"</span>) <span class="sc">+</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>metagenomics_genus <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Genus"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_genus, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># keep top 10 genera to avoid clutter</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>top_genera <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_genus_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_genera, metagenomics_genus_per)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_genus_top, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 10 Genera Composition by Disease"</span>) <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -777,15 +707,24 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </section>
+<section id="beta-diversity---pcoa" class="level2">
+<h2 class="anchored" data-anchor-id="beta-diversity---pcoa">Beta Diversity - PCoA</h2>
+<p>Beta diversity measures differences in microbial composition between samples.<br>
+Bray-Curtis distance is a statistic used to quantify the dissimilarity in composition between samples, based on abundance data.&nbsp;</p>
+<p>We then visualise sample similarities via Principal Coordinate Analysis (PCoA). Samples positioned close together have more similar microbial compositions, whereas distant samples are more dissimilar.</p>
+<p>Firstly, we do a PCoA by gender.</p>
+</section>
 <section id="beta-diversity---pcoa-by-gender" class="level2">
 <h2 class="anchored" data-anchor-id="beta-diversity---pcoa-by-gender">Beta Diversity - PCoA by gender</h2>
+<p>This visualization allows us to explore whether microbial communities tend to cluster according to gender.</p>
+<p>Strong separation between groups would suggest that gender may influence microbiome composition.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pcoa <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(metagenomics, pcoa, <span class="at">color =</span> <span class="st">"gender"</span>) <span class="sc">+</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCoA - Bray-Curtis by gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pcoa <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(metagenomics, pcoa, <span class="at">color =</span> <span class="st">"gender"</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCoA - Bray-Curtis by gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -794,15 +733,21 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
+<p>Overall, the plot does not show a clear separation between male and female samples.</p>
+<p>Samples from both genders largely overlap, suggesting that gender alone may not strongly influence the overall microbial community composition in this dataset.</p>
+<p>However, a few local clusters and dispersion differences can still be observed. Male samples appear slightly more spread out, which could indicate greater variability in microbial composition between individuals.</p>
+<p>The first two principal coordinates explain 11.1% and 9.9% of the total variation respectively, meaning that only a portion of the microbiome variability is represented in this plot.</p>
+<p>Let’s do a PCoA by gender and disease to furthermore evaluate the dataset. Adding disease status as a variable allows visualization of two metadata variables simultaneously and may reveal certain paterns.</p>
 </section>
 <section id="beta-diversity---pcoa-by-gender-and-disease" class="level2">
 <h2 class="anchored" data-anchor-id="beta-diversity---pcoa-by-gender-and-disease">Beta Diversity - PCoA by gender and disease</h2>
+<p>This PCoA visualization combines both gender and disease information to explore whether microbial composition varies between groups.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pcoagd <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(metagenomics, pcoagd, <span class="at">color =</span> <span class="st">"gender"</span>, <span class="at">shape =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pcoagd <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(metagenomics, pcoagd, <span class="at">color =</span> <span class="st">"gender"</span>, <span class="at">shape =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -811,17 +756,22 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
+<p>Some disease-specific clustering patterns can be observed. Samples associated with cirrhosis tend to be located more frequently in the lower part of the plot, whereas cancer samples appear more concentrated in the upper central region.</p>
+<p>In contrast, ulcerative colitis and type 2 diabetes samples show overlap with the other groups, suggesting less distinct microbial separation.</p>
+<p>Gender does not appear to create a strong separation within disease groups, as male and female samples remain mostly intermixed through the space.</p>
+<p>Overall, disease status may contribute more strongly than gender to differences in microbial composition, although the overlap between groups indicates that these effects are moderate.</p>
 </section>
 <section id="distribution-of-samples-by-gender" class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-samples-by-gender">Distribution of samples by gender</h2>
+<p>Let’s analyze the distribution of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gender_counts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gender_counts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
   gender Count Percentage
@@ -830,20 +780,19 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 2 male     267       55.2</code></pre>
 </div>
 </div>
-<p>There is more data for males than females.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">y =</span> Count, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Gender"</span>,</span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">y =</span> Count, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Gender"</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -852,16 +801,17 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
+<p>We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.</p>
 </section>
 <section id="number-of-samples-of-diseases-by-gender" class="level2">
 <h2 class="anchored" data-anchor-id="number-of-samples-of-diseases-by-gender">Number of samples of diseases by gender</h2>
-<p>Females:</p>
+<p>Number of samples of diseases for females:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>disease_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender, disease) <span class="sc">%&gt;%</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>disease_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender, disease) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has regrouped the output.
 ℹ Summaries were computed grouped by gender and disease.
@@ -870,12 +820,12 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 ℹ Use `summarise(.by = c(gender, disease))` for per-operation grouping
   (`?dplyr::dplyr_by`) instead.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"female"</span>),</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Female Samples per Disease"</span>) <span class="sc">+</span></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"female"</span>),</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Female Samples per Disease"</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -884,14 +834,15 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
-<p>Males:</p>
+<p>Ulcerative colitis (IBD) has the highest number of samples with more than 75 counts, followed by type 2 diabetes (T2D), then cirrhosis, and finally cancer, which has fewer than 25 counts.</p>
+<p>Number of samples of diseases for males:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"male"</span>),</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Male Samples per Disease"</span>) <span class="sc">+</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"male"</span>),</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Male Samples per Disease"</span>) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -900,21 +851,23 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 </div>
+<p>Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.</p>
+<p>We can see that there are differences in the number of samples per disease, depending on gender.</p>
 </section>
 <section id="distribution-of-bacterial-class-by-gender" class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-bacterial-class-by-gender">Distribution of bacterial class by gender</h2>
 <p>The taxonomic composition at the class level was compared between genders using relative abundance profiles. Only the most abundant classes (top 10) were retained to improve visualization clarity.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>metagenomics_class <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Class"</span>)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>metagenomics_class_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_class, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>top_classes <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_class_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>metagenomics_class_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_classes, metagenomics_class_per)</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_class_top, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial TOP 10 Classes Distribution by Gender"</span>) <span class="sc">+</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>metagenomics_class <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Class"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>metagenomics_class_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_class, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>top_classes <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_class_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>metagenomics_class_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_classes, metagenomics_class_per)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_class_top, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial TOP 10 Classes Distribution by Gender"</span>) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -925,11 +878,11 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 <p>The same analysis but with all the bacterial classes:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_class, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial Class Distribution by Gender"</span>) <span class="sc">+</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(metagenomics_class, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial Class Distribution by Gender"</span>) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -939,8 +892,11 @@ Sample_3504 Sample_3519 Sample_3526 Sample_3553 Sample_3594
 </div>
 </div>
 <p>It seems that the bacterial distribution is approximately the same for each gender.</p>
+<p>Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).</p>
+<p>These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
