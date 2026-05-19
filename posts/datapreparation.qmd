@@ -344,7 +344,7 @@ ggplot(disease_counts %>% filter(gender == "male"),
 
 Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.
 
-We can see that there are differences in the number of samples per disease depending on gender.
+We can see that there are differences in the number of samples per disease, depending on gender.
 
 ## Distribution of bacterial class by gender
 
