@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Statistical Analysis of Metagenomic Data</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -38,18 +35,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-65374b318c0134d157d194ac18a362cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-550d66c67f20dfa247342852d3476241.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-46dfdc4933501eb0228b819ce2b9b0b9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
   </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -496,7 +494,7 @@ window.Quarto = {
     </div>
 </div>
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="SW50cm9kdWN0aW9u" data-listing-file-modified-sort="1779389435658" data-listing-reading-time-sort="3" data-listing-word-count-sort="598">
+<div class="g-col-1" data-index="0" data-categories="SW50cm9kdWN0aW9u" data-listing-file-modified-sort="1779371302554" data-listing-reading-time-sort="3" data-listing-word-count-sort="598">
 <a href="./posts/Introduction.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -521,11 +519,11 @@ window.Quarto = {
 </div>
 </div>
 <div class="card-footer">
-<div class="card-file-modified listing-file-modified">5/21/26, 8:50:35 PM</div>
+<div class="card-file-modified listing-file-modified">5/21/26, 3:48:22 PM</div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="UHJlcGFyYXRvcnklMjBBbmFseXNpcw==" data-listing-file-modified-sort="1779395999494" data-listing-reading-time-sort="10" data-listing-word-count-sort="1882">
+<div class="g-col-1" data-index="1" data-categories="UHJlcGFyYXRvcnklMjBBbmFseXNpcw==" data-listing-file-modified-sort="1779397011179" data-listing-reading-time-sort="10" data-listing-word-count-sort="1882">
 <a href="./posts/datapreparation.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -550,11 +548,11 @@ window.Quarto = {
 </div>
 </div>
 <div class="card-footer">
-<div class="card-file-modified listing-file-modified">5/21/26, 10:39:59 PM</div>
+<div class="card-file-modified listing-file-modified">5/21/26, 10:56:51 PM</div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="RGl2ZXJzaXR5JTIwQW5hbHlzaXM=" data-listing-file-modified-sort="1779396001555" data-listing-reading-time-sort="7" data-listing-word-count-sort="1360">
+<div class="g-col-1" data-index="2" data-categories="RGl2ZXJzaXR5JTIwQW5hbHlzaXM=" data-listing-file-modified-sort="1779395893984" data-listing-reading-time-sort="7" data-listing-word-count-sort="1360">
 <a href="./posts/alpha_diversity.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -579,11 +577,11 @@ window.Quarto = {
 </div>
 </div>
 <div class="card-footer">
-<div class="card-file-modified listing-file-modified">5/21/26, 10:40:01 PM</div>
+<div class="card-file-modified listing-file-modified">5/21/26, 10:38:13 PM</div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="RGl2ZXJzaXR5JTIwQW5hbHlzaXM=" data-listing-file-modified-sort="1779396041762" data-listing-reading-time-sort="7" data-listing-word-count-sort="1348">
+<div class="g-col-1" data-index="3" data-categories="RGl2ZXJzaXR5JTIwQW5hbHlzaXM=" data-listing-file-modified-sort="1779397011137" data-listing-reading-time-sort="7" data-listing-word-count-sort="1348">
 <a href="./posts/beta_diversity.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -608,11 +606,11 @@ window.Quarto = {
 </div>
 </div>
 <div class="card-footer">
-<div class="card-file-modified listing-file-modified">5/21/26, 10:40:41 PM</div>
+<div class="card-file-modified listing-file-modified">5/21/26, 10:56:51 PM</div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="TmV0d29yayUyMEFuYWx5c2lz" data-listing-file-modified-sort="1779396029386" data-listing-reading-time-sort="13" data-listing-word-count-sort="2537">
+<div class="g-col-1" data-index="4" data-categories="TmV0d29yayUyMEFuYWx5c2lz" data-listing-file-modified-sort="1779397024079" data-listing-reading-time-sort="13" data-listing-word-count-sort="2566">
 <a href="./posts/Network.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -637,7 +635,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="card-footer">
-<div class="card-file-modified listing-file-modified">5/21/26, 10:40:29 PM</div>
+<div class="card-file-modified listing-file-modified">5/21/26, 10:57:04 PM</div>
 </div>
 </div></a>
 </div>

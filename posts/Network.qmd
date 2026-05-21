@@ -13,6 +13,7 @@
   description: "Network Analysis of Metagenomic Data"
 ---
 
+
 ```{r}
 #| label: plotting-theme
 #| include: false
@@ -115,6 +116,14 @@ To eliminate algorithmic artifacts and increase the positive predictive value of
 ```{r}
 #| label: setup
 #| include: false
+
+# Install the "devtools" package if it isn't already on your computer
+if (!requireNamespace("devtools", quietly = TRUE)) {
+    install.packages("devtools")
+}
+
+# Download and install SpiecEasi from its official GitHub repository
+devtools::install_github("zdk123/SpiecEasi")
 
 # Loading necessary network and data manipulation libraries
 
@@ -366,3 +375,4 @@ Ultimately, these network topologies show that chronic diseases do not merely al
 ```{r}
 sessioninfo::session_info(pkgs = "attached")
 ```
+
