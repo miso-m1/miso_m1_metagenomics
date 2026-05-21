@@ -1,11 +1,36 @@
 ---
   title: "2.1: Alpha Diversity"
-  format: html
+  format: 
+    html: 
+      theme: cosmo
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
   editor: visual
   categories: ["Diversity Analysis"]
   image: "/img/alpha.png"
   description: "Alpha Diversity Analysis on Metagenomic Data"
 ---
+
+```{r}
+#| label: plotting-theme
+#| include: false
+
+source("inputData.R")
+library(viridis)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 13))
+
+options(
+  ggplot2.discrete.fill = function(...)
+    scale_fill_viridis_d(option = "cividis", ...),
+
+  ggplot2.discrete.colour = function(...)
+    scale_color_viridis_d(option = "cividis", ...)
+)
+```
 
 ## **Transforming data**
 
@@ -24,7 +49,6 @@ In microbial ecology and amplicon sequencing (e.g., 16S rRNA gene sequencing) wh
 ```{r}
 #| label: normalized data  
 #| include: true
-source("inputData.R")
 
 library("vegan")
 library("phyloseq")
@@ -124,7 +148,6 @@ alpha_long <- pivot_longer(alpha_df, cols = c(Shannon, Simpson, InvSimpson, Obse
 AlphaD_combined <- ggplot(alpha_long, aes(x = Disease, y = Value, fill = Disease)) +
   geom_boxplot() +
   facet_wrap(~Metric, scales = "free_y") +
-  theme_bw() +
   labs(title = "Alpha diversity from relative abundances")
 
 AlphaD_combined

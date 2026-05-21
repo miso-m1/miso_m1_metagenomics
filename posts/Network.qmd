@@ -1,6 +1,12 @@
 ---
   title: "3: Metagenomic Network Analysis"
-  format: html
+  format: 
+    html: 
+      theme: cosmo
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
   editor: visual
   categories: ["Network Analysis"]
   image: "/img/network.jpg"
@@ -8,7 +14,22 @@
 ---
 
 ```{r}
+#| label: plotting-theme
+#| include: false
+#| 
 source("inputData.R")
+library(viridis)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 13))
+
+options(
+  ggplot2.discrete.fill = function(...)
+    scale_fill_viridis_d(option = "cividis", ...),
+
+  ggplot2.discrete.colour = function(...)
+    scale_color_viridis_d(option = "cividis", ...)
+)
 ```
 
 ## 1. Introduction and Objectives
@@ -217,11 +238,22 @@ plot_global_network <- function(network_list, tax_level) {
   
   # Inline HTML Quarto Report Rendering (L'affichage en direct)
   plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
-       vertex.color = "lightgrey", vertex.frame.color = "white",
+       vertex.color = "grey90", vertex.frame.color = "white",
        vertex.label.color = "black", vertex.label.cex = v_cex,
        edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
        main = paste("Global Consensus Multi-Disease Network -", tax_level))
   
+  legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
+         col = color_palette, lwd = 3, bty = "n", cex = 0.8)
+  
+  dev.off()
+  
+  # Inline HTML Quarto Report Rendering
+  plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
+       vertex.color = "grey90", vertex.frame.color = "white",
+       vertex.label.color = "black", vertex.label.cex = v_cex,
+       edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
+       main = paste("Global Consensus Multi-Disease Network -", tax_level))
   legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
          col = color_palette, lwd = 3, bty = "n", cex = 0.6)
   

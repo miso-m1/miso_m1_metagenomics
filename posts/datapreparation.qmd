@@ -1,11 +1,35 @@
 ---
   title: "1: Data preparation"
-  format: html
+  format: 
+    html: 
+      theme: cosmo
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
   editor: visual
   categories: ["Preparatory Analysis"]
   image: "/img/dataPrep.png"
   description: "Preparatory work for Statistical Analysis of Metagenomic Data"
 ---
+
+```{r}
+#| label: plotting-theme
+#| include: false
+
+library(viridis)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 13))
+
+options(
+  ggplot2.discrete.fill = function(...)
+    scale_fill_viridis_d(option = "cividis", ...),
+
+  ggplot2.discrete.colour = function(...)
+    scale_color_viridis_d(option = "cividis", ...)
+)
+```
 
 ```{r}
 #| label: load-packages
@@ -396,5 +420,3 @@ save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_
 Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).
 
 These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.
-
-

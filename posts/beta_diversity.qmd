@@ -1,6 +1,12 @@
 ---
   title: "2.2: Beta Diversity"
-  format: html
+  format: 
+    html: 
+      theme: cosmo
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
   editor: visual
   categories: ["Diversity Analysis"]
   image: "/img/beta.png"
@@ -8,7 +14,22 @@
 ---
 
 ```{r}
+#| label: plotting-theme
+#| include: false
+#| 
 source("inputData.R")
+library(viridis)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 13))
+
+options(
+  ggplot2.discrete.fill = function(...)
+    scale_fill_viridis_d(option = "cividis", ...),
+
+  ggplot2.discrete.colour = function(...)
+    scale_color_viridis_d(option = "cividis", ...)
+)
 ```
 
 ## Beta Diversity
@@ -71,10 +92,9 @@ PCoA (also called metric MDS) projects the high‑dimensional distance matrix in
 ```{r}
 # Perform PCoA on distance matrices
 ord_bray <- ordinate(metagenomics, method = "MDS", distance = dist_bray)
-p_bray <- plot_ordination(metagenomics, ord_bray, color = "disease") +
+p_bray <- plot_ordination(metagenomics, ord_bray, color = "disease", shape = "disease") +
   geom_point(size = 3, alpha = 0.8) +
   stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
-  theme_bw(base_size = 12) +
   ggtitle("Bray-Curtis Dissimilarity") +
   theme(legend.position = "bottom")
 p_bray
@@ -83,10 +103,9 @@ p_bray
 
 
 ord_jaccard <- ordinate(metagenomics, method = "MDS", distance = dist_jaccard)
-p_jaccard <- plot_ordination(metagenomics, ord_jaccard, color = "disease") +
+p_jaccard <- plot_ordination(metagenomics, ord_jaccard, color = "disease", shape = "disease") +
   geom_point(size = 3, alpha = 0.8) +
   stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
-  theme_bw(base_size = 12) +
   ggtitle("Jaccard Distance") +
   theme(legend.position = "bottom")
 p_jaccard
@@ -123,11 +142,11 @@ We performed **`betadisper()`** on both Bray‑Curtis and Jaccard distance matri
 library("vegan")
 disp_bray <- betadisper(dist_bray, samples_df$disease)
 # pdf("figures/Beta/boxplot_betaDisperson_bray.pdf")
-boxplot(disp_bray, main = "Bray-Curtis dispersion per diseases")
+boxplot(disp_bray, col = viridis(4, option = "cividis"), main = "Bray-Curtis dispersion per diseases")
 
 disp_jaccard <- betadisper(dist_jaccard, samples_df$disease)
 # pdf("figures/Beta/boxplot_betaDisperson_jaccard.pdf")
-boxplot(disp_jaccard, main = "Jaccard dispersion per diseases")
+boxplot(disp_jaccard, col = viridis(4, option = "cividis"), main = "Jaccard dispersion per diseases")
 
 
 # Permutation test for homogeneity
