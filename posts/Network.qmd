@@ -363,5 +363,6 @@ Ultimately, these network topologies show that chronic diseases do not merely al
 
 # Session info
 
-```{r} sessioninfo::session_info(pkgs = "attached")}
+```{r}
+sessioninfo::session_info(pkgs = "attached")
 ```

@@ -285,7 +285,9 @@ Beta diversity analysis revealed significant differences in microbial community 
 
 Because PERMANOVA is sensitive to dispersion differences, results should be interpreted as reflecting both centroid separation and changes in community variability.
 
+
 # Session info
 
-```{r} sessioninfo::session_info(pkgs = "attached")}
+```{r}
+sessioninfo::session_info(pkgs = "attached")
 ```
