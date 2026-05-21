@@ -121,13 +121,13 @@ library(tidyr)
 # Reshape for faceting
 alpha_long <- pivot_longer(alpha_df, cols = c(Shannon, Simpson, InvSimpson, Observed), names_to = "Metric", values_to = "Value")
 
-p_combined <- ggplot(alpha_long, aes(x = Disease, y = Value, fill = Disease)) +
+AlphaD_combined <- ggplot(alpha_long, aes(x = Disease, y = Value, fill = Disease)) +
   geom_boxplot() +
   facet_wrap(~Metric, scales = "free_y") +
   theme_bw() +
   labs(title = "Alpha diversity from relative abundances")
 
-p_combined
+AlphaD_combined
 # ggsave("figures/Alpha/alpha_diversity_all.pdf", p_combined, width = 10, height = 6)
 
 ```
@@ -149,12 +149,23 @@ Inverse Simpson: $1/D = 1 / \sum_{i=1}^{R} p_i^2$
 ## Normality Testing
 
 ```{r}
-# Check Normality (Shapiro-Wilk) to decide test 
-shapiro.test(alpha_df$Shannon)
-shapiro.test(alpha_df$Simpson)
-shapiro.test(alpha_df$InvSimpson)
-shapiro.test(alpha_df$Observed)
+library(dplyr)
+library(broom)
 
+# Check Normality (Shapiro-Wilk) to decide test 
+alpha_metrics <- c("Observed", "Simpson", "InvSimpson", "Shannon")
+shapiro_results <- lapply(alpha_metrics, function(metric) {
+  
+  test <- shapiro.test(alpha_df[[metric]])
+  test_table <- broom::tidy(test)
+  test_table$Metric <- metric
+  return(test_table)
+})
+
+shapiro_table <- bind_rows(shapiro_results) %>%
+  select(Metric, statistic, p.value) %>%
+  arrange(p.value)
+print(shapiro_table)
 ```
 
 If p-value \> alpha 0.5, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).
@@ -162,10 +173,18 @@ If p-value \> alpha 0.5, data is normal, use ANOVA. All test rejects the null hy
 Shapiro–Wilk tests assess whether diversity metrics follow a normal distribution. In microbiome datasets, these metrics are typically non-normal due to compositionality and sparsity. Therefore, results are used as a diagnostic tool rather than a strict decision criterion.
 
 ```{r}
-kruskal.test(Shannon ~ Disease, data = alpha_df)
-kruskal.test(Observed ~ Disease, data = alpha_df)
-kruskal.test(Simpson ~ Disease, data = alpha_df)
-kruskal.test(InvSimpson ~ Disease, data = alpha_df)
+kw_results <- lapply(alpha_metrics, function(metric) {
+  
+  test <- kruskal.test(alpha_df[[metric]] ~ Disease, data = alpha_df)
+  test_table <- broom::tidy(test)
+  test_table$Metric <- metric
+  return(test_table)
+})
+
+kw_table <- bind_rows(kw_results) %>%
+  select(Metric, statistic, p.value) %>%
+  arrange(p.value)
+print(kw_table)
 ```
 
 The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.
@@ -234,15 +253,36 @@ Since Kruskal-Wallis tells you there’s a difference **somewhere among the grou
 
 ```{r}
 library(FSA)
+library(dplyr)
+library(broom)
+
 # Pairwise Wilcoxon test with p-value adjustment
-pairwise.wilcox.test(alpha_df$Observed, alpha_df$Disease, p.adjust.method = "BH") 
-pairwise.wilcox.test(alpha_df$Simpson, alpha_df$Disease, p.adjust.method = "BH")
-pairwise.wilcox.test(alpha_df$InvSimpson, alpha_df$Disease, p.adjust.method = "BH")
-pairwise.wilcox.test(alpha_df$Shannon, alpha_df$Disease, p.adjust.method = "BH")
-# p.adjust.method = "BH" → controls for multiple comparisons (Benjamini-Hochberg FDR)
+alpha_metrics <- c("Observed", "Simpson", "InvSimpson", "Shannon")
+results_list <- lapply(alpha_metrics, function(metric) {
+  
+  test <- pairwise.wilcox.test(alpha_df[[metric]], 
+                               alpha_df$Disease, 
+                               p.adjust.method = "BH")
+  
+  test_table <- broom::tidy(test)
+  test_table$Metric <- metric
+  
+  return(test_table)
+})
+
+PW_Wilcox_table <- bind_rows(results_list) %>%
+  select(Metric, group1, group2, p.value)%>%
+  arrange(p.value)
+
+print(PW_Wilcox_table)
 ```
 
 Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.
+
+```{r}
+#To save all the data/graphs for the presentation
+save(kw_table, PW_Wilcox_table, shapiro_table, AlphaD_combined, file = here::here("posts", "alpha_diversity.RData"))
+```
 
 ## Summary
 
@@ -252,5 +292,3 @@ Consistency across multiple indices strengthens biological inference, while dive
 
 Alpha diversity was assessed using Shannon, Simpson (1 − D), Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.
 
-```         
-```

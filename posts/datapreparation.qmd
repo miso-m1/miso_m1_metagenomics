@@ -16,6 +16,7 @@ library("ggplot2")      # graphics
 library("readxl")       # necessary to import the data from Excel file
 library("dplyr")        # filter and reformat data frames
 library("tibble")       # Needed for converting column to row names
+library("here")         # To facilitate the file managment and exportation
 ```
 
 # Introduction
@@ -162,12 +163,13 @@ summary(sample_depth)
 ```
 
 ```{r}
-ggplot(data.frame(depth = sample_depth), aes(x = depth)) +
+bp_seq_depth <- ggplot(data.frame(depth = sample_depth), aes(x = depth)) +
   geom_histogram(bins = 30) +
   theme_minimal() +
   labs(title = "Distribution of Sequencing Depth",
        x = "Reads per sample",
        y = "Frequency")
+bp_seq_depth
 ```
 
 Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been normalized to relative abundances.
@@ -191,18 +193,20 @@ These representations help identify dominant bacterial taxa and observe potentia
 ```{r}
 metagenomics_phylum <- tax_glom(metagenomics, taxrank = "Phylum")
 metagenomics_phylum_per <- transform_sample_counts(metagenomics_phylum, function(x) x / sum(x))
-plot_bar(metagenomics_phylum_per, fill = "Phylum") +
+Tax_phyllum <- plot_bar(metagenomics_phylum_per, fill = "Phylum") +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Taxonomic composition at Phylum level") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Tax_phyllum
 ```
 
 ```{r}
-plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
+Tax_disease_group <- plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Phylum composition by disease group")
+Tax_disease_group
 ```
 
 To improve readability, only the 10 most abundant genera were retained in the following visualization.
@@ -216,11 +220,12 @@ metagenomics_genus_per <- transform_sample_counts(metagenomics_genus, function(x
 top_genera <- names(sort(taxa_sums(metagenomics_genus_per), decreasing = TRUE))[1:10]
 metagenomics_genus_top <- prune_taxa(top_genera, metagenomics_genus_per)
 
-plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus") +
+Top10b_disease <- plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Top 10 Genera Composition by Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+Top10b_disease
 ```
 
 ## Beta Diversity - PCoA
@@ -242,10 +247,11 @@ Strong separation between groups would suggest that gender may influence microbi
 
 pcoa <- ordinate(metagenomics, method = "PCoA", distance = "bray")
 
-plot_ordination(metagenomics, pcoa, color = "gender") +
+Pcoa_gender <- plot_ordination(metagenomics, pcoa, color = "gender") +
   geom_point(size = 3) +
   theme_minimal() +
   labs(title = "PCoA - Bray-Curtis by gender")
+Pcoa_gender
 ```
 
 Overall, the plot does not show a clear separation between male and female samples.
@@ -265,9 +271,10 @@ This PCoA visualization combines both gender and disease information to explore 
 ```{r}
 pcoagd <- ordinate(metagenomics, method = "PCoA", distance = "bray")
 
-plot_ordination(metagenomics, pcoagd, color = "gender", shape = "disease") +
+Pcoa_gendre_disease <- plot_ordination(metagenomics, pcoagd, color = "gender", shape = "disease") +
   geom_point(size = 3) +
   theme_minimal()
+Pcoa_gendre_disease
 ```
 
 Some disease-specific clustering patterns can be observed. Samples associated with cirrhosis tend to be located more frequently in the lower part of the plot, whereas cancer samples appear more concentrated in the upper central region.
@@ -299,12 +306,13 @@ gender_counts <- meta_df %>%
   group_by(gender) %>%
   summarise(Count = n())
 
-ggplot(gender_counts, aes(x = gender, y = Count, fill = gender)) +
+Sample_dist_gender <- ggplot(gender_counts, aes(x = gender, y = Count, fill = gender)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Number of Samples by Gender",
        x = "Gender",
        y = "Number of Samples")
+Sample_dist_gender
 ```
 
 We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.
@@ -320,12 +328,13 @@ disease_counts <- meta_df %>%
   group_by(gender, disease) %>%
   summarise(Count = n())
 
-ggplot(disease_counts %>% filter(gender == "female"),
+SampleF_dist_disease <- ggplot(disease_counts %>% filter(gender == "female"),
        aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Number of Female Samples per Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+SampleF_dist_disease
 ```
 
 Ulcerative colitis (IBD) has the highest number of samples with more than 75 counts, followed by type 2 diabetes (T2D), then cirrhosis, and finally cancer, which has fewer than 25 counts.
@@ -334,12 +343,13 @@ Number of samples of diseases for males:
 
 ```{r}
 
-ggplot(disease_counts %>% filter(gender == "male"),
+SampleM_dist_disease <- ggplot(disease_counts %>% filter(gender == "male"),
        aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Number of Male Samples per Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+SampleM_dist_disease
 ```
 
 Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.
@@ -356,26 +366,35 @@ metagenomics_class_per <- transform_sample_counts(metagenomics_class, function(x
 top_classes <- names(sort(taxa_sums(metagenomics_class_per), decreasing = TRUE))[1:10]
 metagenomics_class_top <- prune_taxa(top_classes, metagenomics_class_per)
 
-plot_bar(metagenomics_class_top, x = "gender", fill = "Class") +
+B10class_dist_gender <- plot_bar(metagenomics_class_top, x = "gender", fill = "Class") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Bacterial TOP 10 Classes Distribution by Gender") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+B10class_dist_gender
 ```
 
 The same analysis but with all the bacterial classes:
 
 ```{r}
 
-plot_bar(metagenomics_class, x = "gender", fill = "Class") +
+Bclass_dist_gender <- plot_bar(metagenomics_class, x = "gender", fill = "Class") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(title = "Bacterial Class Distribution by Gender") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+Bclass_dist_gender
 ```
 
 It seems that the bacterial distribution is approximately the same for each gender.
 
+```{r}
+#To save all the data/graphs for the presentation
+save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_gender, Pcoa_gendre_disease, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, file = here::here("posts", "datapreparation.RData"))
+```
+
 Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).
 
 These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.
+
+

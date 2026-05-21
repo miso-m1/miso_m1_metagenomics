@@ -182,8 +182,8 @@ print_network_stats <- function(network_list, tax_level) {
   return(stats_df)
 }
 
-# Function to generate and save the multicolored global network
-export_global_network <- function(network_list, tax_level, nom_fichier) {
+# Fonction mise à jour : Génère le graphe, l'affiche, et le retourne
+plot_global_network <- function(network_list, tax_level) {
   all_edges <- data.frame()
   
   # Compiling edge lists across all individual sub-networks
@@ -204,7 +204,7 @@ export_global_network <- function(network_list, tax_level, nom_fichier) {
   
   # Mapping disease-specific color codes
   unique_diseases <- unique(E(master_net)$Disease)
-  color_palette <- setNames(rainbow(length(unique_diseases)), unique_diseases)
+  color_palette <- setNames(viridis(length(unique_diseases), option = "cividis"), unique_diseases)
   E(master_net)$color <- color_palette[E(master_net)$Disease]
   
   # Computing geometric curvatures for parallel shared edges
@@ -215,34 +215,19 @@ export_global_network <- function(network_list, tax_level, nom_fichier) {
   else if(tax_level == "Family") { v_size <- 5; v_cex <- 0.6 }
   else { v_size <- 3; v_cex <- 0.45 }
   
-  # High-definition file export (300 DPI PNG)
-  chemin <- file.path("../graph/Network", nom_fichier)
-  png(filename = chemin, width = 2500, height = 2500, res = 300)
-  
+  # Inline HTML Quarto Report Rendering (L'affichage en direct)
   plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
        vertex.color = "lightgrey", vertex.frame.color = "white",
        vertex.label.color = "black", vertex.label.cex = v_cex,
        edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
        main = paste("Global Consensus Multi-Disease Network -", tax_level))
   
-  legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
-         col = color_palette, lwd = 3, bty = "n", cex = 0.8)
-  
-  dev.off()
-  
-  # Inline HTML Quarto Report Rendering
-  plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
-       vertex.color = "lightgrey", vertex.frame.color = "white",
-       vertex.label.color = "black", vertex.label.cex = v_cex,
-       edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
-       main = paste("Global Consensus Multi-Disease Network -", tax_level))
   legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
          col = color_palette, lwd = 3, bty = "n", cex = 0.6)
+  
+  # L'Étape clé : On retourne l'objet mathématique du réseau !
+  return(master_net)
 }
-
-# Ensuring the destination directory exists
-dossier_export <- "../graph/Network"
-if(!dir.exists(dossier_export)) dir.create(dossier_export, recursive = TRUE)
 ```
 
 ## 3. Phylum Level Analysis (Macro-Ecology)
@@ -262,8 +247,9 @@ for(g in groups) {
 # Displaying topological summary table
 knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
 
-# Generating and plotting global network
-export_global_network(networks_phylum, "Phylum", "Reseau_Global_Phylums.png")
+# Plotting global network
+Network_phylum <- plot_global_network(networks_phylum, "Phylum")
+
 ```
 
 ### Biological Interpretation (Phylum)
@@ -289,8 +275,8 @@ for(g in groups) {
 # Displaying topological summary table
 knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
 
-# Generating and plotting global network
-export_global_network(networks_family, "Family", "Reseau_Global_Familles.png")
+# Plotting global network
+Network_family <- plot_global_network(networks_family, "Family")
 ```
 
 ### Biological Interpretation (Family)
@@ -320,8 +306,13 @@ for(g in groups) {
 # Displaying topological summary table
 knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
 
-# Generating and plotting global network
-export_global_network(networks_genus, "Genre", "Reseau_Global_Genres.png")
+# Plotting global network
+Network_genre <- plot_global_network(networks_genus, "Genus")
+```
+
+```{r}
+#To save all the data/graphs for the presentation
+save(Network_phylum, Network_family, Network_genre, file = here::here("posts", "Network.RData"))
 ```
 
 ### Biological Interpretation (Genre)

@@ -123,13 +123,11 @@ We performed **`betadisper()`** on both Bray‑Curtis and Jaccard distance matri
 library("vegan")
 disp_bray <- betadisper(dist_bray, samples_df$disease)
 # pdf("figures/Beta/boxplot_betaDisperson_bray.pdf")
-boxplot(disp_bray)
-dev.off()
+boxplot(disp_bray, main = "Bray-Curtis dispersion per diseases")
 
 disp_jaccard <- betadisper(dist_jaccard, samples_df$disease)
 # pdf("figures/Beta/boxplot_betaDisperson_jaccard.pdf")
-boxplot(disp_jaccard)
-dev.off()
+boxplot(disp_jaccard, main = "Jaccard dispersion per diseases")
 
 
 # Permutation test for homogeneity
@@ -227,8 +225,8 @@ Pairwise comparisons identify which disease groups differ in within-group variab
 -   higher dispersion → greater interpersonal variability
 
 ```{r}
-TukeyHSD(disp_bray)   # shows which disease pairs have different spreads
-
+Tuckey_BC <- TukeyHSD(disp_bray)   # shows which disease pairs have different spreads
+Tuckey_BC
 ```
 
 IBD has significantly lower dispersion than cirrhosis (IBD is more homogeneous).
@@ -238,7 +236,8 @@ T2D has significantly higher dispersion than IBD (T2D is more heterogeneous).
 No evidence that cancer differs from others, nor cirrhosis vs T2D.
 
 ```{r}
-TukeyHSD(disp_jaccard)   # shows which disease pairs have different spreads
+Tuckey_Jaccard <- TukeyHSD(disp_jaccard)   # shows which disease pairs have different spreads
+Tuckey_Jaccard
 ```
 
 IBD less variable than cirrhosis.
@@ -248,6 +247,10 @@ T2D more variable than IBD.
 Cancer not different from any
 
 Cirrhosis vs T2D not different.
+
+```{r}
+save(disp_bray, disp_jaccard, results_df, Tuckey_BC, Tuckey_Jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
+```
 
 ## Conclusion
 
