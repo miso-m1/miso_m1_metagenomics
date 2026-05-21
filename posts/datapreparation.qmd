@@ -423,5 +423,7 @@ These checks helped confirm data quality, identify potential biases, and ensure 
 
 # Session info
 
-```{r} sessioninfo::session_info(pkgs = "attached")}
+```{r}
+include = true
+sessioninfo::session_info(pkgs = "attached")
 ```
