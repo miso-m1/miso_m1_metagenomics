@@ -22,93 +22,93 @@ When you click the **Render** button a presentation will be generated that inclu
 ```{r}
 #| include: false
 library("here")
-load(here("posts", "datapreparation.RData"))
-load(here("posts", "alpha_diversity.RData"))
-load(here("posts", "beta_diversity.RData"))
-load(here("posts", "Network.RData"))
-
-
-knitr::kable(PW_Wilcox_table, 
-             digits = 4, # Arrondir les p-values à 4 décimales
-             col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
-set.seed(42)
-
-plot(Network_phylum, 
-     layout = layout_with_fr(Network_phylum), 
-     vertex.size = 8,
-     vertex.color = "lightgrey", 
-     vertex.frame.color = "white",
-     vertex.label.color = "black", 
-     vertex.label.cex = 0.7,
-     edge.color = E(Network_phylum)$color, # Récupère les couleurs sauvegardées
-     edge.width = 1.5,
-     main = "Global Consensus Multi-Disease Network - Phylum")
-
-# 1. Identifier les Hubs (les nœuds les plus connectés pour la Famille)
-degres_famille <- degree(Network_family)
-# On prend le Top 10 (ajuste ce chiffre si tu veux en montrer plus ou moins)
-seuil_top10 <- sort(degres_famille, decreasing = TRUE)[10] 
-
-# 2. Préparer les étiquettes et les tailles
-# Base : pas de nom ("") et taille correcte pour les gris (4)
-labels_hubs_fam <- rep("", vcount(Network_family))
-tailles_noeuds_fam <- rep(4, vcount(Network_family))
-
-# On ajoute le nom et on grossit (taille 8) UNIQUEMENT pour les hubs
-labels_hubs_fam[degres_famille >= seuil_top10] <- V(Network_family)$name[degres_famille >= seuil_top10]
-tailles_noeuds_fam[degres_famille >= seuil_top10] <- 8
-
-# 3. Calcul de la disposition (Kamada-Kawai aère très bien le niveau Famille)
-set.seed(42)
-layout_famille <- layout_with_kk(Network_family)
-
-# 4. Le dessin final
-plot(Network_family, 
-     layout = layout_famille, 
-     vertex.size = tailles_noeuds_fam,         
-     vertex.color = ifelse(degres_famille >= seuil_top10, "gold", "lightgrey"), 
-     vertex.frame.color = "white",
-     vertex.frame.width = 0.5,
-     vertex.label = labels_hubs_fam,           
-     vertex.label.color = "black", 
-     vertex.label.cex = 0.8,               
-     vertex.label.font = 2,                
-     vertex.label.dist = 0.8,              
-     edge.color = E(Network_family)$color,  
-     edge.width = 0.8,                     
-     main = "Global Consensus Multi-Disease Network - Family (Top Hubs Highlighted)")
-
-# 1. Identifier les Hubs (les nœuds les plus connectés)
-degres_genre <- degree(Network_genre)
-# On trouve la valeur de connexion pour être dans le "Top 15"
-seuil_top15 <- sort(degres_genre, decreasing = TRUE)[15] 
-
-# 2. Préparer les étiquettes et les tailles
-# Par défaut, pas d'étiquette ("") et petite taille (2)
-labels_hubs <- rep("", vcount(Network_genre))
-tailles_noeuds <- rep(4, vcount(Network_genre))
-
-# On ne garde le nom et on grossit (taille 6) QUE pour les hubs
-labels_hubs[degres_genre >= seuil_top15] <- V(Network_genre)$name[degres_genre >= seuil_top15]
-tailles_noeuds[degres_genre >= seuil_top15] <- 6
-
-# 3. Calcul de la disposition (graphopt est souvent performant pour les très gros réseaux)
-set.seed(42)
-layout_genre <- layout_with_graphopt(Network_genre)
-
-# 4. Le dessin final !
-plot(Network_genre, 
-     layout = layout_genre, 
-     vertex.size = tailles_noeuds,         # Taille dynamique (gros pour hubs, petit pour le reste)
-     vertex.color = ifelse(degres_genre >= seuil_top15, "gold", "lightgrey"), # Les hubs en doré !
-     vertex.frame.color = "white",
-     vertex.frame.width = 0.2,
-     vertex.label = labels_hubs,           # Seulement les 15 noms apparaissent
-     vertex.label.color = "black", 
-     vertex.label.cex = 0.8,               # Texte bien lisible
-     vertex.label.font = 2,                # Texte en gras pour faire ressortir les hubs
-     vertex.label.dist = 0.8,              # Décale le texte
-     edge.color = E(Network_genre)$color,  # Bien utiliser les couleurs du genre
-     edge.width = 0.3,                     # Liens extrêmement fins pour voir à travers
-     main = "Global Consensus Multi-Disease Network - Genus (Top Hubs Highlighted)")
+# load(here("posts", "datapreparation.RData"))
+# load(here("posts", "alpha_diversity.RData"))
+# load(here("posts", "beta_diversity.RData"))
+# load(here("posts", "Network.RData"))
+# 
+# 
+# knitr::kable(PW_Wilcox_table, 
+#              digits = 4, # Arrondir les p-values à 4 décimales
+#              col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
+# set.seed(42)
+# 
+# plot(Network_phylum, 
+#      layout = layout_with_fr(Network_phylum), 
+#      vertex.size = 8,
+#      vertex.color = "lightgrey", 
+#      vertex.frame.color = "white",
+#      vertex.label.color = "black", 
+#      vertex.label.cex = 0.7,
+#      edge.color = E(Network_phylum)$color, # Récupère les couleurs sauvegardées
+#      edge.width = 1.5,
+#      main = "Global Consensus Multi-Disease Network - Phylum")
+# 
+# # 1. Identifier les Hubs (les nœuds les plus connectés pour la Famille)
+# degres_famille <- degree(Network_family)
+# # On prend le Top 10 (ajuste ce chiffre si tu veux en montrer plus ou moins)
+# seuil_top10 <- sort(degres_famille, decreasing = TRUE)[10] 
+# 
+# # 2. Préparer les étiquettes et les tailles
+# # Base : pas de nom ("") et taille correcte pour les gris (4)
+# labels_hubs_fam <- rep("", vcount(Network_family))
+# tailles_noeuds_fam <- rep(4, vcount(Network_family))
+# 
+# # On ajoute le nom et on grossit (taille 8) UNIQUEMENT pour les hubs
+# labels_hubs_fam[degres_famille >= seuil_top10] <- V(Network_family)$name[degres_famille >= seuil_top10]
+# tailles_noeuds_fam[degres_famille >= seuil_top10] <- 8
+# 
+# # 3. Calcul de la disposition (Kamada-Kawai aère très bien le niveau Famille)
+# set.seed(42)
+# layout_famille <- layout_with_kk(Network_family)
+# 
+# # 4. Le dessin final
+# plot(Network_family, 
+#      layout = layout_famille, 
+#      vertex.size = tailles_noeuds_fam,         
+#      vertex.color = ifelse(degres_famille >= seuil_top10, "gold", "lightgrey"), 
+#      vertex.frame.color = "white",
+#      vertex.frame.width = 0.5,
+#      vertex.label = labels_hubs_fam,           
+#      vertex.label.color = "black", 
+#      vertex.label.cex = 0.8,               
+#      vertex.label.font = 2,                
+#      vertex.label.dist = 0.8,              
+#      edge.color = E(Network_family)$color,  
+#      edge.width = 0.8,                     
+#      main = "Global Consensus Multi-Disease Network - Family (Top Hubs Highlighted)")
+# 
+# # 1. Identifier les Hubs (les nœuds les plus connectés)
+# degres_genre <- degree(Network_genre)
+# # On trouve la valeur de connexion pour être dans le "Top 15"
+# seuil_top15 <- sort(degres_genre, decreasing = TRUE)[15] 
+# 
+# # 2. Préparer les étiquettes et les tailles
+# # Par défaut, pas d'étiquette ("") et petite taille (2)
+# labels_hubs <- rep("", vcount(Network_genre))
+# tailles_noeuds <- rep(4, vcount(Network_genre))
+# 
+# # On ne garde le nom et on grossit (taille 6) QUE pour les hubs
+# labels_hubs[degres_genre >= seuil_top15] <- V(Network_genre)$name[degres_genre >= seuil_top15]
+# tailles_noeuds[degres_genre >= seuil_top15] <- 6
+# 
+# # 3. Calcul de la disposition (graphopt est souvent performant pour les très gros réseaux)
+# set.seed(42)
+# layout_genre <- layout_with_graphopt(Network_genre)
+# 
+# # 4. Le dessin final !
+# plot(Network_genre, 
+#      layout = layout_genre, 
+#      vertex.size = tailles_noeuds,         # Taille dynamique (gros pour hubs, petit pour le reste)
+#      vertex.color = ifelse(degres_genre >= seuil_top15, "gold", "lightgrey"), # Les hubs en doré !
+#      vertex.frame.color = "white",
+#      vertex.frame.width = 0.2,
+#      vertex.label = labels_hubs,           # Seulement les 15 noms apparaissent
+#      vertex.label.color = "black", 
+#      vertex.label.cex = 0.8,               # Texte bien lisible
+#      vertex.label.font = 2,                # Texte en gras pour faire ressortir les hubs
+#      vertex.label.dist = 0.8,              # Décale le texte
+#      edge.color = E(Network_genre)$color,  # Bien utiliser les couleurs du genre
+#      edge.width = 0.3,                     # Liens extrêmement fins pour voir à travers
+#      main = "Global Consensus Multi-Disease Network - Genus (Top Hubs Highlighted)")
 ```

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ec100a28b3f28334d858203a6e0baf76.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4d57fda717b58917cdf7b65ed0f2374.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -1371,8 +1372,8 @@ window.Quarto = {
 <span id="cb22-209"><a href="#cb22-209" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(stats_df)</span>
 <span id="cb22-210"><a href="#cb22-210" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb22-211"><a href="#cb22-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-212"><a href="#cb22-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate and save the multicolored global network</span></span>
-<span id="cb22-213"><a href="#cb22-213" aria-hidden="true" tabindex="-1"></a>export_global_network <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level, nom_fichier) {</span>
+<span id="cb22-212"><a href="#cb22-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Fonction mise à jour : Génère le graphe, l'affiche, et le retourne</span></span>
+<span id="cb22-213"><a href="#cb22-213" aria-hidden="true" tabindex="-1"></a>plot_global_network <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level) {</span>
 <span id="cb22-214"><a href="#cb22-214" aria-hidden="true" tabindex="-1"></a>  all_edges <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb22-215"><a href="#cb22-215" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb22-216"><a href="#cb22-216" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compiling edge lists across all individual sub-networks</span></span>
@@ -1404,128 +1405,130 @@ window.Quarto = {
 <span id="cb22-242"><a href="#cb22-242" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(tax_level <span class="sc">==</span> <span class="st">"Family"</span>) { v_size <span class="ot">&lt;-</span> <span class="dv">5</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.6</span> }</span>
 <span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> { v_size <span class="ot">&lt;-</span> <span class="dv">3</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.45</span> }</span>
 <span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a>  <span class="co"># High-definition file export (300 DPI PNG)</span></span>
-<span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a>  chemin <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"../graph/Network"</span>, nom_fichier)</span>
-<span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">png</span>(<span class="at">filename =</span> chemin, <span class="at">width =</span> <span class="dv">2500</span>, <span class="at">height =</span> <span class="dv">2500</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
-<span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
-<span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
-<span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
-<span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
-<span id="cb22-253"><a href="#cb22-253" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
+<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering (L'affichage en direct)</span></span>
+<span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
+<span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
+<span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
+<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
+<span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
+<span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
+<span id="cb22-253"><a href="#cb22-253" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
 <span id="cb22-254"><a href="#cb22-254" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-255"><a href="#cb22-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
-<span id="cb22-256"><a href="#cb22-256" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
-<span id="cb22-257"><a href="#cb22-257" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-258"><a href="#cb22-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
-<span id="cb22-259"><a href="#cb22-259" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-260"><a href="#cb22-260" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering</span></span>
-<span id="cb22-261"><a href="#cb22-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
-<span id="cb22-262"><a href="#cb22-262" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
-<span id="cb22-263"><a href="#cb22-263" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
-<span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
-<span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
-<span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
-<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb22-255"><a href="#cb22-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
+<span id="cb22-256"><a href="#cb22-256" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-257"><a href="#cb22-257" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering</span></span>
+<span id="cb22-258"><a href="#cb22-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
+<span id="cb22-259"><a href="#cb22-259" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
+<span id="cb22-260"><a href="#cb22-260" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
+<span id="cb22-261"><a href="#cb22-261" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
+<span id="cb22-262"><a href="#cb22-262" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
+<span id="cb22-263"><a href="#cb22-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
+<span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a>  <span class="co"># L'Étape clé : On retourne l'objet mathématique du réseau !</span></span>
+<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(master_net)</span>
 <span id="cb22-268"><a href="#cb22-268" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensuring the destination directory exists</span></span>
-<span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a>dossier_export <span class="ot">&lt;-</span> <span class="st">"../graph/Network"</span></span>
-<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(dossier_export)) <span class="fu">dir.create</span>(dossier_export, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Phylum Level Analysis (Macro-Ecology)</span></span>
-<span id="cb22-276"><a href="#cb22-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-279"><a href="#cb22-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb22-280"><a href="#cb22-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-phylum</span></span>
-<span id="cb22-281"><a href="#cb22-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb22-282"><a href="#cb22-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb22-283"><a href="#cb22-283" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 8</span></span>
-<span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
-<span id="cb22-285"><a href="#cb22-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a>networks_phylum <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a>  networks_phylum[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Phylum"</span>, <span class="fl">0.10</span>)</span>
-<span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-291"><a href="#cb22-291" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb22-292"><a href="#cb22-292" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_phylum, <span class="st">"Phylum"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Phylum Level"</span>)</span>
-<span id="cb22-293"><a href="#cb22-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-294"><a href="#cb22-294" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating and plotting global network</span></span>
-<span id="cb22-295"><a href="#cb22-295" aria-hidden="true" tabindex="-1"></a><span class="fu">export_global_network</span>(networks_phylum, <span class="st">"Phylum"</span>, <span class="st">"Reseau_Global_Phylums.png"</span>)</span>
-<span id="cb22-296"><a href="#cb22-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-297"><a href="#cb22-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-298"><a href="#cb22-298" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Phylum)</span></span>
-<span id="cb22-299"><a href="#cb22-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-300"><a href="#cb22-300" aria-hidden="true" tabindex="-1"></a>At the **Phylum** level, the global consensus network exhibits extremely low density and highly limited interactions. This layout exemplifies the concept of **functional redundancy** and the mathematical smoothing effect.</span>
-<span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-302"><a href="#cb22-302" aria-hidden="true" tabindex="-1"></a>Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.</span>
-<span id="cb22-303"><a href="#cb22-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-304"><a href="#cb22-304" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Family Level Analysis (Meso-Ecology)</span></span>
-<span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-family</span></span>
-<span id="cb22-310"><a href="#cb22-310" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a>networks_family <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a>  networks_family[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Family"</span>, <span class="fl">0.15</span>)</span>
-<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Phylum Level Analysis (Macro-Ecology)</span></span>
+<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-276"><a href="#cb22-276" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-phylum</span></span>
+<span id="cb22-277"><a href="#cb22-277" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb22-278"><a href="#cb22-278" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb22-279"><a href="#cb22-279" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 8</span></span>
+<span id="cb22-280"><a href="#cb22-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
+<span id="cb22-281"><a href="#cb22-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-282"><a href="#cb22-282" aria-hidden="true" tabindex="-1"></a>networks_phylum <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb22-283"><a href="#cb22-283" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a>  networks_phylum[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Phylum"</span>, <span class="fl">0.10</span>)</span>
+<span id="cb22-285"><a href="#cb22-285" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_phylum, <span class="st">"Phylum"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Phylum Level"</span>)</span>
+<span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb22-291"><a href="#cb22-291" aria-hidden="true" tabindex="-1"></a>Network_phylum <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_phylum, <span class="st">"Phylum"</span>)</span>
+<span id="cb22-292"><a href="#cb22-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-293"><a href="#cb22-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-294"><a href="#cb22-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-295"><a href="#cb22-295" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Phylum)</span></span>
+<span id="cb22-296"><a href="#cb22-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-297"><a href="#cb22-297" aria-hidden="true" tabindex="-1"></a>At the **Phylum** level, the global consensus network exhibits extremely low density and highly limited interactions. This layout exemplifies the concept of **functional redundancy** and the mathematical smoothing effect.</span>
+<span id="cb22-298"><a href="#cb22-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-299"><a href="#cb22-299" aria-hidden="true" tabindex="-1"></a>Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.</span>
+<span id="cb22-300"><a href="#cb22-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Family Level Analysis (Meso-Ecology)</span></span>
+<span id="cb22-302"><a href="#cb22-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-family</span></span>
+<span id="cb22-307"><a href="#cb22-307" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb22-310"><a href="#cb22-310" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a>networks_family <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a>  networks_family[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Family"</span>, <span class="fl">0.15</span>)</span>
+<span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_family, <span class="st">"Family"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Family Level"</span>)</span>
 <span id="cb22-319"><a href="#cb22-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_family, <span class="st">"Family"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Family Level"</span>)</span>
-<span id="cb22-322"><a href="#cb22-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-323"><a href="#cb22-323" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating and plotting global network</span></span>
-<span id="cb22-324"><a href="#cb22-324" aria-hidden="true" tabindex="-1"></a><span class="fu">export_global_network</span>(networks_family, <span class="st">"Family"</span>, <span class="st">"Reseau_Global_Familles.png"</span>)</span>
-<span id="cb22-325"><a href="#cb22-325" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-326"><a href="#cb22-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-327"><a href="#cb22-327" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Family)</span></span>
-<span id="cb22-328"><a href="#cb22-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-329"><a href="#cb22-329" aria-hidden="true" tabindex="-1"></a>The **Family** level provides an ideal analytical sweet spot, revealing clear pathological restructuring and disease-specific modular guilds:</span>
-<span id="cb22-330"><a href="#cb22-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-331"><a href="#cb22-331" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.</span>
-<span id="cb22-332"><a href="#cb22-332" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.</span>
-<span id="cb22-333"><a href="#cb22-333" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).</span>
-<span id="cb22-334"><a href="#cb22-334" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.</span>
-<span id="cb22-335"><a href="#cb22-335" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.</span>
-<span id="cb22-336"><a href="#cb22-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-337"><a href="#cb22-337" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Genus Level Analysis (Micro-Ecology)</span></span>
-<span id="cb22-338"><a href="#cb22-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-341"><a href="#cb22-341" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb22-342"><a href="#cb22-342" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-genus</span></span>
-<span id="cb22-343"><a href="#cb22-343" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb22-344"><a href="#cb22-344" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb22-345"><a href="#cb22-345" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
-<span id="cb22-346"><a href="#cb22-346" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb22-347"><a href="#cb22-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-348"><a href="#cb22-348" aria-hidden="true" tabindex="-1"></a>networks_genus <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb22-349"><a href="#cb22-349" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb22-350"><a href="#cb22-350" aria-hidden="true" tabindex="-1"></a>  networks_genus[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Genus"</span>, <span class="fl">0.20</span>)</span>
-<span id="cb22-351"><a href="#cb22-351" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a>Network_family <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_family, <span class="st">"Family"</span>)</span>
+<span id="cb22-322"><a href="#cb22-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-323"><a href="#cb22-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-324"><a href="#cb22-324" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Family)</span></span>
+<span id="cb22-325"><a href="#cb22-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-326"><a href="#cb22-326" aria-hidden="true" tabindex="-1"></a>The **Family** level provides an ideal analytical sweet spot, revealing clear pathological restructuring and disease-specific modular guilds:</span>
+<span id="cb22-327"><a href="#cb22-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-328"><a href="#cb22-328" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.</span>
+<span id="cb22-329"><a href="#cb22-329" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.</span>
+<span id="cb22-330"><a href="#cb22-330" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).</span>
+<span id="cb22-331"><a href="#cb22-331" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.</span>
+<span id="cb22-332"><a href="#cb22-332" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.</span>
+<span id="cb22-333"><a href="#cb22-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-334"><a href="#cb22-334" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Genus Level Analysis (Micro-Ecology)</span></span>
+<span id="cb22-335"><a href="#cb22-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-338"><a href="#cb22-338" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-339"><a href="#cb22-339" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-genus</span></span>
+<span id="cb22-340"><a href="#cb22-340" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb22-341"><a href="#cb22-341" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb22-342"><a href="#cb22-342" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
+<span id="cb22-343"><a href="#cb22-343" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb22-344"><a href="#cb22-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-345"><a href="#cb22-345" aria-hidden="true" tabindex="-1"></a>networks_genus <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb22-346"><a href="#cb22-346" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb22-347"><a href="#cb22-347" aria-hidden="true" tabindex="-1"></a>  networks_genus[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Genus"</span>, <span class="fl">0.20</span>)</span>
+<span id="cb22-348"><a href="#cb22-348" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-349"><a href="#cb22-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-350"><a href="#cb22-350" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb22-351"><a href="#cb22-351" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
 <span id="cb22-352"><a href="#cb22-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-353"><a href="#cb22-353" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb22-354"><a href="#cb22-354" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
-<span id="cb22-355"><a href="#cb22-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-356"><a href="#cb22-356" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating and plotting global network</span></span>
-<span id="cb22-357"><a href="#cb22-357" aria-hidden="true" tabindex="-1"></a><span class="fu">export_global_network</span>(networks_genus, <span class="st">"Genre"</span>, <span class="st">"Reseau_Global_Genres.png"</span>)</span>
-<span id="cb22-358"><a href="#cb22-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-359"><a href="#cb22-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-360"><a href="#cb22-360" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genre)</span></span>
-<span id="cb22-361"><a href="#cb22-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-362"><a href="#cb22-362" aria-hidden="true" tabindex="-1"></a>At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).</span>
+<span id="cb22-353"><a href="#cb22-353" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb22-354"><a href="#cb22-354" aria-hidden="true" tabindex="-1"></a>Network_genre <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span>
+<span id="cb22-355"><a href="#cb22-355" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-356"><a href="#cb22-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-359"><a href="#cb22-359" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-360"><a href="#cb22-360" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
+<span id="cb22-361"><a href="#cb22-361" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genre, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span>
+<span id="cb22-362"><a href="#cb22-362" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-363"><a href="#cb22-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-364"><a href="#cb22-364" aria-hidden="true" tabindex="-1"></a>At this scale, data sparse properties significantly expand due to **zero-inflation** (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to **20%** effectively trims down background noise and isolates true **Microbial Hubs** (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.</span>
+<span id="cb22-364"><a href="#cb22-364" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genre)</span></span>
 <span id="cb22-365"><a href="#cb22-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-366"><a href="#cb22-366" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. General Conclusion</span></span>
+<span id="cb22-366"><a href="#cb22-366" aria-hidden="true" tabindex="-1"></a>At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).</span>
 <span id="cb22-367"><a href="#cb22-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-368"><a href="#cb22-368" aria-hidden="true" tabindex="-1"></a>This study demonstrates the immense value of using a consensus-based network inference approach to decode the complex dynamics of the gut microbiome across different chronic diseases. By combining neighborhood selection (MB), global precision matrix estimation (Glasso), and compositional correlation modeling (SparCC), we successfully mitigated the inherent statistical biases of metagenomic data, yielding highly robust and biologically relevant microbial interaction networks.</span>
+<span id="cb22-368"><a href="#cb22-368" aria-hidden="true" tabindex="-1"></a>At this scale, data sparse properties significantly expand due to **zero-inflation** (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to **20%** effectively trims down background noise and isolates true **Microbial Hubs** (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.</span>
 <span id="cb22-369"><a href="#cb22-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-370"><a href="#cb22-370" aria-hidden="true" tabindex="-1"></a>The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Etiological Guilds:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).</span>
+<span id="cb22-370"><a href="#cb22-370" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. General Conclusion</span></span>
 <span id="cb22-371"><a href="#cb22-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-372"><a href="#cb22-372" aria-hidden="true" tabindex="-1"></a>Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.</span>
+<span id="cb22-372"><a href="#cb22-372" aria-hidden="true" tabindex="-1"></a>This study demonstrates the immense value of using a consensus-based network inference approach to decode the complex dynamics of the gut microbiome across different chronic diseases. By combining neighborhood selection (MB), global precision matrix estimation (Glasso), and compositional correlation modeling (SparCC), we successfully mitigated the inherent statistical biases of metagenomic data, yielding highly robust and biologically relevant microbial interaction networks.</span>
+<span id="cb22-373"><a href="#cb22-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-374"><a href="#cb22-374" aria-hidden="true" tabindex="-1"></a>The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Etiological Guilds:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).</span>
+<span id="cb22-375"><a href="#cb22-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-376"><a href="#cb22-376" aria-hidden="true" tabindex="-1"></a>Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

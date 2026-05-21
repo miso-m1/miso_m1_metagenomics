@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ec100a28b3f28334d858203a6e0baf76.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4d57fda717b58917cdf7b65ed0f2374.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -1338,11 +1339,11 @@ t2d-ibd_ulcerative_colitis       0.0000000</code></pre>
 <span id="cb26-150"><a href="#cb26-150" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"vegan"</span>)</span>
 <span id="cb26-151"><a href="#cb26-151" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, samples_df<span class="sc">$</span>disease)</span>
 <span id="cb26-152"><a href="#cb26-152" aria-hidden="true" tabindex="-1"></a><span class="co"># pdf("figures/Beta/boxplot_betaDisperson_bray.pdf")</span></span>
-<span id="cb26-153"><a href="#cb26-153" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_bray, <span class="at">col =</span> <span class="fu">viridis</span>(<span class="dv">4</span>, <span class="at">option =</span> <span class="st">"cividis"</span>))</span>
+<span id="cb26-153"><a href="#cb26-153" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_bray, <span class="at">col =</span> <span class="fu">viridis</span>(<span class="dv">4</span>, <span class="at">option =</span> <span class="st">"cividis"</span>), <span class="at">main =</span> <span class="st">"Bray-Curtis dispersion per diseases"</span>)</span>
 <span id="cb26-154"><a href="#cb26-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-155"><a href="#cb26-155" aria-hidden="true" tabindex="-1"></a>disp_jaccard <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_jaccard, samples_df<span class="sc">$</span>disease)</span>
 <span id="cb26-156"><a href="#cb26-156" aria-hidden="true" tabindex="-1"></a><span class="co"># pdf("figures/Beta/boxplot_betaDisperson_jaccard.pdf")</span></span>
-<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_jaccard, <span class="at">col =</span> <span class="fu">viridis</span>(<span class="dv">4</span>, <span class="at">option =</span> <span class="st">"cividis"</span>))</span>
+<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(disp_jaccard, <span class="at">col =</span> <span class="fu">viridis</span>(<span class="dv">4</span>, <span class="at">option =</span> <span class="st">"cividis"</span>), <span class="at">main =</span> <span class="st">"Jaccard dispersion per diseases"</span>)</span>
 <span id="cb26-158"><a href="#cb26-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-159"><a href="#cb26-159" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-160"><a href="#cb26-160" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutation test for homogeneity</span></span>
@@ -1440,8 +1441,8 @@ t2d-ibd_ulcerative_colitis       0.0000000</code></pre>
 <span id="cb26-256"><a href="#cb26-256" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>higher dispersion → greater interpersonal variability</span>
 <span id="cb26-257"><a href="#cb26-257" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-260"><a href="#cb26-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-261"><a href="#cb26-261" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(disp_bray)   <span class="co"># shows which disease pairs have different spreads</span></span>
-<span id="cb26-262"><a href="#cb26-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-261"><a href="#cb26-261" aria-hidden="true" tabindex="-1"></a>Tuckey_BC <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(disp_bray)   <span class="co"># shows which disease pairs have different spreads</span></span>
+<span id="cb26-262"><a href="#cb26-262" aria-hidden="true" tabindex="-1"></a>Tuckey_BC</span>
 <span id="cb26-263"><a href="#cb26-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb26-264"><a href="#cb26-264" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-265"><a href="#cb26-265" aria-hidden="true" tabindex="-1"></a>IBD has significantly lower dispersion than cirrhosis (IBD is more homogeneous).</span>
@@ -1451,30 +1452,35 @@ t2d-ibd_ulcerative_colitis       0.0000000</code></pre>
 <span id="cb26-269"><a href="#cb26-269" aria-hidden="true" tabindex="-1"></a>No evidence that cancer differs from others, nor cirrhosis vs T2D.</span>
 <span id="cb26-270"><a href="#cb26-270" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-273"><a href="#cb26-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-274"><a href="#cb26-274" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(disp_jaccard)   <span class="co"># shows which disease pairs have different spreads</span></span>
-<span id="cb26-275"><a href="#cb26-275" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb26-276"><a href="#cb26-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-277"><a href="#cb26-277" aria-hidden="true" tabindex="-1"></a>IBD less variable than cirrhosis.</span>
-<span id="cb26-278"><a href="#cb26-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-279"><a href="#cb26-279" aria-hidden="true" tabindex="-1"></a>T2D more variable than IBD.</span>
-<span id="cb26-280"><a href="#cb26-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-281"><a href="#cb26-281" aria-hidden="true" tabindex="-1"></a>Cancer not different from any</span>
-<span id="cb26-282"><a href="#cb26-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-283"><a href="#cb26-283" aria-hidden="true" tabindex="-1"></a>Cirrhosis vs T2D not different.</span>
-<span id="cb26-284"><a href="#cb26-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-285"><a href="#cb26-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
-<span id="cb26-286"><a href="#cb26-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-287"><a href="#cb26-287" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion differences were evaluated using Tukey’s HSD test.</span>
-<span id="cb26-288"><a href="#cb26-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-289"><a href="#cb26-289" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
-<span id="cb26-290"><a href="#cb26-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-291"><a href="#cb26-291" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
-<span id="cb26-292"><a href="#cb26-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-293"><a href="#cb26-293" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
-<span id="cb26-294"><a href="#cb26-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-295"><a href="#cb26-295" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, suggesting that disease groups differ not only in average composition but also in microbiome heterogeneity.</span>
-<span id="cb26-296"><a href="#cb26-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-297"><a href="#cb26-297" aria-hidden="true" tabindex="-1"></a>Because PERMANOVA is sensitive to dispersion differences, results should be interpreted as reflecting both centroid separation and changes in community variability.</span>
+<span id="cb26-274"><a href="#cb26-274" aria-hidden="true" tabindex="-1"></a>Tuckey_Jaccard <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(disp_jaccard)   <span class="co"># shows which disease pairs have different spreads</span></span>
+<span id="cb26-275"><a href="#cb26-275" aria-hidden="true" tabindex="-1"></a>Tuckey_Jaccard</span>
+<span id="cb26-276"><a href="#cb26-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-277"><a href="#cb26-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-278"><a href="#cb26-278" aria-hidden="true" tabindex="-1"></a>IBD less variable than cirrhosis.</span>
+<span id="cb26-279"><a href="#cb26-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-280"><a href="#cb26-280" aria-hidden="true" tabindex="-1"></a>T2D more variable than IBD.</span>
+<span id="cb26-281"><a href="#cb26-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-282"><a href="#cb26-282" aria-hidden="true" tabindex="-1"></a>Cancer not different from any</span>
+<span id="cb26-283"><a href="#cb26-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-284"><a href="#cb26-284" aria-hidden="true" tabindex="-1"></a>Cirrhosis vs T2D not different.</span>
+<span id="cb26-285"><a href="#cb26-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-288"><a href="#cb26-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-289"><a href="#cb26-289" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(disp_bray, disp_jaccard, results_df, Tuckey_BC, Tuckey_Jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"beta_diversity.RData"</span>))</span>
+<span id="cb26-290"><a href="#cb26-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-291"><a href="#cb26-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-292"><a href="#cb26-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb26-293"><a href="#cb26-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-294"><a href="#cb26-294" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion differences were evaluated using Tukey’s HSD test.</span>
+<span id="cb26-295"><a href="#cb26-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-296"><a href="#cb26-296" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
+<span id="cb26-297"><a href="#cb26-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-298"><a href="#cb26-298" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
+<span id="cb26-299"><a href="#cb26-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-300"><a href="#cb26-300" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
+<span id="cb26-301"><a href="#cb26-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-302"><a href="#cb26-302" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, suggesting that disease groups differ not only in average composition but also in microbiome heterogeneity.</span>
+<span id="cb26-303"><a href="#cb26-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-304"><a href="#cb26-304" aria-hidden="true" tabindex="-1"></a>Because PERMANOVA is sensitive to dispersion differences, results should be interpreted as reflecting both centroid separation and changes in community variability.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ec100a28b3f28334d858203a6e0baf76.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4d57fda717b58917cdf7b65ed0f2374.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -1379,12 +1380,12 @@ P value adjustment method: BH </code></pre>
 <span id="cb43-151"><a href="#cb43-151" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape for faceting</span></span>
 <span id="cb43-152"><a href="#cb43-152" aria-hidden="true" tabindex="-1"></a>alpha_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(alpha_df, <span class="at">cols =</span> <span class="fu">c</span>(Shannon, Simpson, InvSimpson, Observed), <span class="at">names_to =</span> <span class="st">"Metric"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>)</span>
 <span id="cb43-153"><a href="#cb43-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-154"><a href="#cb43-154" aria-hidden="true" tabindex="-1"></a>p_combined <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_long, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Value, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb43-154"><a href="#cb43-154" aria-hidden="true" tabindex="-1"></a>AlphaD_combined <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_long, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Value, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
 <span id="cb43-155"><a href="#cb43-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb43-156"><a href="#cb43-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
 <span id="cb43-157"><a href="#cb43-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Alpha diversity from relative abundances"</span>)</span>
 <span id="cb43-158"><a href="#cb43-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a>p_combined</span>
+<span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a>AlphaD_combined</span>
 <span id="cb43-160"><a href="#cb43-160" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_diversity_all.pdf", p_combined, width = 10, height = 6)</span></span>
 <span id="cb43-161"><a href="#cb43-161" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-162"><a href="#cb43-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1406,111 +1407,148 @@ P value adjustment method: BH </code></pre>
 <span id="cb43-178"><a href="#cb43-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Normality Testing</span></span>
 <span id="cb43-179"><a href="#cb43-179" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-182"><a href="#cb43-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb43-183"><a href="#cb43-183" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Normality (Shapiro-Wilk) to decide test </span></span>
-<span id="cb43-184"><a href="#cb43-184" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(alpha_df<span class="sc">$</span>Shannon)</span>
-<span id="cb43-185"><a href="#cb43-185" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(alpha_df<span class="sc">$</span>Simpson)</span>
-<span id="cb43-186"><a href="#cb43-186" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(alpha_df<span class="sc">$</span>InvSimpson)</span>
-<span id="cb43-187"><a href="#cb43-187" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(alpha_df<span class="sc">$</span>Observed)</span>
-<span id="cb43-188"><a href="#cb43-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-189"><a href="#cb43-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb43-190"><a href="#cb43-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-191"><a href="#cb43-191" aria-hidden="true" tabindex="-1"></a>If p-value <span class="sc">\&gt;</span> alpha 0.5, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).</span>
-<span id="cb43-192"><a href="#cb43-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-193"><a href="#cb43-193" aria-hidden="true" tabindex="-1"></a>Shapiro–Wilk tests assess whether diversity metrics follow a normal distribution. In microbiome datasets, these metrics are typically non-normal due to compositionality and sparsity. Therefore, results are used as a diagnostic tool rather than a strict decision criterion.</span>
-<span id="cb43-194"><a href="#cb43-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-197"><a href="#cb43-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb43-198"><a href="#cb43-198" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(Shannon <span class="sc">~</span> Disease, <span class="at">data =</span> alpha_df)</span>
-<span id="cb43-199"><a href="#cb43-199" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(Observed <span class="sc">~</span> Disease, <span class="at">data =</span> alpha_df)</span>
-<span id="cb43-200"><a href="#cb43-200" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(Simpson <span class="sc">~</span> Disease, <span class="at">data =</span> alpha_df)</span>
-<span id="cb43-201"><a href="#cb43-201" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(InvSimpson <span class="sc">~</span> Disease, <span class="at">data =</span> alpha_df)</span>
-<span id="cb43-202"><a href="#cb43-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-183"><a href="#cb43-183" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb43-184"><a href="#cb43-184" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb43-185"><a href="#cb43-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-186"><a href="#cb43-186" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Normality (Shapiro-Wilk) to decide test </span></span>
+<span id="cb43-187"><a href="#cb43-187" aria-hidden="true" tabindex="-1"></a>alpha_metrics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Simpson"</span>, <span class="st">"InvSimpson"</span>, <span class="st">"Shannon"</span>)</span>
+<span id="cb43-188"><a href="#cb43-188" aria-hidden="true" tabindex="-1"></a>shapiro_results <span class="ot">&lt;-</span> <span class="fu">lapply</span>(alpha_metrics, <span class="cf">function</span>(metric) {</span>
+<span id="cb43-189"><a href="#cb43-189" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-190"><a href="#cb43-190" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(alpha_df[[metric]])</span>
+<span id="cb43-191"><a href="#cb43-191" aria-hidden="true" tabindex="-1"></a>  test_table <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(test)</span>
+<span id="cb43-192"><a href="#cb43-192" aria-hidden="true" tabindex="-1"></a>  test_table<span class="sc">$</span>Metric <span class="ot">&lt;-</span> metric</span>
+<span id="cb43-193"><a href="#cb43-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(test_table)</span>
+<span id="cb43-194"><a href="#cb43-194" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb43-195"><a href="#cb43-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-196"><a href="#cb43-196" aria-hidden="true" tabindex="-1"></a>shapiro_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(shapiro_results) <span class="sc">%&gt;%</span></span>
+<span id="cb43-197"><a href="#cb43-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Metric, statistic, p.value) <span class="sc">%&gt;%</span></span>
+<span id="cb43-198"><a href="#cb43-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(p.value)</span>
+<span id="cb43-199"><a href="#cb43-199" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_table)</span>
+<span id="cb43-200"><a href="#cb43-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-201"><a href="#cb43-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-202"><a href="#cb43-202" aria-hidden="true" tabindex="-1"></a>If p-value <span class="sc">\&gt;</span> alpha 0.5, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).</span>
 <span id="cb43-203"><a href="#cb43-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-204"><a href="#cb43-204" aria-hidden="true" tabindex="-1"></a>The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.</span>
+<span id="cb43-204"><a href="#cb43-204" aria-hidden="true" tabindex="-1"></a>Shapiro–Wilk tests assess whether diversity metrics follow a normal distribution. In microbiome datasets, these metrics are typically non-normal due to compositionality and sparsity. Therefore, results are used as a diagnostic tool rather than a strict decision criterion.</span>
 <span id="cb43-205"><a href="#cb43-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-206"><a href="#cb43-206" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alpha Diversity Visualization</span></span>
-<span id="cb43-207"><a href="#cb43-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-210"><a href="#cb43-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb43-211"><a href="#cb43-211" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Shannon, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
-<span id="cb43-212"><a href="#cb43-212" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb43-213"><a href="#cb43-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb43-214"><a href="#cb43-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Shannon Diversity"</span>) <span class="sc">+</span></span>
-<span id="cb43-215"><a href="#cb43-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
-<span id="cb43-216"><a href="#cb43-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Shannon)"</span>)</span>
-<span id="cb43-217"><a href="#cb43-217" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_shannon.pdf", p3)</span></span>
-<span id="cb43-218"><a href="#cb43-218" aria-hidden="true" tabindex="-1"></a>p3</span>
-<span id="cb43-219"><a href="#cb43-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-220"><a href="#cb43-220" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Simpson, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
-<span id="cb43-221"><a href="#cb43-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb43-222"><a href="#cb43-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb43-223"><a href="#cb43-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Simpson Diversity"</span>) <span class="sc">+</span></span>
-<span id="cb43-224"><a href="#cb43-224" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
-<span id="cb43-225"><a href="#cb43-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Simpson)"</span>)</span>
-<span id="cb43-226"><a href="#cb43-226" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_Simpson.pdf", p4)</span></span>
-<span id="cb43-227"><a href="#cb43-227" aria-hidden="true" tabindex="-1"></a>p4</span>
-<span id="cb43-228"><a href="#cb43-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-229"><a href="#cb43-229" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> InvSimpson, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
-<span id="cb43-230"><a href="#cb43-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb43-231"><a href="#cb43-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb43-232"><a href="#cb43-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"InvSimpson Diversity"</span>) <span class="sc">+</span></span>
-<span id="cb43-233"><a href="#cb43-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
-<span id="cb43-234"><a href="#cb43-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (InvSimpson)"</span>)</span>
-<span id="cb43-235"><a href="#cb43-235" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_InvSimpson.pdf", p5)</span></span>
-<span id="cb43-236"><a href="#cb43-236" aria-hidden="true" tabindex="-1"></a>p5</span>
-<span id="cb43-237"><a href="#cb43-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-238"><a href="#cb43-238" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Observed, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
-<span id="cb43-239"><a href="#cb43-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb43-240"><a href="#cb43-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb43-241"><a href="#cb43-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Observed Diversity"</span>) <span class="sc">+</span></span>
-<span id="cb43-242"><a href="#cb43-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
-<span id="cb43-243"><a href="#cb43-243" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Observed)"</span>)</span>
-<span id="cb43-244"><a href="#cb43-244" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_Observed.pdf", p6)</span></span>
-<span id="cb43-245"><a href="#cb43-245" aria-hidden="true" tabindex="-1"></a>p6</span>
-<span id="cb43-246"><a href="#cb43-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-208"><a href="#cb43-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-209"><a href="#cb43-209" aria-hidden="true" tabindex="-1"></a>kw_results <span class="ot">&lt;-</span> <span class="fu">lapply</span>(alpha_metrics, <span class="cf">function</span>(metric) {</span>
+<span id="cb43-210"><a href="#cb43-210" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-211"><a href="#cb43-211" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(alpha_df[[metric]] <span class="sc">~</span> Disease, <span class="at">data =</span> alpha_df)</span>
+<span id="cb43-212"><a href="#cb43-212" aria-hidden="true" tabindex="-1"></a>  test_table <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(test)</span>
+<span id="cb43-213"><a href="#cb43-213" aria-hidden="true" tabindex="-1"></a>  test_table<span class="sc">$</span>Metric <span class="ot">&lt;-</span> metric</span>
+<span id="cb43-214"><a href="#cb43-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(test_table)</span>
+<span id="cb43-215"><a href="#cb43-215" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb43-216"><a href="#cb43-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-217"><a href="#cb43-217" aria-hidden="true" tabindex="-1"></a>kw_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(kw_results) <span class="sc">%&gt;%</span></span>
+<span id="cb43-218"><a href="#cb43-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Metric, statistic, p.value) <span class="sc">%&gt;%</span></span>
+<span id="cb43-219"><a href="#cb43-219" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(p.value)</span>
+<span id="cb43-220"><a href="#cb43-220" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(kw_table)</span>
+<span id="cb43-221"><a href="#cb43-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-222"><a href="#cb43-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-223"><a href="#cb43-223" aria-hidden="true" tabindex="-1"></a>The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.</span>
+<span id="cb43-224"><a href="#cb43-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-225"><a href="#cb43-225" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alpha Diversity Visualization</span></span>
+<span id="cb43-226"><a href="#cb43-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-229"><a href="#cb43-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-230"><a href="#cb43-230" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Shannon, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb43-231"><a href="#cb43-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb43-232"><a href="#cb43-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb43-233"><a href="#cb43-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Shannon Diversity"</span>) <span class="sc">+</span></span>
+<span id="cb43-234"><a href="#cb43-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
+<span id="cb43-235"><a href="#cb43-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Shannon)"</span>)</span>
+<span id="cb43-236"><a href="#cb43-236" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_shannon.pdf", p3)</span></span>
+<span id="cb43-237"><a href="#cb43-237" aria-hidden="true" tabindex="-1"></a>p3</span>
+<span id="cb43-238"><a href="#cb43-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-239"><a href="#cb43-239" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Simpson, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb43-240"><a href="#cb43-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb43-241"><a href="#cb43-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb43-242"><a href="#cb43-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Simpson Diversity"</span>) <span class="sc">+</span></span>
+<span id="cb43-243"><a href="#cb43-243" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
+<span id="cb43-244"><a href="#cb43-244" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Simpson)"</span>)</span>
+<span id="cb43-245"><a href="#cb43-245" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_Simpson.pdf", p4)</span></span>
+<span id="cb43-246"><a href="#cb43-246" aria-hidden="true" tabindex="-1"></a>p4</span>
 <span id="cb43-247"><a href="#cb43-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-248"><a href="#cb43-248" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alpha Diversity Plot Interpretation</span></span>
-<span id="cb43-249"><a href="#cb43-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-250"><a href="#cb43-250" aria-hidden="true" tabindex="-1"></a><span class="fu">### Shannon</span></span>
-<span id="cb43-251"><a href="#cb43-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-252"><a href="#cb43-252" aria-hidden="true" tabindex="-1"></a>A popular way to measure the diversity of species in a community. It takes into account both species richness and species evenness. It is calculated based on the logarithm of the relative abundances of species in a community. Higher values of Shannon Diversity indicate higher species richness and evenness. In general, values of 3.50 and above for Shannon-Wiener index indicates high diversity while values below 2.0 indicate low diversity (Baliton et al., 2020).</span>
-<span id="cb43-253"><a href="#cb43-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-254"><a href="#cb43-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### Simpson</span></span>
-<span id="cb43-255"><a href="#cb43-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-256"><a href="#cb43-256" aria-hidden="true" tabindex="-1"></a>The Simpson Index is a measure of diversity that quantifies the probability that two randomly selected individuals from a community belong to the same species. It ranges from 0 to 1, with higher values indicating lower diversity. It is often used to assess the dominance of a few abundant species in a community. The value of D ranges between 0 and 1. The value of Simpson's D ranges from 0 to 1, with 0 representing infinite diversity and 1 representing no diversity, so the larger the value of D, the lower the diversity.</span>
-<span id="cb43-257"><a href="#cb43-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-258"><a href="#cb43-258" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inverse Simpson</span></span>
-<span id="cb43-259"><a href="#cb43-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-260"><a href="#cb43-260" aria-hidden="true" tabindex="-1"></a>It is the reciprocal of the Simpson Index and is often used to emphasize the importance of rare species in a community. Higher values indicate greater diversity. It is positively correlated with the Shannon index.</span>
-<span id="cb43-261"><a href="#cb43-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-262"><a href="#cb43-262" aria-hidden="true" tabindex="-1"></a><span class="fu">### Observed</span></span>
-<span id="cb43-263"><a href="#cb43-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-264"><a href="#cb43-264" aria-hidden="true" tabindex="-1"></a>Counts the actual number of unique features (OTUs) present.</span>
-<span id="cb43-265"><a href="#cb43-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-266"><a href="#cb43-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## Post-Hoc</span></span>
-<span id="cb43-267"><a href="#cb43-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-268"><a href="#cb43-268" aria-hidden="true" tabindex="-1"></a>Since Kruskal-Wallis tells you there’s a difference **somewhere among the groups**, we may want to do **post-hoc pairwise comparisons** to see which groups differ. For non-parametric tests, we can use:</span>
-<span id="cb43-269"><a href="#cb43-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-272"><a href="#cb43-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb43-273"><a href="#cb43-273" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span>
-<span id="cb43-274"><a href="#cb43-274" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise Wilcoxon test with p-value adjustment</span></span>
-<span id="cb43-275"><a href="#cb43-275" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(alpha_df<span class="sc">$</span>Observed, alpha_df<span class="sc">$</span>Disease, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>) </span>
-<span id="cb43-276"><a href="#cb43-276" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(alpha_df<span class="sc">$</span>Simpson, alpha_df<span class="sc">$</span>Disease, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
-<span id="cb43-277"><a href="#cb43-277" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(alpha_df<span class="sc">$</span>InvSimpson, alpha_df<span class="sc">$</span>Disease, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
-<span id="cb43-278"><a href="#cb43-278" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(alpha_df<span class="sc">$</span>Shannon, alpha_df<span class="sc">$</span>Disease, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
-<span id="cb43-279"><a href="#cb43-279" aria-hidden="true" tabindex="-1"></a><span class="co"># p.adjust.method = "BH" → controls for multiple comparisons (Benjamini-Hochberg FDR)</span></span>
-<span id="cb43-280"><a href="#cb43-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb43-281"><a href="#cb43-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-282"><a href="#cb43-282" aria-hidden="true" tabindex="-1"></a>Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.</span>
-<span id="cb43-283"><a href="#cb43-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-284"><a href="#cb43-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
-<span id="cb43-285"><a href="#cb43-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-286"><a href="#cb43-286" aria-hidden="true" tabindex="-1"></a>Alpha diversity analysis evaluates whether microbial community structure differs between disease groups in terms of richness and evenness. If significant differences are observed across metrics, this suggests that disease status is associated with broad ecological shifts in the microbiome, such as loss of diversity, increased dominance, or reduced richness.</span>
-<span id="cb43-287"><a href="#cb43-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-288"><a href="#cb43-288" aria-hidden="true" tabindex="-1"></a>Consistency across multiple indices strengthens biological inference, while divergence between metrics may indicate changes in community structure rather than simple loss or gain of taxa.</span>
-<span id="cb43-289"><a href="#cb43-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-290"><a href="#cb43-290" aria-hidden="true" tabindex="-1"></a>Alpha diversity was assessed using Shannon, Simpson (1 − D), Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.</span>
-<span id="cb43-291"><a href="#cb43-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-292"><a href="#cb43-292" aria-hidden="true" tabindex="-1"></a><span class="in">```         </span></span>
-<span id="cb43-293"><a href="#cb43-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-248"><a href="#cb43-248" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> InvSimpson, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb43-249"><a href="#cb43-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb43-250"><a href="#cb43-250" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb43-251"><a href="#cb43-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"InvSimpson Diversity"</span>) <span class="sc">+</span></span>
+<span id="cb43-252"><a href="#cb43-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
+<span id="cb43-253"><a href="#cb43-253" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (InvSimpson)"</span>)</span>
+<span id="cb43-254"><a href="#cb43-254" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_InvSimpson.pdf", p5)</span></span>
+<span id="cb43-255"><a href="#cb43-255" aria-hidden="true" tabindex="-1"></a>p5</span>
+<span id="cb43-256"><a href="#cb43-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-257"><a href="#cb43-257" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(alpha_df, <span class="fu">aes</span>(<span class="at">x =</span> Disease, <span class="at">y =</span> Observed, <span class="at">fill =</span> Disease)) <span class="sc">+</span></span>
+<span id="cb43-258"><a href="#cb43-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb43-259"><a href="#cb43-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb43-260"><a href="#cb43-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Observed Diversity"</span>) <span class="sc">+</span></span>
+<span id="cb43-261"><a href="#cb43-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Disease"</span>) <span class="sc">+</span></span>
+<span id="cb43-262"><a href="#cb43-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Alpha Diversity (Observed)"</span>)</span>
+<span id="cb43-263"><a href="#cb43-263" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Alpha/alpha_boxplot_Observed.pdf", p6)</span></span>
+<span id="cb43-264"><a href="#cb43-264" aria-hidden="true" tabindex="-1"></a>p6</span>
+<span id="cb43-265"><a href="#cb43-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-266"><a href="#cb43-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-267"><a href="#cb43-267" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alpha Diversity Plot Interpretation</span></span>
+<span id="cb43-268"><a href="#cb43-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-269"><a href="#cb43-269" aria-hidden="true" tabindex="-1"></a><span class="fu">### Shannon</span></span>
+<span id="cb43-270"><a href="#cb43-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-271"><a href="#cb43-271" aria-hidden="true" tabindex="-1"></a>A popular way to measure the diversity of species in a community. It takes into account both species richness and species evenness. It is calculated based on the logarithm of the relative abundances of species in a community. Higher values of Shannon Diversity indicate higher species richness and evenness. In general, values of 3.50 and above for Shannon-Wiener index indicates high diversity while values below 2.0 indicate low diversity (Baliton et al., 2020).</span>
+<span id="cb43-272"><a href="#cb43-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-273"><a href="#cb43-273" aria-hidden="true" tabindex="-1"></a><span class="fu">### Simpson</span></span>
+<span id="cb43-274"><a href="#cb43-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-275"><a href="#cb43-275" aria-hidden="true" tabindex="-1"></a>The Simpson Index is a measure of diversity that quantifies the probability that two randomly selected individuals from a community belong to the same species. It ranges from 0 to 1, with higher values indicating lower diversity. It is often used to assess the dominance of a few abundant species in a community. The value of D ranges between 0 and 1. The value of Simpson's D ranges from 0 to 1, with 0 representing infinite diversity and 1 representing no diversity, so the larger the value of D, the lower the diversity.</span>
+<span id="cb43-276"><a href="#cb43-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-277"><a href="#cb43-277" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inverse Simpson</span></span>
+<span id="cb43-278"><a href="#cb43-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-279"><a href="#cb43-279" aria-hidden="true" tabindex="-1"></a>It is the reciprocal of the Simpson Index and is often used to emphasize the importance of rare species in a community. Higher values indicate greater diversity. It is positively correlated with the Shannon index.</span>
+<span id="cb43-280"><a href="#cb43-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-281"><a href="#cb43-281" aria-hidden="true" tabindex="-1"></a><span class="fu">### Observed</span></span>
+<span id="cb43-282"><a href="#cb43-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-283"><a href="#cb43-283" aria-hidden="true" tabindex="-1"></a>Counts the actual number of unique features (OTUs) present.</span>
+<span id="cb43-284"><a href="#cb43-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-285"><a href="#cb43-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## Post-Hoc</span></span>
+<span id="cb43-286"><a href="#cb43-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-287"><a href="#cb43-287" aria-hidden="true" tabindex="-1"></a>Since Kruskal-Wallis tells you there’s a difference **somewhere among the groups**, we may want to do **post-hoc pairwise comparisons** to see which groups differ. For non-parametric tests, we can use:</span>
+<span id="cb43-288"><a href="#cb43-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-291"><a href="#cb43-291" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-292"><a href="#cb43-292" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span>
+<span id="cb43-293"><a href="#cb43-293" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb43-294"><a href="#cb43-294" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb43-295"><a href="#cb43-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-296"><a href="#cb43-296" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise Wilcoxon test with p-value adjustment</span></span>
+<span id="cb43-297"><a href="#cb43-297" aria-hidden="true" tabindex="-1"></a>alpha_metrics <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Simpson"</span>, <span class="st">"InvSimpson"</span>, <span class="st">"Shannon"</span>)</span>
+<span id="cb43-298"><a href="#cb43-298" aria-hidden="true" tabindex="-1"></a>results_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(alpha_metrics, <span class="cf">function</span>(metric) {</span>
+<span id="cb43-299"><a href="#cb43-299" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-300"><a href="#cb43-300" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">pairwise.wilcox.test</span>(alpha_df[[metric]], </span>
+<span id="cb43-301"><a href="#cb43-301" aria-hidden="true" tabindex="-1"></a>                               alpha_df<span class="sc">$</span>Disease, </span>
+<span id="cb43-302"><a href="#cb43-302" aria-hidden="true" tabindex="-1"></a>                               <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
+<span id="cb43-303"><a href="#cb43-303" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-304"><a href="#cb43-304" aria-hidden="true" tabindex="-1"></a>  test_table <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(test)</span>
+<span id="cb43-305"><a href="#cb43-305" aria-hidden="true" tabindex="-1"></a>  test_table<span class="sc">$</span>Metric <span class="ot">&lt;-</span> metric</span>
+<span id="cb43-306"><a href="#cb43-306" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-307"><a href="#cb43-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(test_table)</span>
+<span id="cb43-308"><a href="#cb43-308" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb43-309"><a href="#cb43-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-310"><a href="#cb43-310" aria-hidden="true" tabindex="-1"></a>PW_Wilcox_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_list) <span class="sc">%&gt;%</span></span>
+<span id="cb43-311"><a href="#cb43-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Metric, group1, group2, p.value)<span class="sc">%&gt;%</span></span>
+<span id="cb43-312"><a href="#cb43-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(p.value)</span>
+<span id="cb43-313"><a href="#cb43-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-314"><a href="#cb43-314" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(PW_Wilcox_table)</span>
+<span id="cb43-315"><a href="#cb43-315" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-316"><a href="#cb43-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-317"><a href="#cb43-317" aria-hidden="true" tabindex="-1"></a>Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.</span>
+<span id="cb43-318"><a href="#cb43-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-321"><a href="#cb43-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-322"><a href="#cb43-322" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
+<span id="cb43-323"><a href="#cb43-323" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(kw_table, PW_Wilcox_table, shapiro_table, AlphaD_combined, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"alpha_diversity.RData"</span>))</span>
+<span id="cb43-324"><a href="#cb43-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-325"><a href="#cb43-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-326"><a href="#cb43-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb43-327"><a href="#cb43-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-328"><a href="#cb43-328" aria-hidden="true" tabindex="-1"></a>Alpha diversity analysis evaluates whether microbial community structure differs between disease groups in terms of richness and evenness. If significant differences are observed across metrics, this suggests that disease status is associated with broad ecological shifts in the microbiome, such as loss of diversity, increased dominance, or reduced richness.</span>
+<span id="cb43-329"><a href="#cb43-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-330"><a href="#cb43-330" aria-hidden="true" tabindex="-1"></a>Consistency across multiple indices strengthens biological inference, while divergence between metrics may indicate changes in community structure rather than simple loss or gain of taxa.</span>
+<span id="cb43-331"><a href="#cb43-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-332"><a href="#cb43-332" aria-hidden="true" tabindex="-1"></a>Alpha diversity was assessed using Shannon, Simpson (1 − D), Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
