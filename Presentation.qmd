@@ -21,7 +21,7 @@ When you click the **Render** button a presentation will be generated that inclu
 
 ```{r}
 #| include: false
-library("here")
+#wlibrary("here")
 # load(here("posts", "datapreparation.RData"))
 # load(here("posts", "alpha_diversity.RData"))
 # load(here("posts", "beta_diversity.RData"))

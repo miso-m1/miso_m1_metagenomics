@@ -420,3 +420,8 @@ save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_
 Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).
 
 These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.
+
+# Session info
+
+```{r} sessioninfo::session_info(pkgs = "attached")}
+```

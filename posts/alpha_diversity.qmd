@@ -315,3 +315,8 @@ Consistency across multiple indices strengthens biological inference, while dive
 
 Alpha diversity was assessed using Shannon, Simpson (1 − D), Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.
 
+# Session info
+
+```{r}
+sessioninfo::session_info(pkgs = "attached")
+```

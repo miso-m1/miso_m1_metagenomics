@@ -284,3 +284,8 @@ Beta diversity analysis revealed significant differences in microbial community 
 -   Significant beta dispersion tests indicate unequal within-group variability, suggesting that disease groups differ not only in average composition but also in microbiome heterogeneity.
 
 Because PERMANOVA is sensitive to dispersion differences, results should be interpreted as reflecting both centroid separation and changes in community variability.
+
+# Session info
+
+```{r} sessioninfo::session_info(pkgs = "attached")}
+```

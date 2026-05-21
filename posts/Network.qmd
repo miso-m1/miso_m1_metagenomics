@@ -360,3 +360,8 @@ This study demonstrates the immense value of using a consensus-based network inf
 The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Etiological Guilds:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).
 
 Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.
+
+# Session info
+
+```{r} sessioninfo::session_info(pkgs = "attached")}
+```

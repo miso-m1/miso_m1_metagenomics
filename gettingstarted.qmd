@@ -8,6 +8,8 @@ Welcome to our blog on the statistical analysis of metagenomic data. This websit
 
 The project was carried out as part of the Master’s program in Bioinformatics at [[Université de Lille]{.underline}](https://www.univ-lille.fr/).
 
+The link to our GitHub repository is here : <https://github.com/miso-m1/miso_m1_metagenomics>.
+
 ## How to Navigate the Blog
 
 The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:
