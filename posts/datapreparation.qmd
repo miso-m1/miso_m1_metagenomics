@@ -424,7 +424,5 @@ These checks helped confirm data quality, identify potential biases, and ensure 
 
 # Session info
 
-```{r}
-install.packages("sessioninfo")
-sessioninfo::session_info(pkgs = "attached")
+```{r} sessioninfo::session_info(pkgs = "attached")}
 ```
