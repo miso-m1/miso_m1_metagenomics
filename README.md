@@ -24,7 +24,7 @@ The analyses were conducted using R and various bioinformatics/statistical packa
 
 # Blog Website
 
-The project is presented as an interactive blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
+The project is presented as a blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
 
 To properly understand the project workflow, we strongly recommend beginning with the Getting Started section of the blog.
 
