@@ -22,7 +22,7 @@ Construction and interpretation of co-occurrence networks.
 
 The analyses were conducted using R and various bioinformatics/statistical packages.
 
-#Blog Website
+# Blog Website
 
 The project is presented as an interactive blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
 
