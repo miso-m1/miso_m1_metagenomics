@@ -12,21 +12,15 @@ Our work combines statistical analysis, alpha and beta diversity exploration, an
 
 The objective of this project was to perform a complete analysis of metagenomic data from intestinal microbiomes. The workflow includes:
 
-Data import, cleaning, and preprocessing,
+Data import and preparation, alpha-diversity analysis (within-sample diversity), beta-diversity analysis (between-sample diversity) and construction and interpretation of co-occurrence networks.
 
-Alpha-diversity analysis (within-sample diversity), statistical testing using ANOVA,
-
-Beta-diversity analysis (between-sample diversity), statistical testing using PERMANOVA, 
-
-Construction and interpretation of co-occurrence networks.
-
-The analyses were conducted using R and various bioinformatics/statistical packages.
+The analyses were conducted using R and various bioinformatics and statistical packages.
 
 # Blog Website
 
 The project is presented as a blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
 
-To properly understand the project workflow, we recommend beginning with the Getting Started section of the blog.
+To understand the project workflow, we recommend beginning with the Getting Started section of the blog.
 
 The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:
 
