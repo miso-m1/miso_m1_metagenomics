@@ -1,93 +1,77 @@
 # M1 project
 
+# Statistical Analysis of Shotgun Metagenomic Data
 
+This repository contains a complete statistical analysis pipeline for shotgun metagenomic datasets of human gut microbiota, carried out as part of the Master’s program MISO in Bioinformatics at Université de Lille.
 
-## Getting started
+The project is based on publicly available human metagenomics datasets from Kaggle Human Metagenomics Dataset.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Our work combines statistical analysis, alpha and beta diversity exploration, and network analysis through an interactive blog built with Quarto.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+# Project Overview
 
-## Add your files
+The objective of this project was to perform a complete analysis of metagenomic data from intestinal microbiomes. The workflow includes:
 
-* [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Data import, cleaning, and preprocessing,
+Alpha-diversity analysis (within-sample diversity), statistical testing using ANOVA,
+Beta-diversity analysis (between-sample diversity), statistical testing using PERMANOVA, 
+Construction and interpretation of co-occurrence networks.
 
-```
-cd existing_repo
-git remote add origin https://gitlab-etu.fil.univ-lille.fr/paul.lemonnier.etu/m1-project.git
-git branch -M main
-git push -uf origin main
-```
+The analyses were conducted using R and various bioinformatics/statistical packages.
 
-## Integrate with your tools
+#Blog Website
 
-* [Set up project integrations](https://gitlab-etu.fil.univ-lille.fr/paul.lemonnier.etu/m1-project/-/settings/integrations)
+The project is presented as an interactive blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
 
-## Collaborate with your team
+To properly understand the project workflow, we strongly recommend beginning with the Getting Started section of the blog.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:
 
-## Test and Deploy
+### 0. Introduction
+This post presents the context, the objectives of the study, and the structure of the project.
 
-Use the built-in continuous integration in GitLab.
+### 1. Data Preparation
+This section explains how the dataset was imported, cleaned and transformed before the study.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### 2.1 Alpha Diversity
+This post explores within-sample diversity using diversity indices and visualizations.
 
-***
+### 2.2 Beta Diversity
+This section investigates differences between samples and groups using distance metrics and ordination methods.
 
-# Editing this README
+### 3. Metagenomic Network Analysis
+The network analysis focuses on relationships between microbial taxa through co-occurrence network approaches.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Additional sections include:
+Several resources are available through the navigation bar at the top of the website:
 
-## Suggestions for a good README
+#### Navigation Guide: How to navigate the blog.
+Presentation: slides summarizing the project and main results.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+#### Sources: references and resources used throughout the analyses.
 
-## Name
-Choose a self-explaining name for your project.
+#### About: information about the contributors and the context of the project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+#### Social Links: direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+#Repository Structure
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The repository is structured like that :
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+miso_m1_metagenomics/
+│
+├── Blog_template/     # Quarto website structure and templates
+├── data/              # Datasets
+├── docs/              # Rendered website files for GitHub Pages
+├── posts/             # Blog posts
+├── img/               # Images and figures used in the blog
+├── _quarto.yml        # Quarto website configuration
+├── resources/         # The different sources
+└── README.md          # README.md
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+# Contributors
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+This project was carried out collaboratively, drawing on skills in biological data analysis, statistics, and bioinformatics.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The contributors are Ines Bakli, Paul Lemonnier, and Alden Sneath. We would also like to thank our referent, Clément Poupelin, for his guidance throughout this project.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
