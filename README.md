@@ -45,23 +45,6 @@ This section investigates differences between samples and groups using distance 
 ### 3. Metagenomic Network Analysis
 The network analysis focuses on relationships between microbial taxa through co-occurrence network approaches.
 
-### Additional sections include:
-Several resources are available through the navigation bar at the top of the website:
-
-#### Navigation Guide
-How to navigate the blog.
-
-#### Presentation
-Slides summarizing the project and main results.
-
-#### Sources
-References and resources used throughout the analyses.
-
-#### About
-Information about the contributors and the context of the project.
-
-#### Social Links
-Access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
 # Contributors
 
