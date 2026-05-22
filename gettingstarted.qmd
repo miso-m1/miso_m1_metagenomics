@@ -39,15 +39,9 @@ The network analysis focuses on relationships between microbial taxa through co-
 Several resources are available through the navigation bar at the top of the website:
 
 - **Navigation Guide**: How to navigate the blog, what you're reading right now :).
-
-<!-- -->
-
 - **Presentation**: slides summarizing the project and main results.
-
 - **Sources**: references and resources used throughout the analyses.
-
 - **About**: information about the contributors and the context of the project.
-
 - **Social Links**: access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
 ## Reproducibility
