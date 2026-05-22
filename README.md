@@ -13,8 +13,11 @@ Our work combines statistical analysis, alpha and beta diversity exploration, an
 The objective of this project was to perform a complete analysis of metagenomic data from intestinal microbiomes. The workflow includes:
 
 Data import, cleaning, and preprocessing,
+
 Alpha-diversity analysis (within-sample diversity), statistical testing using ANOVA,
+
 Beta-diversity analysis (between-sample diversity), statistical testing using PERMANOVA, 
+
 Construction and interpretation of co-occurrence networks.
 
 The analyses were conducted using R and various bioinformatics/statistical packages.
