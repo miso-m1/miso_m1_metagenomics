@@ -26,7 +26,7 @@ The analyses were conducted using R and various bioinformatics/statistical packa
 
 The project is presented as a blog available here : https://miso-m1.github.io/miso_m1_metagenomics/ .
 
-To properly understand the project workflow, we strongly recommend beginning with the Getting Started section of the blog.
+To properly understand the project workflow, we recommend beginning with the Getting Started section of the blog.
 
 The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:
 
@@ -61,7 +61,7 @@ References and resources used throughout the analyses.
 Information about the contributors and the context of the project.
 
 #### Social Links
-Direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
+Access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
 # Contributors
 
