@@ -45,29 +45,20 @@ The network analysis focuses on relationships between microbial taxa through co-
 ### Additional sections include:
 Several resources are available through the navigation bar at the top of the website:
 
-#### Navigation Guide: How to navigate the blog.
-Presentation: slides summarizing the project and main results.
+#### Navigation Guide
+How to navigate the blog.
 
-#### Sources: references and resources used throughout the analyses.
+#### Presentation
+Slides summarizing the project and main results.
 
-#### About: information about the contributors and the context of the project.
+#### Sources
+References and resources used throughout the analyses.
 
-#### Social Links: direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
+#### About
+Information about the contributors and the context of the project.
 
-#Repository Structure
-
-The repository is structured like that :
-
-miso_m1_metagenomics/
-│
-├── Blog_template/     # Quarto website structure and templates
-├── data/              # Datasets
-├── docs/              # Rendered website files for GitHub Pages
-├── posts/             # Blog posts
-├── img/               # Images and figures used in the blog
-├── _quarto.yml        # Quarto website configuration
-├── resources/         # The different sources
-└── README.md          # README.md
+#### Social Links
+Direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
 # Contributors
 
