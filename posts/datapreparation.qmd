@@ -49,12 +49,12 @@ library("tidyr")
 
 Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:
 
--   importing OTU, taxonomy, and metadata tables,
--   creating a phyloseq object,
--   checking for missing values,
--   verifying sequencing depth consistency,
--   exploring taxonomic composition,
--   and visualizing global similarities between samples.
+- importing OTU, taxonomy, and metadata tables,
+- creating a phyloseq object,
+- checking for missing values,
+- verifying sequencing depth consistency,
+- exploring taxonomic composition,
+- and visualizing global similarities between samples.
 
 These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.
 
@@ -208,7 +208,7 @@ sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 
 Most samples show similar sequencing depth values, suggesting that the dataset was already normalized before analysis.\
 \
-One sample (\*\*Sample_3482\*\*) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
+One sample (**Sample_3482**) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
 
 ## Taxonomic composition
 
