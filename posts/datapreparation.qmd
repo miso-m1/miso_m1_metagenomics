@@ -37,11 +37,12 @@ options(
 #| include: false
 
 library("phyloseq")
-library("ggplot2")      # graphics
-library("readxl")       # necessary to import the data from Excel file
-library("dplyr")        # filter and reformat data frames
-library("tibble")       # Needed for converting column to row names
-library("here")         # To facilitate the file managment and exportation
+library("ggplot2")      
+library("readxl")       
+library("dplyr")       
+library("tibble")       
+library("here")       
+library("tidyr")
 ```
 
 # Introduction
@@ -262,7 +263,7 @@ We then visualise sample similarities via Principal Coordinate Analysis (PCoA). 
 
 Firstly, we do a PCoA by gender.
 
-## Beta Diversity - PCoA by gender
+### Beta Diversity - PCoA by gender
 
 This visualization allows us to explore whether microbial communities tend to cluster according to gender.
 
@@ -289,7 +290,7 @@ The first two principal coordinates explain 11.1% and 9.9% of the total variatio
 
 Let's do a PCoA by gender and disease to furthermore evaluate the dataset. Adding disease status as a variable allows visualization of two metadata variables simultaneously and may reveal certain paterns.
 
-## Beta Diversity - PCoA by gender and disease
+### Beta Diversity - PCoA by gender and disease
 
 This PCoA visualization combines both gender and disease information to explore whether microbial composition varies between groups.
 
@@ -340,32 +341,6 @@ Sample_dist_gender
 
 We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.
 
-## Distribution of samples by country
-
-```{r}
-country_counts <- meta_df %>%
-  group_by(country) %>%
-  summarise(Count = n()) %>%
-  mutate(Percentage = Count / sum(Count) * 100)
-print(country_counts)
-```
-
-```{r}
-country_counts <- meta_df %>%
-  group_by(country) %>%
-  summarise(Count = n())
-
-Sample_dist_country<- ggplot(country_counts, aes(x = country, y = Count, fill = country)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(title = "Number of Samples by Country",
-       x = "Country",
-       y = "Number of Samples")
-Sample_dist_country
-```
-
-We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.
-
 ## Number of samples of diseases by gender
 
 Number of samples of diseases for females:
@@ -404,6 +379,88 @@ SampleM_dist_disease
 Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.
 
 We can see that there are differences in the number of samples per disease, depending on gender.
+
+## Distribution of samples by country
+
+```{r}
+country_counts <- meta_df %>%
+  group_by(country) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+print(country_counts)
+```
+
+```{r}
+country_counts <- meta_df %>%
+  group_by(country) %>%
+  summarise(Count = n())
+
+Sample_dist_country<- ggplot(country_counts, aes(x = country, y = Count, fill = country)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Samples by Country",
+       x = "Country",
+       y = "Number of Samples")
+Sample_dist_country
+```
+
+We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.
+
+## Number of samples of diseases by country
+
+```{r}
+diseases<- c("ibd ulcerative colitis", "t2d", "cirrhosis", "cancer")
+disease_counts <- meta_df %>%
+  group_by(country, disease) %>%
+  summarise(Count = n())
+
+ggplot(disease_counts, aes(x = disease, y = n)) +
+  geom_col() +
+  facet_wrap(~ country) +
+  labs(
+    x = "Disease",
+    y = "Number of samples"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  )
+
+```
+
+Number of samples of diseases for China:
+
+```{r}
+disease_counts <- meta_df %>%
+  group_by(country, disease) %>%
+  summarise(Count = n())
+
+SampleC_dist_disease <- ggplot(disease_counts %>% filter(country == "china"),
+       aes(x = disease, y = Count, fill = disease)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Samples from China per Disease") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+SampleC_dist_disease
+```
+
+Number of samples of diseases for France:
+
+```{r}
+disease_counts <- meta_df %>%
+  group_by(country, disease) %>%
+  summarise(Count = n())
+
+SampleFr_dist_disease <- ggplot(disease_counts %>% filter(country == "france"),
+       aes(x = disease, y = Count, fill = disease)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Samples from France per Disease") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+SampleFr_dist_disease
+```
+
+Number of samples of diseases for Spain:
 
 ## Distribution of bacterial class by gender
 
