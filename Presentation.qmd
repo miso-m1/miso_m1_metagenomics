@@ -265,17 +265,17 @@ knitr::kable(kw_table,
 KW = difference somewhere among the groups ➔  post-hoc pairwise comparisons to see which groups differ
 
 ```{r}
-# 1. Trier le tableau par la 4ème colonne (la p-value) par ordre décroissant
-PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[, 4], decreasing = TRUE), ]
-
-# 2. Extraire les 2 premières lignes et les 2 dernières lignes
-PW_Wilcox_extremes <- rbind(head(PW_Wilcox_sorted, 2), tail(PW_Wilcox_sorted, 2))
-
-# 3. Afficher le tableau filtré avec kable
-knitr::kable(PW_Wilcox_extremes, 
-             digits = 4, 
-             row.names = FALSE, 
-             col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
+# # 1. Trier le tableau par la 4ème colonne (la p-value) par ordre décroissant
+# PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[, 4], decreasing = TRUE), ]
+# 
+# # 2. Extraire les 2 premières lignes et les 2 dernières lignes
+# PW_Wilcox_extremes <- rbind(head(PW_Wilcox_sorted, 2), tail(PW_Wilcox_sorted, 2))
+# 
+# # 3. Afficher le tableau filtré avec kable
+# knitr::kable(PW_Wilcox_extremes, 
+#              digits = 4, 
+#              row.names = FALSE, 
+#              col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
 ```
 
 
