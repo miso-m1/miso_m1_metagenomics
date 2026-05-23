@@ -382,6 +382,8 @@ We can see that there are differences in the number of samples per disease, depe
 
 ## Distribution of samples by country
 
+Let's analyze the distribution of samples by country.
+
 ```{r}
 country_counts <- meta_df %>%
   group_by(country) %>%
@@ -409,7 +411,11 @@ We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9
 ## Number of samples of diseases by country
 
 ```{r}
-plot_data <- disease_counts %>%
+disease_counts_country <- meta_df %>%
+  group_by(country, disease) %>%
+  summarise(Count = n(), .groups = "drop")
+
+plot_data <- disease_counts_country %>%
   ungroup() %>%
   tidyr::complete(country, disease, fill = list(Count = 0))
 
@@ -426,7 +432,7 @@ ggplot(plot_data, aes(x = disease, y = Count, fill = disease)) +
   )
 ```
 
-We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ibd (ulcerative colitis).
+We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ulcerative colitis (ibd).
 
 This imbalance should be kept in mind in all analyses.
 
