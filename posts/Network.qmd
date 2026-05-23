@@ -223,7 +223,6 @@ print_network_stats <- function(network_list, tax_level) {
   return(stats_df)
 }
 
-# Fonction mise à jour : Génère le graphe, l'affiche, et le retourne
 plot_global_network <- function(network_list, tax_level) {
   all_edges <- data.frame()
   
@@ -256,7 +255,7 @@ plot_global_network <- function(network_list, tax_level) {
   else if(tax_level == "Family") { v_size <- 5; v_cex <- 0.6 }
   else { v_size <- 3; v_cex <- 0.45 }
   
-  # Inline HTML Quarto Report Rendering (L'affichage en direct)
+# Inline HTML Quarto Report Rendering 
   plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
        vertex.color = "grey90", vertex.frame.color = "white",
        vertex.label.color = "black", vertex.label.cex = v_cex,
@@ -264,20 +263,8 @@ plot_global_network <- function(network_list, tax_level) {
        main = paste("Global Consensus Multi-Disease Network -", tax_level))
   
   legend("bottomright", title = "Diseases", legend = names(color_palette), 
-         col = color_palette, lwd = 3, bty = "n", cex = 0.8)
-  
-  dev.off()
-  
-  # Inline HTML Quarto Report Rendering
-  plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
-       vertex.color = "grey90", vertex.frame.color = "white",
-       vertex.label.color = "black", vertex.label.cex = v_cex,
-       edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
-       main = paste("Global Consensus Multi-Disease Network -", tax_level))
-  legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
          col = color_palette, lwd = 3, bty = "n", cex = 0.6)
   
-  # L'Étape clé : On retourne l'objet mathématique du réseau !
   return(master_net)
 }
 ```
@@ -301,7 +288,6 @@ knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topologi
 
 # Plotting global network
 Network_phylum <- plot_global_network(networks_phylum, "Phylum")
-
 ```
 
 ### Biological Interpretation (Phylum)
