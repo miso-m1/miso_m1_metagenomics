@@ -215,41 +215,37 @@ The Kruskal–Wallis test evaluates whether median diversity differs across dise
 ## Alpha Diversity Visualization
 
 ```{r}
-p3 <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
+AlphaD_Shannon <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
   geom_boxplot() +
   theme_minimal() +
   ylab("Shannon Diversity") +
   xlab("Disease") +
   ggtitle("Alpha Diversity (Shannon)")
-# ggsave("figures/Alpha/alpha_boxplot_shannon.pdf", p3)
-p3
+AlphaD_Shannon
 
-p4 <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
+AlphaD_Simpson <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
   geom_boxplot() +
   theme_minimal() +
   ylab("Simpson Diversity") +
   xlab("Disease") +
   ggtitle("Alpha Diversity (Simpson)")
-# ggsave("figures/Alpha/alpha_boxplot_Simpson.pdf", p4)
-p4
+AlphaD_Simpson
 
-p5 <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
+AlphaD_InvSimpson <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
   geom_boxplot() +
   theme_minimal() +
   ylab("InvSimpson Diversity") +
   xlab("Disease") +
   ggtitle("Alpha Diversity (InvSimpson)")
-# ggsave("figures/Alpha/alpha_boxplot_InvSimpson.pdf", p5)
-p5
+AlphaD_InvSimpson
 
-p6 <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
+AlphaD_Observed <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
   geom_boxplot() +
   theme_minimal() +
   ylab("Observed Diversity") +
   xlab("Disease") +
   ggtitle("Alpha Diversity (Observed)")
-# ggsave("figures/Alpha/alpha_boxplot_Observed.pdf", p6)
-p6
+AlphaD_Observed
 ```
 
 ## Alpha Diversity Plot Interpretation
@@ -304,7 +300,7 @@ Wilcox test identifies specific group differences following a significant Kruska
 
 ```{r}
 #To save all the data/graphs for the presentation
-save(kw_table, PW_Wilcox_table, shapiro_table, AlphaD_combined, file = here::here("posts", "alpha_diversity.RData"))
+save(kw_table, PW_Wilcox_table, shapiro_table, AlphaD_combined, AlphaD_Observed, AlphaD_InvSimpson, AlphaD_Simpson, AlphaD_Shannon, file = here::here("posts", "alpha_diversity.RData"))
 ```
 
 ## Summary
