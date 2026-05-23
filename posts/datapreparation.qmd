@@ -207,7 +207,7 @@ sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 
 Most samples show similar sequencing depth values, suggesting that the dataset was already normalized before analysis.\
 \
-One sample (\`Sample_3482\`) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
+One sample (\*\*Sample_3482\*\*) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
 
 ## Taxonomic composition
 
