@@ -48,12 +48,12 @@ library("here")         # To facilitate the file managment and exportation
 
 Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:
 
--   importing OTU, taxonomy, and metadata tables,
--   creating a phyloseq object,
--   checking for missing values,
--   verifying sequencing depth consistency,
--   exploring taxonomic composition,
--   and visualizing global similarities between samples.
+- importing OTU, taxonomy, and metadata tables,
+- creating a phyloseq object,
+- checking for missing values,
+- verifying sequencing depth consistency,
+- exploring taxonomic composition,
+- and visualizing global similarities between samples.
 
 These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.
 
@@ -325,8 +325,6 @@ print(gender_counts)
 ```
 
 ```{r}
-meta_df <- data.frame(sample_data(metagenomics))
-
 gender_counts <- meta_df %>%
   group_by(gender) %>%
   summarise(Count = n())
@@ -341,6 +339,32 @@ Sample_dist_gender
 ```
 
 We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.
+
+## Distribution of samples by country
+
+```{r}
+country_counts <- meta_df %>%
+  group_by(country) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+print(country_counts)
+```
+
+```{r}
+country_counts <- meta_df %>%
+  group_by(country) %>%
+  summarise(Count = n())
+
+Sample_dist_country<- ggplot(country_counts, aes(x = country, y = Count, fill = country)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Samples by Country",
+       x = "Country",
+       y = "Number of Samples")
+Sample_dist_country
+```
+
+We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.
 
 ## Number of samples of diseases by gender
 
