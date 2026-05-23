@@ -318,7 +318,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#genus-level-analysis-micro-ecology" id="toc-genus-level-analysis-micro-ecology" class="nav-link" data-scroll-target="#genus-level-analysis-micro-ecology">5. Genus Level Analysis (Micro-Ecology)</a>
   <ul class="collapse">
-  <li><a href="#biological-interpretation-genre" id="toc-biological-interpretation-genre" class="nav-link" data-scroll-target="#biological-interpretation-genre">Biological Interpretation (Genre)</a></li>
+  <li><a href="#biological-interpretation-genus" id="toc-biological-interpretation-genus" class="nav-link" data-scroll-target="#biological-interpretation-genus">Biological Interpretation (Genus)</a></li>
   </ul></li>
   <li><a href="#general-conclusion" id="toc-general-conclusion" class="nav-link" data-scroll-target="#general-conclusion">6. General Conclusion</a></li>
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
@@ -564,17 +564,17 @@ window.Quarto = {
 <td style="text-align: left;">Family</td>
 <td style="text-align: left;">cirrhosis</td>
 <td style="text-align: right;">37</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">0.024</td>
-<td style="text-align: right;">0.86</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.81</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Family</td>
 <td style="text-align: left;">t2d</td>
 <td style="text-align: right;">36</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">0.027</td>
-<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.89</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Family</td>
@@ -632,7 +632,7 @@ window.Quarto = {
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genus"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -657,7 +657,7 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Genre</td>
+<td style="text-align: left;">Genus</td>
 <td style="text-align: left;">ibd_ulcerative_colitis</td>
 <td style="text-align: right;">64</td>
 <td style="text-align: right;">46</td>
@@ -665,7 +665,7 @@ window.Quarto = {
 <td style="text-align: right;">1.44</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Genre</td>
+<td style="text-align: left;">Genus</td>
 <td style="text-align: left;">cirrhosis</td>
 <td style="text-align: right;">70</td>
 <td style="text-align: right;">31</td>
@@ -673,7 +673,7 @@ window.Quarto = {
 <td style="text-align: right;">0.89</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Genre</td>
+<td style="text-align: left;">Genus</td>
 <td style="text-align: left;">t2d</td>
 <td style="text-align: right;">64</td>
 <td style="text-align: right;">57</td>
@@ -681,7 +681,7 @@ window.Quarto = {
 <td style="text-align: right;">1.78</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Genre</td>
+<td style="text-align: left;">Genus</td>
 <td style="text-align: left;">cancer</td>
 <td style="text-align: right;">73</td>
 <td style="text-align: right;">29</td>
@@ -694,18 +694,18 @@ window.Quarto = {
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Network_genre <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Network_genus <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genre, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="biological-interpretation-genre" class="level3">
-<h3 class="anchored" data-anchor-id="biological-interpretation-genre">Biological Interpretation (Genre)</h3>
+<section id="biological-interpretation-genus" class="level3">
+<h3 class="anchored" data-anchor-id="biological-interpretation-genus">Biological Interpretation (Genus)</h3>
 <p>At the <strong>Genus</strong> level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., <em>Faecalibacterium, Akkermansia</em>).</p>
 <p>At this scale, data sparse properties significantly expand due to <strong>zero-inflation</strong> (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to <strong>20%</strong> effectively trims down background noise and isolates true <strong>Microbial Hubs</strong> (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.</p>
 </section>
@@ -726,8 +726,8 @@ window.Quarto = {
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in system2("quarto", "-V", stdout = TRUE, env = paste0("TMPDIR=", :
 l'exécution de la commande '"quarto"
-TMPDIR=C:/Users/paull/AppData/Local/Temp/RtmpYdWKgH/file18cc644556a5 -V'
-renvoie un statut 1</code></pre>
+TMPDIR=C:/Users/paull/AppData/Local/Temp/Rtmps1l83W/filee441d11312 -V' renvoie
+un statut 1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
@@ -1486,7 +1486,7 @@ renvoie un statut 1</code></pre>
 <span id="cb27-271"><a href="#cb27-271" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
 <span id="cb27-272"><a href="#cb27-272" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
 <span id="cb27-273"><a href="#cb27-273" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-274"><a href="#cb27-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
+<span id="cb27-274"><a href="#cb27-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Diseases"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
 <span id="cb27-275"><a href="#cb27-275" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
 <span id="cb27-276"><a href="#cb27-276" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb27-277"><a href="#cb27-277" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
@@ -1579,18 +1579,18 @@ renvoie un statut 1</code></pre>
 <span id="cb27-370"><a href="#cb27-370" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb27-371"><a href="#cb27-371" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-372"><a href="#cb27-372" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb27-373"><a href="#cb27-373" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
+<span id="cb27-373"><a href="#cb27-373" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genus"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
 <span id="cb27-374"><a href="#cb27-374" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-375"><a href="#cb27-375" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
-<span id="cb27-376"><a href="#cb27-376" aria-hidden="true" tabindex="-1"></a>Network_genre <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span>
+<span id="cb27-376"><a href="#cb27-376" aria-hidden="true" tabindex="-1"></a>Network_genus <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span>
 <span id="cb27-377"><a href="#cb27-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb27-378"><a href="#cb27-378" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-381"><a href="#cb27-381" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb27-382"><a href="#cb27-382" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb27-383"><a href="#cb27-383" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genre, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span>
+<span id="cb27-383"><a href="#cb27-383" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span>
 <span id="cb27-384"><a href="#cb27-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb27-385"><a href="#cb27-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-386"><a href="#cb27-386" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genre)</span></span>
+<span id="cb27-386"><a href="#cb27-386" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genus)</span></span>
 <span id="cb27-387"><a href="#cb27-387" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-388"><a href="#cb27-388" aria-hidden="true" tabindex="-1"></a>At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).</span>
 <span id="cb27-389"><a href="#cb27-389" aria-hidden="true" tabindex="-1"></a></span>

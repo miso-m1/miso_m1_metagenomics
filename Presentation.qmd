@@ -8,6 +8,7 @@ format:
     slide-number: true
     smaller: false
     scrollable: true
+    zoom: true
 ---
 
 ```{r setup}
@@ -17,9 +18,8 @@ library(ggplot2)
 library(here)
 library(phyloseq)
 library(knitr)
-library(viridis) # AJOUT : Il faut charger la librairie pour les couleurs
+library(viridis) 
 
-# AJOUT : On remet les options globales de couleurs pour que ggplot s'en souvienne
 theme_set(theme_minimal(base_size = 13))
 
 options(
@@ -38,7 +38,7 @@ load(here::here("posts", "Network.RData"))
 
 # Introduction
 
-## Metagenomic Challenge
+## Metagenomic Challenge {.smaller}
 
 ::: {.incremental}
 
@@ -64,21 +64,15 @@ Counts/proportions of each taxon across samples.
 
 ```{r}
 #| echo: false
-# 1. Extrait la matrice d'OTU
 otu_mat <- as(otu_table(metagenomics), "matrix")
 
-# ✨ 2. L'ASTUCE : Trier les bactéries par leur abondance totale (décroissante)
-# On calcule la somme de chaque ligne, et on ordonne la matrice
 top_bacteries <- order(rowSums(otu_mat), decreasing = TRUE)
 otu_mat_triee <- otu_mat[top_bacteries, ]
 
-# 3. On sélectionne le Top 5 des bactéries et les 5 premiers patients
 otu_preview <- otu_mat_triee[1:5, 1:5]
 
-# 4. On nettoie les noms de lignes très longs (comme vu précédemment)
 rownames(otu_preview) <- gsub(".*\\|[a-z]__", "", rownames(otu_preview))
 
-# 5. On affiche le tableau
 knitr::kable(otu_preview, row.names = TRUE, digits = 2)
 ```
 
@@ -87,15 +81,10 @@ Clinical context and patient variables used for group comparisons
 
 ```{r}
 #| echo: false
-# 1. Extrait les méta-données en data.frame
 meta_df <- as.data.frame(as(sample_data(metagenomics), "data.frame"))
 
-# 2. Filtre pour ne garder que le premier individu de chaque groupe de maladie
-# (Vérifie bien si ta colonne s'appelle "disease" ou "Disease_Status")
 sample_preview <- meta_df[!duplicated(meta_df$disease), ]
 
-# 3. Sélectionne les colonnes clés pour l'affichage sur la slide
-# (Ajuste les noms de colonnes "age", "gender", "country" selon ton dataset)
 colonnes_a_afficher <- c("age", "gender", "disease", "country")
 knitr::kable(sample_preview[, colonnes_a_afficher], row.names = TRUE)
 ```
@@ -108,12 +97,8 @@ Biological identification for each OTU.
 tax_df <- as.data.frame(as(tax_table(metagenomics), "matrix"))
 tax_preview <- tax_df[!duplicated(tax_df$Phylum), ]
 
-# ✨ LA LIGNE MAGIQUE : Nettoyer les noms de lignes
-# On supprime tout ce qui précède le dernier caractère "|" suivi d'une lettre et de "__"
 rownames(tax_preview) <- gsub(".*\\|[a-z]__", "", rownames(tax_preview))
 
-# 3. Affiche les 5 premiers Phyla uniques pour que ça rentre bien sur la slide
-# (Ajuste les noms de colonnes si besoin : "kingdom", "phylum", etc.)
 colonnes_taxo <- c("Kingdom", "Phylum", "Class", "Order", "Family")
 knitr::kable(head(tax_preview[, colonnes_taxo], 5), row.names = TRUE)
 ```
@@ -179,7 +164,7 @@ Top10b_disease
 
 # Diversity analysis
 
-## 1. Alpha diversity
+## 1. Alpha diversity {.smaller}
 
 Alpha diversity measures the diversity within a single sample. It can reflect both:
 
@@ -244,7 +229,7 @@ All of those differences in diversity needs to be **statistically significant**
 ## Statistical analysis {.smaller}
 ::: {.panel-tabset}
 ### 1. Normality test {.smaller}
-To assess the normality, we used the Shapiro test
+Assess the normality = Shapiro test
 ```{r}
 knitr::kable(shapiro_table, 
               digits = 4, # Arrondir les p-values à 4 décimales
@@ -253,122 +238,382 @@ knitr::kable(shapiro_table,
 ➔ p-value < 0.05 = reject the normality ➔  Non parametric test
 
 ### 2. Significance test
-To assess significant differences in microbial diversity across disease groups, we performed a Kruskal-Wallis test
+Assess the significant differences in microbial diversity across disease groups = Kruskal-Wallis test
 
 ```{r}
 knitr::kable(kw_table, 
               digits = 4, 
               col.names = c("Metric", "statistic", "P-value"))
 ```
+➔ p-value < 0.05 = difference somewhere among the groups
+
 
 ### 3. Pairwise comparaisons
 KW = difference somewhere among the groups ➔  post-hoc pairwise comparisons to see which groups differ
 
 ```{r}
-# # 1. Trier le tableau par la 4ème colonne (la p-value) par ordre décroissant
-# PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[, 4], decreasing = TRUE), ]
-# 
-# # 2. Extraire les 2 premières lignes et les 2 dernières lignes
-# PW_Wilcox_extremes <- rbind(head(PW_Wilcox_sorted, 2), tail(PW_Wilcox_sorted, 2))
-# 
-# # 3. Afficher le tableau filtré avec kable
-# knitr::kable(PW_Wilcox_extremes, 
-#              digits = 4, 
-#              row.names = FALSE, 
-#              col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
+
+PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[[4]], decreasing = TRUE), ]
+
+PW_Wilcox_extremes <- rbind(head(PW_Wilcox_sorted, 2), tail(PW_Wilcox_sorted, 2))
+
+knitr::kable(PW_Wilcox_extremes,
+             digits = 4,
+             row.names = FALSE,
+             col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
+```
+- p-value < 0.05 = significative difference in diversity beetween the 2 communities
+- p-value > 0.05 = no significative difference
+:::
+## 2. Beta diversity {.smaller}
+
+Beta diversity measures differences in microbial composition between samples. 
+
+We used 2 metrics :
+
+::: {.incremental}
+
+- **Bray-Curtis** : Considers both the microbial communitites presence/absence and relative abundance beetween samples
+
+- **Jaccard** : Considers only presence/absence.
+
+:::
+
+. . .
+
+To visualise those dispersions, we used PCoA
+
+## 2. Beta diversity {.smaller}
+
+::: {.panel-tabset}
+### Bray-Curtis PCoA
+```{r}
+p_bray
 ```
 
+### Jaccard PCoA
+```{r}
+p_jaccard
+```
+:::
+## Statistical Analysis {.smaller}
+::: {.panel-tabset}
+### 1. Permutation test 
+Needed to verify the homogeneity of multivariate dispersions
 
 ```{r}
-#| include: false
-#library("here")
-# load(here("posts", "datapreparation.RData"))
-# load(here("posts", "alpha_diversity.RData"))
-# load(here("posts", "beta_diversity.RData"))
-# load(here("posts", "Network.RData"))
-# 
-# 
-# knitr::kable(PW_Wilcox_table, 
-#              digits = 4, # Arrondir les p-values à 4 décimales
-#              col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
-# set.seed(42)
-# 
-# plot(Network_phylum, 
-#      layout = layout_with_fr(Network_phylum), 
-#      vertex.size = 8,
-#      vertex.color = "lightgrey", 
-#      vertex.frame.color = "white",
-#      vertex.label.color = "black", 
-#      vertex.label.cex = 0.7,
-#      edge.color = E(Network_phylum)$color, # Récupère les couleurs sauvegardées
-#      edge.width = 1.5,
-#      main = "Global Consensus Multi-Disease Network - Phylum")
-# 
-# # 1. Identifier les Hubs (les nœuds les plus connectés pour la Famille)
-# degres_famille <- degree(Network_family)
-# # On prend le Top 10 (ajuste ce chiffre si tu veux en montrer plus ou moins)
-# seuil_top10 <- sort(degres_famille, decreasing = TRUE)[10] 
-# 
-# # 2. Préparer les étiquettes et les tailles
-# # Base : pas de nom ("") et taille correcte pour les gris (4)
-# labels_hubs_fam <- rep("", vcount(Network_family))
-# tailles_noeuds_fam <- rep(4, vcount(Network_family))
-# 
-# # On ajoute le nom et on grossit (taille 8) UNIQUEMENT pour les hubs
-# labels_hubs_fam[degres_famille >= seuil_top10] <- V(Network_family)$name[degres_famille >= seuil_top10]
-# tailles_noeuds_fam[degres_famille >= seuil_top10] <- 8
-# 
-# # 3. Calcul de la disposition (Kamada-Kawai aère très bien le niveau Famille)
-# set.seed(42)
-# layout_famille <- layout_with_kk(Network_family)
-# 
-# # 4. Le dessin final
-# plot(Network_family, 
-#      layout = layout_famille, 
-#      vertex.size = tailles_noeuds_fam,         
-#      vertex.color = ifelse(degres_famille >= seuil_top10, "gold", "lightgrey"), 
-#      vertex.frame.color = "white",
-#      vertex.frame.width = 0.5,
-#      vertex.label = labels_hubs_fam,           
-#      vertex.label.color = "black", 
-#      vertex.label.cex = 0.8,               
-#      vertex.label.font = 2,                
-#      vertex.label.dist = 0.8,              
-#      edge.color = E(Network_family)$color,  
-#      edge.width = 0.8,                     
-#      main = "Global Consensus Multi-Disease Network - Family (Top Hubs Highlighted)")
-# 
-# # 1. Identifier les Hubs (les nœuds les plus connectés)
-# degres_genre <- degree(Network_genre)
-# # On trouve la valeur de connexion pour être dans le "Top 15"
-# seuil_top15 <- sort(degres_genre, decreasing = TRUE)[15] 
-# 
-# # 2. Préparer les étiquettes et les tailles
-# # Par défaut, pas d'étiquette ("") et petite taille (2)
-# labels_hubs <- rep("", vcount(Network_genre))
-# tailles_noeuds <- rep(4, vcount(Network_genre))
-# 
-# # On ne garde le nom et on grossit (taille 6) QUE pour les hubs
-# labels_hubs[degres_genre >= seuil_top15] <- V(Network_genre)$name[degres_genre >= seuil_top15]
-# tailles_noeuds[degres_genre >= seuil_top15] <- 6
-# 
-# # 3. Calcul de la disposition (graphopt est souvent performant pour les très gros réseaux)
-# set.seed(42)
-# layout_genre <- layout_with_graphopt(Network_genre)
-# 
-# # 4. Le dessin final !
-# plot(Network_genre, 
-#      layout = layout_genre, 
-#      vertex.size = tailles_noeuds,         # Taille dynamique (gros pour hubs, petit pour le reste)
-#      vertex.color = ifelse(degres_genre >= seuil_top15, "gold", "lightgrey"), # Les hubs en doré !
-#      vertex.frame.color = "white",
-#      vertex.frame.width = 0.2,
-#      vertex.label = labels_hubs,           # Seulement les 15 noms apparaissent
-#      vertex.label.color = "black", 
-#      vertex.label.cex = 0.8,               # Texte bien lisible
-#      vertex.label.font = 2,                # Texte en gras pour faire ressortir les hubs
-#      vertex.label.dist = 0.8,              # Décale le texte
-#      edge.color = E(Network_genre)$color,  # Bien utiliser les couleurs du genre
-#      edge.width = 0.3,                     # Liens extrêmement fins pour voir à travers
-#      main = "Global Consensus Multi-Disease Network - Genus (Top Hubs Highlighted)")
+disp_results <- data.frame(
+  Metric = c("Bray-Curtis", "Jaccard"),
+  F_value = c(disp_test_bray$tab$F[1], disp_test_jaccard$tab$F[1]),
+  P_value = c(disp_test_bray$tab$`Pr(>F)`[1], disp_test_jaccard$tab$`Pr(>F)`[1])
+)
+
+knitr::kable(disp_results, 
+             digits = 3, # Arrondit à 3 décimales pour un affichage propre
+             col.names = c("Distance Metric", "F-value", "P-value (999 perms)"))
 ```
+
+
+➔ p-value < 0.05 = heterogeneity in the groups multivariate dispersion
+
+### 2. Permanova {.smaller}
+Asses whether the centroids of the groups (disease status) are significantly different
+```{r}
+perm_result <- data.frame(
+  Metric = c("Bray-Curtis", "Jaccard"),
+  
+  R2_percent = c(
+    round(permanova_bray[1, "R2"] * 100, 2), 
+    round(permanova_jaccard[1, "R2"] * 100, 2)
+  ),
+  
+  F_value = c(permanova_bray[1, "F"], permanova_jaccard[1, "F"]),
+  P_value = c(permanova_bray[1, "Pr(>F)"], permanova_jaccard[1, "Pr(>F)"])
+)
+
+knitr::kable(perm_result, 
+             digits = 3, 
+             col.names = c("Distance Metric", "Variation Explained (R² %)", "F-value", "P-value"))
+```
+➔ p-value < 0.05 = Significant differences in community structure
+
+➔ R2 Bray-Curtis > R2 Jaccard = abundance differences are more discriminative than just presence/absence
+
+### 3. Pairwise comparaison
+Tuckey tests to see which diseases induce the  variance heterogeneity
+```{r}
+df_bc <- as.data.frame(Tuckey_BC[[1]])
+df_jaccard <- as.data.frame(Tuckey_Jaccard[[1]])
+
+df_bc$Comparison <- rownames(df_bc)
+df_bc$Metric <- "Bray-Curtis"
+
+df_jaccard$Comparison <- rownames(df_jaccard)
+df_jaccard$Metric <- "Jaccard"
+
+combined_tukey <- rbind(df_bc, df_jaccard)
+
+tukey_sorted <- combined_tukey[order(combined_tukey$`p adj`, decreasing = TRUE), ]
+
+tukey_extremes <- rbind(head(tukey_sorted, 2), tail(tukey_sorted, 2))
+
+tukey_final <- tukey_extremes[, c("Metric", "Comparison", "diff", "lwr", "upr", "p adj")]
+
+knitr::kable(tukey_final, 
+             digits = 4, 
+             row.names = FALSE, 
+             col.names = c("Metric", "Comparison", "Difference", "Lower CI", "Upper CI", "P-value (adj)"))
+```
+
+➔ t2d and ibd_ulcerative_colitis seems to have very differing dispersion variances, causing the heterogeneity
+
+:::
+
+## Metagenomic networks analysis {.smaller}
+
+How microbial populations reorganize, compete, or cooperate depending on the host’s disease.
+
+We used a consensus network approach : 
+
+::: {.incremental}
+
+- **SpiecEasi (MB)**: Meinshausen-Bühlmann Neighborhood Selection = Node to node interactions
+
+- **SpiecEasi (Glasso)**: Graphical Lasso = Global estimation
+
+- **SparCC**: Sparse Correlations for Compositional Data = global correlations
+
+:::
+
+. . . 
+
+An interaction is validates if confirmed by 2 of 3 methods
+
+We tested 3 taxonomic levels : *Phylum*, *Family* and *Genus*
+
+## 1. Phylum Level {.smaller}
+
+::: {.panel-tabset}
+
+### Network
+
+```{r}
+plot(Network_phylum,
+     layout = layout_with_fr(Network_phylum),
+     vertex.size = 8,
+     vertex.color = "lightgrey",
+     vertex.frame.color = "white",
+     vertex.label.color = "black",
+     vertex.label.cex = 0.7,
+     edge.color = E(Network_phylum)$color, # Récupère les couleurs sauvegardées
+     edge.width = 1.5,
+     main = "Global Consensus Multi-Disease Network - Phylum")
+
+legend_data <- unique(data.frame(
+  Disease = E(Network_phylum)$Disease, 
+  Color = E(Network_phylum)$color
+))
+
+legend("bottomright", 
+       title = "Disease", 
+       legend = legend_data$Disease, 
+       col = legend_data$Color, 
+       lwd = 3,       # Épaisseur du trait dans la légende
+       bty = "n",     # "n" pour ne pas dessiner de boîte moche autour de la légende
+       cex = 0.8)     # Taille du texte
+```
+
+### Metrics
+
+```{r}
+print_network_stats <- function(network_list, tax_level) {
+  stats_df <- do.call(rbind, lapply(names(network_list), function(g) {
+    net <- network_list[[g]]
+    if(is.null(net)) return(NULL)
+    
+    data.frame(
+      Tax_Level       = tax_level,
+      Disease_Cohort  = g,
+      Nodes_Count     = vcount(net),
+      Edges_Count     = ecount(net),
+      Graph_Density   = round(edge_density(net), 3),
+      Average_Degree  = round(mean(degree(net)), 2)
+    )
+  }))
+  return(stats_df)
+}
+#| echo: false
+knitr::kable(print_network_stats(networks_phylum, "Phylum"))
+```
+- Low edge count (interactions)
+- Very low density
+
+➔ grouping of populations, lack of resolution
+:::
+
+## 2. Family Level {.smaller}
+
+::: {.panel-tabset}
+
+### Network
+
+```{r}
+degres_famille <- degree(Network_family)
+seuil_top10 <- sort(degres_famille, decreasing = TRUE)[10]
+
+labels_hubs_fam <- rep("", vcount(Network_family))
+tailles_noeuds_fam <- rep(4, vcount(Network_family))
+
+labels_hubs_fam[degres_famille >= seuil_top10] <- V(Network_family)$name[degres_famille >= seuil_top10]
+tailles_noeuds_fam[degres_famille >= seuil_top10] <- 8
+
+set.seed(42)
+layout_famille <- layout_with_kk(Network_family)
+
+plot(Network_family,
+     layout = layout_famille,
+     vertex.size = tailles_noeuds_fam,
+     vertex.color = ifelse(degres_famille >= seuil_top10, "gold", "lightgrey"),
+     vertex.frame.color = "white",
+     vertex.frame.width = 0.5,
+     vertex.label = labels_hubs_fam,
+     vertex.label.color = "black",
+     vertex.label.cex = 0.5,
+     vertex.label.font = 1,
+     vertex.label.dist = 0.8,
+     edge.color = E(Network_family)$color,
+     edge.width = 0.8,
+     main = "Global Consensus Multi-Disease Network - Family (Top Hubs Highlighted)")
+
+legend_data <- unique(data.frame(
+  Disease = E(Network_family)$Disease, 
+  Color = E(Network_family)$color
+))
+
+legend("bottomright", 
+       title = "Disease", 
+       legend = legend_data$Disease, 
+       col = legend_data$Color, 
+       lwd = 3,       # Épaisseur du trait dans la légende
+       bty = "n",     # "n" pour ne pas dessiner de boîte moche autour de la légende
+       cex = 0.8)     # Taille du texte
+```
+
+### Metrics
+
+```{r}
+print_network_stats <- function(network_list, tax_level) {
+  stats_df <- do.call(rbind, lapply(names(network_list), function(g) {
+    net <- network_list[[g]]
+    if(is.null(net)) return(NULL)
+    
+    data.frame(
+      Tax_Level       = tax_level,
+      Disease_Cohort  = g,
+      Nodes_Count     = vcount(net),
+      Edges_Count     = ecount(net),
+      Graph_Density   = round(edge_density(net), 3),
+      Average_Degree  = round(mean(degree(net)), 2)
+    )
+  }))
+  return(stats_df)
+}
+#| echo: false
+knitr::kable(print_network_stats(networks_family, "Family"))
+```
+- Increase in nodes and edges
+- Optimal graph density
+
+➔ Network architecture = specific to each diseases
+:::
+
+
+## 3. Genus Level {.smaller}
+
+::: {.panel-tabset}
+
+### Network
+
+```{r}
+degres_genre <- degree(Network_genus)
+seuil_top15 <- sort(degres_genre, decreasing = TRUE)[15]
+
+labels_hubs <- rep("", vcount(Network_genus))
+tailles_noeuds <- rep(4, vcount(Network_genus))
+
+labels_hubs[degres_genre >= seuil_top15] <- V(Network_genus)$name[degres_genre >= seuil_top15]
+tailles_noeuds[degres_genre >= seuil_top15] <- 6
+
+set.seed(42)
+layout_genre <- layout_with_graphopt(Network_genus)
+
+plot(Network_genus,
+     layout = layout_genre,
+     vertex.size = tailles_noeuds,         # Taille dynamique (gros pour hubs, petit pour le reste)
+     vertex.color = ifelse(degres_genre >= seuil_top15, "gold", "lightgrey"), # Les hubs en doré !
+     vertex.frame.color = "white",
+     vertex.frame.width = 0.2,
+     vertex.label = labels_hubs,           # Seulement les 15 noms apparaissent
+     vertex.label.color = "black",
+     vertex.label.cex = 0.5,               # Texte bien lisible
+     vertex.label.font = 1,                # Texte en gras pour faire ressortir les hubs
+     vertex.label.dist = 0.8,              # Décale le texte
+     edge.color = E(Network_genus)$color,  # Bien utiliser les couleurs du genre
+     edge.width = 0.3,                     # Liens extrêmement fins pour voir à travers
+     main = "Global Consensus Multi-Disease Network - Genus (Top Hubs Highlighted)")
+
+
+legend_data <- unique(data.frame(
+  Disease = E(Network_genus)$Disease, 
+  Color = E(Network_genus)$color
+))
+
+legend("bottomright", 
+       title = "Disease", 
+       legend = legend_data$Disease, 
+       col = legend_data$Color, 
+       lwd = 3,       # Épaisseur du trait dans la légende
+       bty = "n",     # "n" pour ne pas dessiner de boîte moche autour de la légende
+       cex = 0.8)     # Taille du texte
+```
+
+### Metrics
+
+```{r}
+print_network_stats <- function(network_list, tax_level) {
+  stats_df <- do.call(rbind, lapply(names(network_list), function(g) {
+    net <- network_list[[g]]
+    if(is.null(net)) return(NULL)
+    
+    data.frame(
+      Tax_Level       = tax_level,
+      Disease_Cohort  = g,
+      Nodes_Count     = vcount(net),
+      Edges_Count     = ecount(net),
+      Graph_Density   = round(edge_density(net), 3),
+      Average_Degree  = round(mean(degree(net)), 2)
+    )
+  }))
+  return(stats_df)
+}
+#| echo: false
+knitr::kable(print_network_stats(networks_genus, "Genus"))
+```
+- Too much nodes and edges
+- Decreasing density
+
+➔ Topological collapse = a lot of fragmentation
+:::
+
+## Conclusion: A Robust Bioinformatics Pipeline {.smaller}
+
+::: {.incremental}
+
+* **End-to-End Reproducibility:** Seamless integration of metadata, taxonomy, and OTU counts within the `phyloseq` framework.
+* **Statistical Rigor:** Addressed inherent metagenomic biases (sparsity, zero-inflation, compositionality) via Centered Log-Ratio (CLR) transformations and non-parametric testing.
+* **Consensus Network Inference:** Mitigated algorithmic artifacts and false positives by enforcing a strict majority vote across three distinct methodologies (*SPIEC-EASI MB, SPIEC-EASI Glasso, and SparCC*).
+* **Scalable Architecture:** Delivered a fully automated, version-controlled analytical environment using R, `igraph`, and Quarto.
+
+:::
+
+# THANK YOU FOR YOUR ATTENTION ! 

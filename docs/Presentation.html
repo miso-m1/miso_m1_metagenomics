@@ -146,7 +146,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <h1>Introduction</h1>
 
 </section>
-<section id="metagenomic-challenge" class="slide level2">
+<section id="metagenomic-challenge" class="slide level2 smaller">
 <h2>Metagenomic Challenge</h2>
 <ul>
 <li class="fragment"><p>Goal: Building a reproducible pipeline ➔ reliable conclusions on microbial interaction from metagenomic data.</p></li>
@@ -431,7 +431,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <h1>Diversity analysis</h1>
 
 </section>
-<section id="alpha-diversity" class="slide level2">
+<section id="alpha-diversity" class="slide level2 smaller">
 <h2>1. Alpha diversity</h2>
 <p>Alpha diversity measures the diversity within a single sample. It can reflect both:</p>
 <ul>
@@ -509,7 +509,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">1. Normality test</a></li><li><a href="#tabset-4-2">2. Significance test</a></li><li><a href="#tabset-4-3">3. Pairwise comparaisons</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1">
-<p>To assess the normality, we used the Shapiro test</p>
+<p>Assess the normality = Shapiro test</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
@@ -548,7 +548,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <p>➔ p-value &lt; 0.05 = reject the normality ➔ Non parametric test</p>
 </div>
 <div id="tabset-4-2">
-<p>To assess significant differences in microbial diversity across disease groups, we performed a Kruskal-Wallis test</p>
+<p>Assess the significant differences in microbial diversity across disease groups = Kruskal-Wallis test</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
@@ -584,15 +584,512 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 </table>
 </div>
 </div>
+<p>➔ p-value &lt; 0.05 = difference somewhere among the groups</p>
 </div>
 <div id="tabset-4-3">
 <p>KW = difference somewhere among the groups ➔ post-hoc pairwise comparisons to see which groups differ</p>
-
-
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Group A</th>
+<th style="text-align: left;">Group B</th>
+<th style="text-align: right;">P-value (BH)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Simpson</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: left;">cancer</td>
+<td style="text-align: right;">0.8046</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">InvSimpson</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: left;">cancer</td>
+<td style="text-align: right;">0.8046</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Shannon</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: left;">cirrhosis</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Observed</td>
+<td style="text-align: left;">t2d</td>
+<td style="text-align: left;">cirrhosis</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>p-value &lt; 0.05 = significative difference in diversity beetween the 2 communities</li>
+<li>p-value &gt; 0.05 = no significative difference</li>
+</ul>
 </div>
 </div>
 </div>
+</section>
+<section id="beta-diversity" class="slide level2 smaller">
+<h2>2. Beta diversity</h2>
+<p>Beta diversity measures differences in microbial composition between samples.</p>
+<p>We used 2 metrics :</p>
+<ul>
+<li class="fragment"><p><strong>Bray-Curtis</strong> : Considers both the microbial communitites presence/absence and relative abundance beetween samples</p></li>
+<li class="fragment"><p><strong>Jaccard</strong> : Considers only presence/absence.</p></li>
+</ul>
+<div class="fragment">
+<p>To visualise those dispersions, we used PCoA</p>
+</div>
+</section>
+<section id="beta-diversity-1" class="slide level2 smaller">
+<h2>2. Beta diversity</h2>
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Bray-Curtis PCoA</a></li><li><a href="#tabset-5-2">Jaccard PCoA</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-18-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="statistical-analysis-1" class="slide level2 smaller">
+<h2>Statistical Analysis</h2>
+<div class="panel-tabset">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">1. Permutation test</a></li><li><a href="#tabset-6-2">2. Permanova</a></li><li><a href="#tabset-6-3">3. Pairwise comparaison</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1">
+<p>Needed to verify the homogeneity of multivariate dispersions</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Distance Metric</th>
+<th style="text-align: right;">F-value</th>
+<th style="text-align: right;">P-value (999 perms)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bray-Curtis</td>
+<td style="text-align: right;">18.158</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jaccard</td>
+<td style="text-align: right;">18.513</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>➔ p-value &lt; 0.05 = heterogeneity in the groups multivariate dispersion</p>
+</div>
+<div id="tabset-6-2">
+<p>Asses whether the centroids of the groups (disease status) are significantly different</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Distance Metric</th>
+<th style="text-align: right;">Variation Explained (R² %)</th>
+<th style="text-align: right;">F-value</th>
+<th style="text-align: right;">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bray-Curtis</td>
+<td style="text-align: right;">8.69</td>
+<td style="text-align: right;">15.235</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jaccard</td>
+<td style="text-align: right;">5.55</td>
+<td style="text-align: right;">9.408</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>➔ p-value &lt; 0.05 = Significant differences in community structure</p>
+<p>➔ R2 Bray-Curtis &gt; R2 Jaccard = abundance differences are more discriminative than just presence/absence</p>
+</div>
+<div id="tabset-6-3">
+<p>Tuckey tests to see which diseases induce the variance heterogeneity</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 32%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Comparison</th>
+<th style="text-align: right;">Difference</th>
+<th style="text-align: right;">Lower CI</th>
+<th style="text-align: right;">Upper CI</th>
+<th style="text-align: right;">P-value (adj)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bray-Curtis</td>
+<td style="text-align: left;">t2d-cirrhosis</td>
+<td style="text-align: right;">0.0086</td>
+<td style="text-align: right;">-0.0141</td>
+<td style="text-align: right;">0.0313</td>
+<td style="text-align: right;">0.7607</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jaccard</td>
+<td style="text-align: left;">t2d-cirrhosis</td>
+<td style="text-align: right;">0.0070</td>
+<td style="text-align: right;">-0.0079</td>
+<td style="text-align: right;">0.0218</td>
+<td style="text-align: right;">0.6203</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bray-Curtis</td>
+<td style="text-align: left;">t2d-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0578</td>
+<td style="text-align: right;">0.0365</td>
+<td style="text-align: right;">0.0791</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jaccard</td>
+<td style="text-align: left;">t2d-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0385</td>
+<td style="text-align: right;">0.0246</td>
+<td style="text-align: right;">0.0524</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>➔ t2d and ibd_ulcerative_colitis seems to have very differing dispersion variances, causing the heterogeneity</p>
+</div>
+</div>
+</div>
+</section>
+<section id="metagenomic-networks-analysis" class="slide level2 smaller">
+<h2>Metagenomic networks analysis</h2>
+<p>How microbial populations reorganize, compete, or cooperate depending on the host’s disease.</p>
+<p>We used a consensus network approach :</p>
+<ul>
+<li class="fragment"><p><strong>SpiecEasi (MB)</strong>: Meinshausen-Bühlmann Neighborhood Selection = Node to node interactions</p></li>
+<li class="fragment"><p><strong>SpiecEasi (Glasso)</strong>: Graphical Lasso = Global estimation</p></li>
+<li class="fragment"><p><strong>SparCC</strong>: Sparse Correlations for Compositional Data = global correlations</p></li>
+</ul>
+<div class="fragment">
+<p>An interaction is validates if confirmed by 2 of 3 methods</p>
+<p>We tested 3 taxonomic levels : <em>Phylum</em>, <em>Family</em> and <em>Genus</em></p>
+</div>
+</section>
+<section id="phylum-level" class="slide level2 smaller">
+<h2>1. Phylum Level</h2>
+<div class="panel-tabset">
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Network</a></li><li><a href="#tabset-7-2">Metrics</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-2">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 26%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tax_Level</th>
+<th style="text-align: left;">Disease_Cohort</th>
+<th style="text-align: right;">Nodes_Count</th>
+<th style="text-align: right;">Edges_Count</th>
+<th style="text-align: right;">Graph_Density</th>
+<th style="text-align: right;">Average_Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Phylum</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">0.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Phylum</td>
+<td style="text-align: left;">cirrhosis</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Phylum</td>
+<td style="text-align: left;">t2d</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">0.22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Phylum</td>
+<td style="text-align: left;">cancer</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.048</td>
+<td style="text-align: right;">0.29</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>Low edge count (interactions)</li>
+<li>Very low density</li>
+</ul>
+<p>➔ grouping of populations, lack of resolution</p>
+</div>
+</div>
+</div>
+</section>
+<section id="family-level" class="slide level2 smaller">
+<h2>2. Family Level</h2>
+<div class="panel-tabset">
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Network</a></li><li><a href="#tabset-8-2">Metrics</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-8-2">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 26%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tax_Level</th>
+<th style="text-align: left;">Disease_Cohort</th>
+<th style="text-align: right;">Nodes_Count</th>
+<th style="text-align: right;">Edges_Count</th>
+<th style="text-align: right;">Graph_Density</th>
+<th style="text-align: right;">Average_Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Family</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">0.043</td>
+<td style="text-align: right;">1.41</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Family</td>
+<td style="text-align: left;">cirrhosis</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Family</td>
+<td style="text-align: left;">t2d</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.89</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Family</td>
+<td style="text-align: left;">cancer</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.86</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>Increase in nodes and edges</li>
+<li>Optimal graph density</li>
+</ul>
+<p>➔ Network architecture = specific to each diseases</p>
+</div>
+</div>
+</div>
+</section>
+<section id="genus-level" class="slide level2 smaller">
+<h2>3. Genus Level</h2>
+<div class="panel-tabset">
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Network</a></li><li><a href="#tabset-9-2">Metrics</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-26-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-9-2">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 26%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tax_Level</th>
+<th style="text-align: left;">Disease_Cohort</th>
+<th style="text-align: right;">Nodes_Count</th>
+<th style="text-align: right;">Edges_Count</th>
+<th style="text-align: right;">Graph_Density</th>
+<th style="text-align: right;">Average_Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Genus</td>
+<td style="text-align: left;">ibd_ulcerative_colitis</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">1.44</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Genus</td>
+<td style="text-align: left;">cirrhosis</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Genus</td>
+<td style="text-align: left;">t2d</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">1.78</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Genus</td>
+<td style="text-align: left;">cancer</td>
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.011</td>
+<td style="text-align: right;">0.79</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>Too much nodes and edges</li>
+<li>Decreasing density</li>
+</ul>
+<p>➔ Topological collapse = a lot of fragmentation</p>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion-a-robust-bioinformatics-pipeline" class="slide level2 smaller">
+<h2>Conclusion: A Robust Bioinformatics Pipeline</h2>
+<ul>
+<li class="fragment"><strong>End-to-End Reproducibility:</strong> Seamless integration of metadata, taxonomy, and OTU counts within the <code>phyloseq</code> framework.</li>
+<li class="fragment"><strong>Statistical Rigor:</strong> Addressed inherent metagenomic biases (sparsity, zero-inflation, compositionality) via Centered Log-Ratio (CLR) transformations and non-parametric testing.</li>
+<li class="fragment"><strong>Consensus Network Inference:</strong> Mitigated algorithmic artifacts and false positives by enforcing a strict majority vote across three distinct methodologies (<em>SPIEC-EASI MB, SPIEC-EASI Glasso, and SparCC</em>).</li>
+<li class="fragment"><strong>Scalable Architecture:</strong> Delivered a fully automated, version-controlled analytical environment using R, <code>igraph</code>, and Quarto.</li>
+</ul>
 </section></section>
+<section id="thank-you-for-your-attention" class="title-slide slide level1 center">
+<h1>THANK YOU FOR YOUR ATTENTION !</h1>
+
+
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

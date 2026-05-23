@@ -263,7 +263,7 @@ plot_global_network <- function(network_list, tax_level) {
        edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
        main = paste("Global Consensus Multi-Disease Network -", tax_level))
   
-  legend("bottomright", title = "Etiological Signatures", legend = names(color_palette), 
+  legend("bottomright", title = "Diseases", legend = names(color_palette), 
          col = color_palette, lwd = 3, bty = "n", cex = 0.8)
   
   dev.off()
@@ -356,18 +356,18 @@ for(g in groups) {
 }
 
 # Displaying topological summary table
-knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
+knitr::kable(print_network_stats(networks_genus, "Genus"), caption = "Topological Metrics at the Genus Level")
 
 # Plotting global network
-Network_genre <- plot_global_network(networks_genus, "Genus")
+Network_genus <- plot_global_network(networks_genus, "Genus")
 ```
 
 ```{r}
 #To save all the data/graphs for the presentation
-save(Network_phylum, Network_family, Network_genre, file = here::here("posts", "Network.RData"))
+save(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, file = here::here("posts", "Network.RData"))
 ```
 
-### Biological Interpretation (Genre)
+### Biological Interpretation (Genus)
 
 At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).
 
