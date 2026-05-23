@@ -350,7 +350,7 @@ meta_df <- data.frame(sample_data(metagenomics))
 
 disease_counts <- meta_df %>%
   group_by(gender, disease) %>%
-  summarise(Count = n())
+  summarise(Count = n(), .groups = "drop")
 
 SampleF_dist_disease <- ggplot(disease_counts %>% filter(gender == "female"),
        aes(x = disease, y = Count, fill = disease)) +
