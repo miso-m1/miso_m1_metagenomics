@@ -140,6 +140,13 @@
     "text": "Let’s analyze the distribution of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.\n\n\nShow code\nmeta_df &lt;- data.frame(sample_data(metagenomics))\n\ngender_counts &lt;- meta_df %&gt;%\n  group_by(gender) %&gt;%\n  summarise(Count = n()) %&gt;%\n  mutate(Percentage = Count / sum(Count) * 100)\nprint(gender_counts)\n\n\n# A tibble: 2 × 3\n  gender Count Percentage\n  &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;\n1 female   217       44.8\n2 male     267       55.2\n\n\n\n\nShow code\ngender_counts &lt;- meta_df %&gt;%\n  group_by(gender) %&gt;%\n  summarise(Count = n())\n\nSample_dist_gender &lt;- ggplot(gender_counts, aes(x = gender, y = Count, fill = gender)) +\n  geom_bar(stat = \"identity\") +\n  theme_minimal() +\n  labs(title = \"Number of Samples by Gender\",\n       x = \"Gender\",\n       y = \"Number of Samples\")\nSample_dist_gender\n\n\n\n\n\n\n\n\n\nWe observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups."
   },
   {
+    "objectID": "posts/datapreparation.html#distribution-of-samples-by-country",
+    "href": "posts/datapreparation.html#distribution-of-samples-by-country",
+    "title": "1: Data preparation",
+    "section": "",
+    "text": "Show code\ncountry_counts &lt;- meta_df %&gt;%\n  group_by(country) %&gt;%\n  summarise(Count = n()) %&gt;%\n  mutate(Percentage = Count / sum(Count) * 100)\nprint(country_counts)\n\n\n# A tibble: 3 × 3\n  country Count Percentage\n  &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;\n1 china     288      59.5 \n2 france     48       9.92\n3 spain     148      30.6 \n\n\n\n\nShow code\ncountry_counts &lt;- meta_df %&gt;%\n  group_by(country) %&gt;%\n  summarise(Count = n())\n\nSample_dist_country&lt;- ggplot(country_counts, aes(x = country, y = Count, fill = country)) +\n  geom_bar(stat = \"identity\") +\n  theme_minimal() +\n  labs(title = \"Number of Samples by Country\",\n       x = \"Country\",\n       y = \"Number of Samples\")\nSample_dist_country\n\n\n\n\n\n\n\n\n\nWe can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France."
+  },
+  {
     "objectID": "posts/datapreparation.html#number-of-samples-of-diseases-by-gender",
     "href": "posts/datapreparation.html#number-of-samples-of-diseases-by-gender",
     "title": "1: Data preparation",
@@ -369,12 +376,5 @@
     "title": "Statistical Analysis of Metagenomic Data",
     "section": "Code",
     "text": "Code\nWhen you click the Render button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:"
-  },
-  {
-    "objectID": "posts/datapreparation.html#distribution-of-samples-by-country",
-    "href": "posts/datapreparation.html#distribution-of-samples-by-country",
-    "title": "1: Data preparation",
-    "section": "",
-    "text": "Show code\ncountry_counts &lt;- meta_df %&gt;%\n  group_by(country) %&gt;%\n  summarise(Count = n()) %&gt;%\n  mutate(Percentage = Count / sum(Count) * 100)\nprint(country_counts)\n\n\n# A tibble: 3 × 3\n  country Count Percentage\n  &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;\n1 china     288      59.5 \n2 france     48       9.92\n3 spain     148      30.6 \n\n\n\n\nShow code\ncountry_counts &lt;- meta_df %&gt;%\n  group_by(country) %&gt;%\n  summarise(Count = n())\n\nSample_dist_country&lt;- ggplot(country_counts, aes(x = country, y = Count, fill = country)) +\n  geom_bar(stat = \"identity\") +\n  theme_minimal() +\n  labs(title = \"Number of Samples by Country\",\n       x = \"Country\",\n       y = \"Number of Samples\")\nSample_dist_country\n\n\n\n\n\n\n\n\n\nWe can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France."
   }
 ]
