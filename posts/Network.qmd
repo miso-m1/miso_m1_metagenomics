@@ -43,6 +43,25 @@ An interaction (edge) is validated in the final consensus network if it is indep
 
 The baseline `phyloseq` object used throughout this pipeline is named `metagenomics` and is automatically loaded via the Quarto preliminary inclusion file.
 
+### 1.1 Installation
+
+Before running the network analysis, you must install the `SpiecEasi` package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using `devtools`. 
+
+Please run the following code in your R console:
+
+```{r}
+#| label: install-spieceasi
+#| eval: false
+
+# Install devtools if it isn't already on your computer
+if (!requireNamespace("devtools", quietly = TRUE)) {
+    install.packages("devtools")
+}
+
+# Download and install SpiecEasi from its official GitHub repository
+devtools::install_github("zdk123/SpiecEasi")
+```
+
 ## 2. Mathematical Foundations of Consensus Network Inference
 
 Before detailing the algorithms, it is critical to address the **compositional data problem**. Metagenomic sequencing yields relative abundances (proportions constrained to a sum of 1), not absolute cell counts. Applying standard Pearson or Spearman correlations directly to such data produces spurious correlations. To mitigate this, both SPIEC-EASI algorithms first apply a **Centered Log-Ratio (CLR)** transformation to the abundance vector $x$:
@@ -113,17 +132,10 @@ $$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$
 
 To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} < 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.
 
+
 ```{r}
 #| label: setup
 #| include: false
-
-# Install the "devtools" package if it isn't already on your computer
-if (!requireNamespace("devtools", quietly = TRUE)) {
-    install.packages("devtools")
-}
-
-# Download and install SpiecEasi from its official GitHub repository
-devtools::install_github("zdk123/SpiecEasi")
 
 # Loading necessary network and data manipulation libraries
 
