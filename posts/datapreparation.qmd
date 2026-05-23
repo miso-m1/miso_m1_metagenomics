@@ -409,58 +409,26 @@ We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9
 ## Number of samples of diseases by country
 
 ```{r}
-diseases<- c("ibd ulcerative colitis", "t2d", "cirrhosis", "cancer")
-disease_counts <- meta_df %>%
-  group_by(country, disease) %>%
-  summarise(Count = n())
+plot_data <- disease_counts %>%
+  ungroup() %>%
+  tidyr::complete(country, disease, fill = list(Count = 0))
 
-ggplot(disease_counts, aes(x = disease, y = n)) +
-  geom_col() +
-  facet_wrap(~ country) +
+ggplot(plot_data, aes(x = disease, y = Count, fill = disease)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~country) +
+  theme_minimal() +
   labs(
+    title = "Number of samples per disease by Country",
     x = "Disease",
     y = "Number of samples"
   ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 30, hjust = 1)
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.border = element_rect(color = "black", fill = NA, linewidth = 1), panel.spacing = unit(0, "lines")
   )
-
 ```
 
-Number of samples of diseases for China:
+We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ibd (ulcerative colitis).
 
-```{r}
-disease_counts <- meta_df %>%
-  group_by(country, disease) %>%
-  summarise(Count = n())
-
-SampleC_dist_disease <- ggplot(disease_counts %>% filter(country == "china"),
-       aes(x = disease, y = Count, fill = disease)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(title = "Number of Samples from China per Disease") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-SampleC_dist_disease
-```
-
-Number of samples of diseases for France:
-
-```{r}
-disease_counts <- meta_df %>%
-  group_by(country, disease) %>%
-  summarise(Count = n())
-
-SampleFr_dist_disease <- ggplot(disease_counts %>% filter(country == "france"),
-       aes(x = disease, y = Count, fill = disease)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(title = "Number of Samples from France per Disease") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-SampleFr_dist_disease
-```
-
-Number of samples of diseases for Spain:
+This imbalance should be kept in mind in all analyses.
 
 ## Distribution of bacterial class by gender
 
