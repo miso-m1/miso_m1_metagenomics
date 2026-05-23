@@ -13,7 +13,6 @@
   description: "Network Analysis of Metagenomic Data"
 ---
 
-
 ```{r}
 #| label: plotting-theme
 #| include: false
@@ -80,10 +79,10 @@ $$z_i = \log\left(\frac{x_i}{g(x)}\right)$$
 
 $$\min_{\beta_j} \left( \frac{1}{2n} \| z_j - Z_{\setminus j} \beta_j \|^2_2 + \lambda \| \beta_j \|_1 \right)$$
 
--   $z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.
--   $Z_{\setminus j}$ is the matrix of all other taxa.
--   $\beta_j$ is the coefficient vector (the edge weights).
--   $\lambda \| \beta_j \|_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.
+- $z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.
+- $Z_{\setminus j}$ is the matrix of all other taxa.
+- $\beta_j$ is the coefficient vector (the edge weights).
+- $\lambda \| \beta_j \|_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.
 
 **Edge Generation:** An undirected edge is drawn between node $i$ and node $j$ if either $\beta_{j}^{(i)} \neq 0$ or $\beta_{i}^{(j)} \neq 0$.
 
@@ -97,8 +96,8 @@ $$\min_{\beta_j} \left( \frac{1}{2n} \| z_j - Z_{\setminus j} \beta_j \|^2_2 + \
 
 $$\min_{\Theta \succ 0} \left( \text{tr}(S\Theta) - \log(\det(\Theta)) + \lambda \| \Theta \|_1 \right)$$
 
--   $\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.
--   $\lambda \| \Theta \|_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.
+- $\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.
+- $\lambda \| \Theta \|_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.
 
 **Edge Generation:** An undirected edge is retained between node $i$ and node $j$ if the estimated entry in the precision matrix satisfies $\Theta_{ij} \neq 0$.
 
@@ -338,8 +337,8 @@ The **Family** level provides an ideal analytical sweet spot, revealing clear pa
 
 1.  **The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.
 2.  **The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.
-    -   **The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).
-    -   **The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.
+    - **The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).
+    - **The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.
 3.  **The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.
 
 ## 5. Genus Level Analysis (Micro-Ecology)
@@ -387,4 +386,3 @@ Ultimately, these network topologies show that chronic diseases do not merely al
 ```{r}
 sessioninfo::session_info(pkgs = "attached")
 ```
-

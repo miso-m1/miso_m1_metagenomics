@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -1236,380 +1237,379 @@ un statut 1</code></pre>
 <span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">  description: "Network Analysis of Metagenomic Data"</span></span>
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: plotting-theme</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| </span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"inputData.R"</span>)</span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggplot2.discrete.fill =</span> <span class="cf">function</span>(...)</span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"cividis"</span>, ...),</span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggplot2.discrete.colour =</span> <span class="cf">function</span>(...)</span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"cividis"</span>, ...)</span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Introduction and Objectives</span></span>
-<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>This document presents an integrated network analysis of the human gut microbiota across different pathological conditions (*ibd_ulcerative_colitis, cirrhosis, t2d, cancer*). The primary goal is to evaluate how microbial populations reorganize, compete, or cooperate depending on the host's disease state.</span>
-<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>To ensure the statistical robustness of the inferred interactions and to eliminate false positives inherent to the compositional nature of metagenomic sequencing data, we implement a consensus network approach inspired by the **OneNet-mean** framework. We combine three distinct mathematical network inference methodologies: 1. **SpiecEasi (MB)**: Neighborhood selection based on the Meinshausen-Bühlmann framework. 2. **SpiecEasi (Glasso)**: Global covariance matrix inversion using Graphical Lasso. 3. **SparCC**: Correlation modeling explicitly tailored for high-dimensional compositional count data.</span>
-<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>An interaction (edge) is validated in the final consensus network if it is independently confirmed by at least 2 out of the 3 methods (majority vote threshold $\ge 0.66$).</span>
-<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>The baseline <span class="in">`phyloseq`</span> object used throughout this pipeline is named <span class="in">`metagenomics`</span> and is automatically loaded via the Quarto preliminary inclusion file.</span>
-<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.1 Installation</span></span>
-<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>Before running the network analysis, you must install the <span class="in">`SpiecEasi`</span> package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using <span class="in">`devtools`</span>. </span>
-<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>Please run the following code in your R console:</span>
-<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: install-spieceasi</span></span>
-<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Install devtools if it isn't already on your computer</span></span>
-<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
-<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
-<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Download and install SpiecEasi from its official GitHub repository</span></span>
-<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"zdk123/SpiecEasi"</span>)</span>
-<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Mathematical Foundations of Consensus Network Inference</span></span>
-<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a>Before detailing the algorithms, it is critical to address the **compositional data problem**. Metagenomic sequencing yields relative abundances (proportions constrained to a sum of 1), not absolute cell counts. Applying standard Pearson or Spearman correlations directly to such data produces spurious correlations. To mitigate this, both SPIEC-EASI algorithms first apply a **Centered Log-Ratio (CLR)** transformation to the abundance vector $x$:</span>
-<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a>$$z_i = \log\left(\frac{x_i}{g(x)}\right)$$</span>
-<span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>*(where* $g(x)$ represents the geometric mean of all taxa abundances).</span>
-<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1. SpiecEasi (MB): Meinshausen-Bühlmann Neighborhood Selection</span></span>
-<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a>**The Concept:** Instead of calculating the global network covariance at once, the MB method treats network inference as a set of separate supervised machine-learning problems. For each taxon, it performs a regression to predict its CLR-abundance using the abundances of all other taxa.</span>
-<span id="cb27-82"><a href="#cb27-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-83"><a href="#cb27-83" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** For a specific node $j$, the algorithm solves a sparse linear regression using the Lasso ($L_1$) penalty to identify which other nodes ($\setminus j$) best predict its variance. The objective function minimized is:</span>
-<span id="cb27-84"><a href="#cb27-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-85"><a href="#cb27-85" aria-hidden="true" tabindex="-1"></a>$$\min_{\beta_j} \left( \frac{1}{2n} <span class="sc">\|</span> z_j - Z_{\setminus j} \beta_j <span class="sc">\|</span>^2_2 + \lambda <span class="sc">\|</span> \beta_j <span class="sc">\|</span>_1 \right)$$</span>
-<span id="cb27-86"><a href="#cb27-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-87"><a href="#cb27-87" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.</span>
-<span id="cb27-88"><a href="#cb27-88" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$Z_{\setminus j}$ is the matrix of all other taxa.</span>
-<span id="cb27-89"><a href="#cb27-89" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\beta_j$ is the coefficient vector (the edge weights).</span>
-<span id="cb27-90"><a href="#cb27-90" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\lambda <span class="sc">\|</span> \beta_j <span class="sc">\|</span>_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.</span>
-<span id="cb27-91"><a href="#cb27-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-92"><a href="#cb27-92" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** An undirected edge is drawn between node $i$ and node $j$ if either $\beta_{j}^{(i)} \neq 0$ or $\beta_{i}^{(j)} \neq 0$.</span>
-<span id="cb27-93"><a href="#cb27-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-94"><a href="#cb27-94" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb27-95"><a href="#cb27-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-96"><a href="#cb27-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2. SpiecEasi (Glasso): Graphical Lasso</span></span>
-<span id="cb27-97"><a href="#cb27-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-98"><a href="#cb27-98" aria-hidden="true" tabindex="-1"></a>**The Concept:** Glasso utilizes a global estimation approach. Assuming a multivariate normal distribution of the CLR-transformed data, two variables are conditionally independent (i.e., no edge exists between them) if their corresponding entry in the **precision matrix** (the inverse of the covariance matrix) is exactly zero. Glasso estimates this sparse precision matrix directly.</span>
-<span id="cb27-99"><a href="#cb27-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-100"><a href="#cb27-100" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** Let $S$ be the empirical covariance matrix of the CLR-transformed data $Z$. Glasso seeks the precision matrix $\Theta$ (where $\Theta = \Sigma^{-1}$) that maximizes the penalized log-likelihood of the data:</span>
-<span id="cb27-101"><a href="#cb27-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-102"><a href="#cb27-102" aria-hidden="true" tabindex="-1"></a>$$\min_{\Theta \succ 0} \left( \text{tr}(S\Theta) - \log(\det(\Theta)) + \lambda <span class="sc">\|</span> \Theta <span class="sc">\|</span>_1 \right)$$</span>
-<span id="cb27-103"><a href="#cb27-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-104"><a href="#cb27-104" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.</span>
-<span id="cb27-105"><a href="#cb27-105" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\lambda <span class="sc">\|</span> \Theta <span class="sc">\|</span>_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.</span>
-<span id="cb27-106"><a href="#cb27-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-107"><a href="#cb27-107" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** An undirected edge is retained between node $i$ and node $j$ if the estimated entry in the precision matrix satisfies $\Theta_{ij} \neq 0$.</span>
-<span id="cb27-108"><a href="#cb27-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-109"><a href="#cb27-109" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb27-110"><a href="#cb27-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-111"><a href="#cb27-111" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3. SparCC: Sparse Correlations for Compositional Data</span></span>
-<span id="cb27-112"><a href="#cb27-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-113"><a href="#cb27-113" aria-hidden="true" tabindex="-1"></a>**The Concept:** Unlike SPIEC-EASI, SparCC bypasses the CLR transformation. Instead, it relies on the variance of log-ratios between pairs of taxa. It operates under the assumption that the true underlying microbial network is sparse (most taxa do not biologically interact) and leverages this assumption to approximate the true linear correlation from the compositional data.</span>
-<span id="cb27-114"><a href="#cb27-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-115"><a href="#cb27-115" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** Let $t_{ij}$ denote the variance of the log-ratio of the compositional abundances of taxa $i$ and $j$:</span>
-<span id="cb27-116"><a href="#cb27-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-117"><a href="#cb27-117" aria-hidden="true" tabindex="-1"></a>$$t_{ij} = \text{Var}\left(\log\left(\frac{x_i}{x_j}\right)\right)$$</span>
-<span id="cb27-118"><a href="#cb27-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-119"><a href="#cb27-119" aria-hidden="true" tabindex="-1"></a>According to the laws of variance, this metric relates to the true (unknown) absolute abundances $\omega_i$ and $\omega_j$, and their true correlation coefficient $\rho_{ij}$:</span>
-<span id="cb27-120"><a href="#cb27-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-121"><a href="#cb27-121" aria-hidden="true" tabindex="-1"></a>$$t_{ij} = \text{Var}(\log \omega_i) + \text{Var}(\log \omega_j) - 2 \rho_{ij} \sqrt{\text{Var}(\log \omega_i)\text{Var}(\log \omega_j)}$$</span>
-<span id="cb27-122"><a href="#cb27-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-123"><a href="#cb27-123" aria-hidden="true" tabindex="-1"></a>Because this system has more unknowns ($\rho_{ij}$ and the basis variances) than equations, it is underdetermined. SparCC approximates a solution iteratively by enforcing the sparsity assumption:</span>
-<span id="cb27-124"><a href="#cb27-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-125"><a href="#cb27-125" aria-hidden="true" tabindex="-1"></a>$$\sum_{j \neq i} \rho_{ij} \approx 0$$</span>
-<span id="cb27-126"><a href="#cb27-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-127"><a href="#cb27-127" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** SparCC outputs a correlation matrix. In this pipeline, an edge is established if the absolute value of the SparCC correlation coefficient exceeds a predefined threshold: $|\rho_{ij}| \geq 0.4$.</span>
-<span id="cb27-128"><a href="#cb27-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-129"><a href="#cb27-129" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb27-130"><a href="#cb27-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-131"><a href="#cb27-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.4. The Consensus Framework (OneNet-Mean)</span></span>
-<span id="cb27-132"><a href="#cb27-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-133"><a href="#cb27-133" aria-hidden="true" tabindex="-1"></a>Once the three independent methodologies compute their respective unweighted adjacency matrices ($A^{MB}, A^{Glasso}, A^{SparCC}$ where edges $= 1$ and non-edges $= 0$), the pipeline calculates the arithmetic mean for every possible edge across the three models:</span>
-<span id="cb27-134"><a href="#cb27-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-135"><a href="#cb27-135" aria-hidden="true" tabindex="-1"></a>$$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$</span>
-<span id="cb27-136"><a href="#cb27-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-137"><a href="#cb27-137" aria-hidden="true" tabindex="-1"></a>To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} &lt; 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: plotting-theme</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| </span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"inputData.R"</span>)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggplot2.discrete.fill =</span> <span class="cf">function</span>(...)</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"cividis"</span>, ...),</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggplot2.discrete.colour =</span> <span class="cf">function</span>(...)</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"cividis"</span>, ...)</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Introduction and Objectives</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>This document presents an integrated network analysis of the human gut microbiota across different pathological conditions (*ibd_ulcerative_colitis, cirrhosis, t2d, cancer*). The primary goal is to evaluate how microbial populations reorganize, compete, or cooperate depending on the host's disease state.</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>To ensure the statistical robustness of the inferred interactions and to eliminate false positives inherent to the compositional nature of metagenomic sequencing data, we implement a consensus network approach inspired by the **OneNet-mean** framework. We combine three distinct mathematical network inference methodologies: 1. **SpiecEasi (MB)**: Neighborhood selection based on the Meinshausen-Bühlmann framework. 2. **SpiecEasi (Glasso)**: Global covariance matrix inversion using Graphical Lasso. 3. **SparCC**: Correlation modeling explicitly tailored for high-dimensional compositional count data.</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>An interaction (edge) is validated in the final consensus network if it is independently confirmed by at least 2 out of the 3 methods (majority vote threshold $\ge 0.66$).</span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>The baseline <span class="in">`phyloseq`</span> object used throughout this pipeline is named <span class="in">`metagenomics`</span> and is automatically loaded via the Quarto preliminary inclusion file.</span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.1 Installation</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>Before running the network analysis, you must install the <span class="in">`SpiecEasi`</span> package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using <span class="in">`devtools`</span>. </span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>Please run the following code in your R console:</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: install-spieceasi</span></span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Install devtools if it isn't already on your computer</span></span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
+<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Download and install SpiecEasi from its official GitHub repository</span></span>
+<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"zdk123/SpiecEasi"</span>)</span>
+<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Mathematical Foundations of Consensus Network Inference</span></span>
+<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a>Before detailing the algorithms, it is critical to address the **compositional data problem**. Metagenomic sequencing yields relative abundances (proportions constrained to a sum of 1), not absolute cell counts. Applying standard Pearson or Spearman correlations directly to such data produces spurious correlations. To mitigate this, both SPIEC-EASI algorithms first apply a **Centered Log-Ratio (CLR)** transformation to the abundance vector $x$:</span>
+<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>$$z_i = \log\left(\frac{x_i}{g(x)}\right)$$</span>
+<span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a>*(where* $g(x)$ represents the geometric mean of all taxa abundances).</span>
+<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1. SpiecEasi (MB): Meinshausen-Bühlmann Neighborhood Selection</span></span>
+<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a>**The Concept:** Instead of calculating the global network covariance at once, the MB method treats network inference as a set of separate supervised machine-learning problems. For each taxon, it performs a regression to predict its CLR-abundance using the abundances of all other taxa.</span>
+<span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-82"><a href="#cb27-82" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** For a specific node $j$, the algorithm solves a sparse linear regression using the Lasso ($L_1$) penalty to identify which other nodes ($\setminus j$) best predict its variance. The objective function minimized is:</span>
+<span id="cb27-83"><a href="#cb27-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-84"><a href="#cb27-84" aria-hidden="true" tabindex="-1"></a>$$\min_{\beta_j} \left( \frac{1}{2n} <span class="sc">\|</span> z_j - Z_{\setminus j} \beta_j <span class="sc">\|</span>^2_2 + \lambda <span class="sc">\|</span> \beta_j <span class="sc">\|</span>_1 \right)$$</span>
+<span id="cb27-85"><a href="#cb27-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-86"><a href="#cb27-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.</span>
+<span id="cb27-87"><a href="#cb27-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_{\setminus j}$ is the matrix of all other taxa.</span>
+<span id="cb27-88"><a href="#cb27-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\beta_j$ is the coefficient vector (the edge weights).</span>
+<span id="cb27-89"><a href="#cb27-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\lambda <span class="sc">\|</span> \beta_j <span class="sc">\|</span>_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.</span>
+<span id="cb27-90"><a href="#cb27-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-91"><a href="#cb27-91" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** An undirected edge is drawn between node $i$ and node $j$ if either $\beta_{j}^{(i)} \neq 0$ or $\beta_{i}^{(j)} \neq 0$.</span>
+<span id="cb27-92"><a href="#cb27-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-93"><a href="#cb27-93" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb27-94"><a href="#cb27-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-95"><a href="#cb27-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2. SpiecEasi (Glasso): Graphical Lasso</span></span>
+<span id="cb27-96"><a href="#cb27-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-97"><a href="#cb27-97" aria-hidden="true" tabindex="-1"></a>**The Concept:** Glasso utilizes a global estimation approach. Assuming a multivariate normal distribution of the CLR-transformed data, two variables are conditionally independent (i.e., no edge exists between them) if their corresponding entry in the **precision matrix** (the inverse of the covariance matrix) is exactly zero. Glasso estimates this sparse precision matrix directly.</span>
+<span id="cb27-98"><a href="#cb27-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-99"><a href="#cb27-99" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** Let $S$ be the empirical covariance matrix of the CLR-transformed data $Z$. Glasso seeks the precision matrix $\Theta$ (where $\Theta = \Sigma^{-1}$) that maximizes the penalized log-likelihood of the data:</span>
+<span id="cb27-100"><a href="#cb27-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-101"><a href="#cb27-101" aria-hidden="true" tabindex="-1"></a>$$\min_{\Theta \succ 0} \left( \text{tr}(S\Theta) - \log(\det(\Theta)) + \lambda <span class="sc">\|</span> \Theta <span class="sc">\|</span>_1 \right)$$</span>
+<span id="cb27-102"><a href="#cb27-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-103"><a href="#cb27-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.</span>
+<span id="cb27-104"><a href="#cb27-104" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\lambda <span class="sc">\|</span> \Theta <span class="sc">\|</span>_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.</span>
+<span id="cb27-105"><a href="#cb27-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-106"><a href="#cb27-106" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** An undirected edge is retained between node $i$ and node $j$ if the estimated entry in the precision matrix satisfies $\Theta_{ij} \neq 0$.</span>
+<span id="cb27-107"><a href="#cb27-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-108"><a href="#cb27-108" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb27-109"><a href="#cb27-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-110"><a href="#cb27-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3. SparCC: Sparse Correlations for Compositional Data</span></span>
+<span id="cb27-111"><a href="#cb27-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-112"><a href="#cb27-112" aria-hidden="true" tabindex="-1"></a>**The Concept:** Unlike SPIEC-EASI, SparCC bypasses the CLR transformation. Instead, it relies on the variance of log-ratios between pairs of taxa. It operates under the assumption that the true underlying microbial network is sparse (most taxa do not biologically interact) and leverages this assumption to approximate the true linear correlation from the compositional data.</span>
+<span id="cb27-113"><a href="#cb27-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-114"><a href="#cb27-114" aria-hidden="true" tabindex="-1"></a>**The Mathematics:** Let $t_{ij}$ denote the variance of the log-ratio of the compositional abundances of taxa $i$ and $j$:</span>
+<span id="cb27-115"><a href="#cb27-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-116"><a href="#cb27-116" aria-hidden="true" tabindex="-1"></a>$$t_{ij} = \text{Var}\left(\log\left(\frac{x_i}{x_j}\right)\right)$$</span>
+<span id="cb27-117"><a href="#cb27-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-118"><a href="#cb27-118" aria-hidden="true" tabindex="-1"></a>According to the laws of variance, this metric relates to the true (unknown) absolute abundances $\omega_i$ and $\omega_j$, and their true correlation coefficient $\rho_{ij}$:</span>
+<span id="cb27-119"><a href="#cb27-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-120"><a href="#cb27-120" aria-hidden="true" tabindex="-1"></a>$$t_{ij} = \text{Var}(\log \omega_i) + \text{Var}(\log \omega_j) - 2 \rho_{ij} \sqrt{\text{Var}(\log \omega_i)\text{Var}(\log \omega_j)}$$</span>
+<span id="cb27-121"><a href="#cb27-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-122"><a href="#cb27-122" aria-hidden="true" tabindex="-1"></a>Because this system has more unknowns ($\rho_{ij}$ and the basis variances) than equations, it is underdetermined. SparCC approximates a solution iteratively by enforcing the sparsity assumption:</span>
+<span id="cb27-123"><a href="#cb27-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-124"><a href="#cb27-124" aria-hidden="true" tabindex="-1"></a>$$\sum_{j \neq i} \rho_{ij} \approx 0$$</span>
+<span id="cb27-125"><a href="#cb27-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-126"><a href="#cb27-126" aria-hidden="true" tabindex="-1"></a>**Edge Generation:** SparCC outputs a correlation matrix. In this pipeline, an edge is established if the absolute value of the SparCC correlation coefficient exceeds a predefined threshold: $|\rho_{ij}| \geq 0.4$.</span>
+<span id="cb27-127"><a href="#cb27-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-128"><a href="#cb27-128" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb27-129"><a href="#cb27-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-130"><a href="#cb27-130" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.4. The Consensus Framework (OneNet-Mean)</span></span>
+<span id="cb27-131"><a href="#cb27-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-132"><a href="#cb27-132" aria-hidden="true" tabindex="-1"></a>Once the three independent methodologies compute their respective unweighted adjacency matrices ($A^{MB}, A^{Glasso}, A^{SparCC}$ where edges $= 1$ and non-edges $= 0$), the pipeline calculates the arithmetic mean for every possible edge across the three models:</span>
+<span id="cb27-133"><a href="#cb27-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-134"><a href="#cb27-134" aria-hidden="true" tabindex="-1"></a>$$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$</span>
+<span id="cb27-135"><a href="#cb27-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-136"><a href="#cb27-136" aria-hidden="true" tabindex="-1"></a>To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} &lt; 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.</span>
+<span id="cb27-137"><a href="#cb27-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-138"><a href="#cb27-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-139"><a href="#cb27-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-142"><a href="#cb27-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-143"><a href="#cb27-143" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb27-144"><a href="#cb27-144" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb27-145"><a href="#cb27-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-146"><a href="#cb27-146" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading necessary network and data manipulation libraries</span></span>
-<span id="cb27-147"><a href="#cb27-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-148"><a href="#cb27-148" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SpiecEasi)</span>
-<span id="cb27-149"><a href="#cb27-149" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
-<span id="cb27-150"><a href="#cb27-150" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb27-151"><a href="#cb27-151" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb27-152"><a href="#cb27-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-153"><a href="#cb27-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting unique disease cohorts from the included dataset</span></span>
-<span id="cb27-154"><a href="#cb27-154" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample_data</span>(metagenomics)<span class="sc">$</span>disease)</span>
-<span id="cb27-155"><a href="#cb27-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-156"><a href="#cb27-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-159"><a href="#cb27-159" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-160"><a href="#cb27-160" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: core-functions</span></span>
-<span id="cb27-161"><a href="#cb27-161" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb27-162"><a href="#cb27-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-163"><a href="#cb27-163" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to build the multi-method consensus network</span></span>
-<span id="cb27-164"><a href="#cb27-164" aria-hidden="true" tabindex="-1"></a>build_consensus_network <span class="ot">&lt;-</span> <span class="cf">function</span>(ps_obj, group_name, group_var, tax_level, prevalence_threshold) {</span>
-<span id="cb27-165"><a href="#cb27-165" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-166"><a href="#cb27-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  -&gt; Inferring sub-network for group:"</span>, group_name, <span class="st">"...</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb27-167"><a href="#cb27-167" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-168"><a href="#cb27-168" aria-hidden="true" tabindex="-1"></a>  <span class="co"># A. Subsampling and phylogenetic taxonomic agglomeration</span></span>
-<span id="cb27-169"><a href="#cb27-169" aria-hidden="true" tabindex="-1"></a>  sdata <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(ps_obj)</span>
-<span id="cb27-170"><a href="#cb27-170" aria-hidden="true" tabindex="-1"></a>  ps_sub <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(sdata[[group_var]] <span class="sc">==</span> group_name, ps_obj)</span>
-<span id="cb27-171"><a href="#cb27-171" aria-hidden="true" tabindex="-1"></a>  ps_tax <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(ps_sub, <span class="at">taxrank =</span> tax_level)</span>
-<span id="cb27-172"><a href="#cb27-172" aria-hidden="true" tabindex="-1"></a>  ps_tax <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(<span class="fu">taxa_sums</span>(ps_tax) <span class="sc">&gt;</span> <span class="dv">0</span>, ps_tax)</span>
-<span id="cb27-173"><a href="#cb27-173" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-174"><a href="#cb27-174" aria-hidden="true" tabindex="-1"></a>  <span class="co"># B. Count matrix extraction and orientation</span></span>
-<span id="cb27-175"><a href="#cb27-175" aria-hidden="true" tabindex="-1"></a>  otu <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">otu_table</span>(ps_tax), <span class="st">"matrix"</span>)</span>
-<span id="cb27-176"><a href="#cb27-176" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">taxa_are_rows</span>(ps_tax)) otu <span class="ot">&lt;-</span> <span class="fu">t</span>(otu)</span>
-<span id="cb27-177"><a href="#cb27-177" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-178"><a href="#cb27-178" aria-hidden="true" tabindex="-1"></a>  <span class="co"># C. Prevalence filtering to control zero-inflation noise</span></span>
-<span id="cb27-179"><a href="#cb27-179" aria-hidden="true" tabindex="-1"></a>  prevalence <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(otu <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb27-180"><a href="#cb27-180" aria-hidden="true" tabindex="-1"></a>  otu_filt <span class="ot">&lt;-</span> otu[prevalence <span class="sc">&gt;=</span> prevalence_threshold, ]</span>
-<span id="cb27-181"><a href="#cb27-181" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-182"><a href="#cb27-182" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(otu_filt) <span class="sc">&lt;</span> <span class="dv">3</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb27-183"><a href="#cb27-183" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-184"><a href="#cb27-184" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transposition: SpiecEasi and SparCC require samples in rows (n x p)</span></span>
-<span id="cb27-185"><a href="#cb27-185" aria-hidden="true" tabindex="-1"></a>  otu_input <span class="ot">&lt;-</span> <span class="fu">t</span>(otu_filt)</span>
-<span id="cb27-186"><a href="#cb27-186" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-187"><a href="#cb27-187" aria-hidden="true" tabindex="-1"></a>  <span class="co"># D. Sequential execution of inference algorithms (Silent Mode)</span></span>
-<span id="cb27-188"><a href="#cb27-188" aria-hidden="true" tabindex="-1"></a>  se_mb <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">spiec.easi</span>(otu_input, <span class="at">method =</span> <span class="st">'mb'</span>, <span class="at">lambda.min.ratio =</span> <span class="fl">1e-2</span>, <span class="at">nlambda =</span> <span class="dv">20</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">20</span>)))</span>
-<span id="cb27-189"><a href="#cb27-189" aria-hidden="true" tabindex="-1"></a>  se_gl <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">spiec.easi</span>(otu_input, <span class="at">method =</span> <span class="st">'glasso'</span>, <span class="at">lambda.min.ratio =</span> <span class="fl">1e-2</span>, <span class="at">nlambda =</span> <span class="dv">20</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">20</span>)))</span>
-<span id="cb27-190"><a href="#cb27-190" aria-hidden="true" tabindex="-1"></a>  sparcc_res <span class="ot">&lt;-</span> <span class="fu">sparcc</span>(otu_input)</span>
-<span id="cb27-191"><a href="#cb27-191" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-192"><a href="#cb27-192" aria-hidden="true" tabindex="-1"></a>  <span class="co"># E. Adjacency matrix extraction and binarization</span></span>
-<span id="cb27-193"><a href="#cb27-193" aria-hidden="true" tabindex="-1"></a>  adj_mb <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">getRefit</span>(se_mb))</span>
-<span id="cb27-194"><a href="#cb27-194" aria-hidden="true" tabindex="-1"></a>  adj_gl <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">getRefit</span>(se_gl))</span>
-<span id="cb27-195"><a href="#cb27-195" aria-hidden="true" tabindex="-1"></a>  adj_sparcc <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">abs</span>(sparcc_res<span class="sc">$</span>Cor) <span class="sc">&gt;=</span> <span class="fl">0.4</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb27-196"><a href="#cb27-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diag</span>(adj_sparcc) <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># Removing self-loops</span></span>
-<span id="cb27-197"><a href="#cb27-197" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-198"><a href="#cb27-198" aria-hidden="true" tabindex="-1"></a>  <span class="co"># F. Computing Majority Vote Consensus (OneNet-Mean)</span></span>
-<span id="cb27-199"><a href="#cb27-199" aria-hidden="true" tabindex="-1"></a>  adj_mean <span class="ot">&lt;-</span> (adj_mb <span class="sc">+</span> adj_gl <span class="sc">+</span> adj_sparcc) <span class="sc">/</span> <span class="dv">3</span></span>
-<span id="cb27-200"><a href="#cb27-200" aria-hidden="true" tabindex="-1"></a>  adj_consensus <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(adj_mean <span class="sc">&gt;=</span> <span class="fl">0.66</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb27-201"><a href="#cb27-201" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-202"><a href="#cb27-202" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Retaining weights only for consensus-validated edges</span></span>
-<span id="cb27-203"><a href="#cb27-203" aria-hidden="true" tabindex="-1"></a>  adj_weighted <span class="ot">&lt;-</span> adj_mean</span>
-<span id="cb27-204"><a href="#cb27-204" aria-hidden="true" tabindex="-1"></a>  adj_weighted[adj_consensus <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb27-205"><a href="#cb27-205" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-206"><a href="#cb27-206" aria-hidden="true" tabindex="-1"></a>  <span class="co"># G. Creating a weighted, undirected igraph object</span></span>
-<span id="cb27-207"><a href="#cb27-207" aria-hidden="true" tabindex="-1"></a>  net <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(adj_weighted, <span class="at">mode =</span> <span class="st">"undirected"</span>, <span class="at">weighted =</span> <span class="cn">TRUE</span>, <span class="at">diag =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb27-208"><a href="#cb27-208" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-209"><a href="#cb27-209" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping formal taxonomy to node names</span></span>
-<span id="cb27-210"><a href="#cb27-210" aria-hidden="true" tabindex="-1"></a>  tax_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps_tax))</span>
-<span id="cb27-211"><a href="#cb27-211" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(net)<span class="sc">$</span>name  <span class="ot">&lt;-</span> tax_info[<span class="fu">rownames</span>(otu_filt), tax_level]</span>
-<span id="cb27-212"><a href="#cb27-212" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(net)<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">V</span>(net)<span class="sc">$</span>name</span>
-<span id="cb27-213"><a href="#cb27-213" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-214"><a href="#cb27-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(net)</span>
-<span id="cb27-215"><a href="#cb27-215" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-216"><a href="#cb27-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-217"><a href="#cb27-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to compile and summarize topological metrics</span></span>
-<span id="cb27-218"><a href="#cb27-218" aria-hidden="true" tabindex="-1"></a>print_network_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level) {</span>
-<span id="cb27-219"><a href="#cb27-219" aria-hidden="true" tabindex="-1"></a>  stats_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(network_list), <span class="cf">function</span>(g) {</span>
-<span id="cb27-220"><a href="#cb27-220" aria-hidden="true" tabindex="-1"></a>    net <span class="ot">&lt;-</span> network_list[[g]]</span>
-<span id="cb27-221"><a href="#cb27-221" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">is.null</span>(net)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb27-222"><a href="#cb27-222" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb27-223"><a href="#cb27-223" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb27-224"><a href="#cb27-224" aria-hidden="true" tabindex="-1"></a>      <span class="at">Tax_Level       =</span> tax_level,</span>
-<span id="cb27-225"><a href="#cb27-225" aria-hidden="true" tabindex="-1"></a>      <span class="at">Disease_Cohort  =</span> g,</span>
-<span id="cb27-226"><a href="#cb27-226" aria-hidden="true" tabindex="-1"></a>      <span class="at">Nodes_Count     =</span> <span class="fu">vcount</span>(net),</span>
-<span id="cb27-227"><a href="#cb27-227" aria-hidden="true" tabindex="-1"></a>      <span class="at">Edges_Count     =</span> <span class="fu">ecount</span>(net),</span>
-<span id="cb27-228"><a href="#cb27-228" aria-hidden="true" tabindex="-1"></a>      <span class="at">Graph_Density   =</span> <span class="fu">round</span>(<span class="fu">edge_density</span>(net), <span class="dv">3</span>),</span>
-<span id="cb27-229"><a href="#cb27-229" aria-hidden="true" tabindex="-1"></a>      <span class="at">Average_Degree  =</span> <span class="fu">round</span>(<span class="fu">mean</span>(<span class="fu">degree</span>(net)), <span class="dv">2</span>)</span>
-<span id="cb27-230"><a href="#cb27-230" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb27-231"><a href="#cb27-231" aria-hidden="true" tabindex="-1"></a>  }))</span>
-<span id="cb27-232"><a href="#cb27-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(stats_df)</span>
-<span id="cb27-233"><a href="#cb27-233" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-234"><a href="#cb27-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-235"><a href="#cb27-235" aria-hidden="true" tabindex="-1"></a><span class="co"># Fonction mise à jour : Génère le graphe, l'affiche, et le retourne</span></span>
-<span id="cb27-236"><a href="#cb27-236" aria-hidden="true" tabindex="-1"></a>plot_global_network <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level) {</span>
-<span id="cb27-237"><a href="#cb27-237" aria-hidden="true" tabindex="-1"></a>  all_edges <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb27-238"><a href="#cb27-238" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-239"><a href="#cb27-239" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compiling edge lists across all individual sub-networks</span></span>
-<span id="cb27-240"><a href="#cb27-240" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="fu">names</span>(network_list)) {</span>
-<span id="cb27-241"><a href="#cb27-241" aria-hidden="true" tabindex="-1"></a>    net <span class="ot">&lt;-</span> network_list[[g]]</span>
-<span id="cb27-242"><a href="#cb27-242" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(net) <span class="sc">&amp;&amp;</span> <span class="fu">ecount</span>(net) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb27-243"><a href="#cb27-243" aria-hidden="true" tabindex="-1"></a>      edgelist <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">as_data_frame</span>(net, <span class="at">what =</span> <span class="st">"edges"</span>)</span>
-<span id="cb27-244"><a href="#cb27-244" aria-hidden="true" tabindex="-1"></a>      edgelist<span class="sc">$</span>Disease <span class="ot">&lt;-</span> g</span>
-<span id="cb27-245"><a href="#cb27-245" aria-hidden="true" tabindex="-1"></a>      all_edges <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_edges, edgelist)</span>
-<span id="cb27-246"><a href="#cb27-246" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb27-247"><a href="#cb27-247" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb27-248"><a href="#cb27-248" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-249"><a href="#cb27-249" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(all_edges) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb27-250"><a href="#cb27-250" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-251"><a href="#cb27-251" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Instantiating the master multi-edge graph</span></span>
-<span id="cb27-252"><a href="#cb27-252" aria-hidden="true" tabindex="-1"></a>  master_net <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(all_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb27-253"><a href="#cb27-253" aria-hidden="true" tabindex="-1"></a>  master_net <span class="ot">&lt;-</span> <span class="fu">delete.vertices</span>(master_net, <span class="fu">degree</span>(master_net) <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># Pruning isolated nodes</span></span>
-<span id="cb27-254"><a href="#cb27-254" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-255"><a href="#cb27-255" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping disease-specific color codes</span></span>
-<span id="cb27-256"><a href="#cb27-256" aria-hidden="true" tabindex="-1"></a>  unique_diseases <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">E</span>(master_net)<span class="sc">$</span>Disease)</span>
-<span id="cb27-257"><a href="#cb27-257" aria-hidden="true" tabindex="-1"></a>  color_palette <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">viridis</span>(<span class="fu">length</span>(unique_diseases), <span class="at">option =</span> <span class="st">"cividis"</span>), unique_diseases)</span>
-<span id="cb27-258"><a href="#cb27-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">E</span>(master_net)<span class="sc">$</span>color <span class="ot">&lt;-</span> color_palette[<span class="fu">E</span>(master_net)<span class="sc">$</span>Disease]</span>
-<span id="cb27-259"><a href="#cb27-259" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-260"><a href="#cb27-260" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Computing geometric curvatures for parallel shared edges</span></span>
-<span id="cb27-261"><a href="#cb27-261" aria-hidden="true" tabindex="-1"></a>  edge_curvatures <span class="ot">&lt;-</span> <span class="fu">curve_multiple</span>(master_net)</span>
-<span id="cb27-262"><a href="#cb27-262" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-263"><a href="#cb27-263" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Adaptive sizing based on taxonomic rank resolution</span></span>
-<span id="cb27-264"><a href="#cb27-264" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(tax_level <span class="sc">==</span> <span class="st">"Phylum"</span>) { v_size <span class="ot">&lt;-</span> <span class="dv">8</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.7</span> }</span>
-<span id="cb27-265"><a href="#cb27-265" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(tax_level <span class="sc">==</span> <span class="st">"Family"</span>) { v_size <span class="ot">&lt;-</span> <span class="dv">5</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.6</span> }</span>
-<span id="cb27-266"><a href="#cb27-266" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> { v_size <span class="ot">&lt;-</span> <span class="dv">3</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.45</span> }</span>
-<span id="cb27-267"><a href="#cb27-267" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-268"><a href="#cb27-268" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering (L'affichage en direct)</span></span>
-<span id="cb27-269"><a href="#cb27-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
-<span id="cb27-270"><a href="#cb27-270" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
-<span id="cb27-271"><a href="#cb27-271" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
-<span id="cb27-272"><a href="#cb27-272" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
-<span id="cb27-273"><a href="#cb27-273" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
-<span id="cb27-274"><a href="#cb27-274" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-275"><a href="#cb27-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
-<span id="cb27-276"><a href="#cb27-276" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
-<span id="cb27-277"><a href="#cb27-277" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-278"><a href="#cb27-278" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
-<span id="cb27-279"><a href="#cb27-279" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-280"><a href="#cb27-280" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering</span></span>
-<span id="cb27-281"><a href="#cb27-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
-<span id="cb27-282"><a href="#cb27-282" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
-<span id="cb27-283"><a href="#cb27-283" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
-<span id="cb27-284"><a href="#cb27-284" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
-<span id="cb27-285"><a href="#cb27-285" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
-<span id="cb27-286"><a href="#cb27-286" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
-<span id="cb27-287"><a href="#cb27-287" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
-<span id="cb27-288"><a href="#cb27-288" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-289"><a href="#cb27-289" aria-hidden="true" tabindex="-1"></a>  <span class="co"># L'Étape clé : On retourne l'objet mathématique du réseau !</span></span>
-<span id="cb27-290"><a href="#cb27-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(master_net)</span>
-<span id="cb27-291"><a href="#cb27-291" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-292"><a href="#cb27-292" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-293"><a href="#cb27-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-294"><a href="#cb27-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Phylum Level Analysis (Macro-Ecology)</span></span>
-<span id="cb27-295"><a href="#cb27-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-298"><a href="#cb27-298" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-299"><a href="#cb27-299" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-phylum</span></span>
-<span id="cb27-300"><a href="#cb27-300" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb27-301"><a href="#cb27-301" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb27-302"><a href="#cb27-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 8</span></span>
-<span id="cb27-303"><a href="#cb27-303" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
-<span id="cb27-304"><a href="#cb27-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-305"><a href="#cb27-305" aria-hidden="true" tabindex="-1"></a>networks_phylum <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb27-306"><a href="#cb27-306" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb27-307"><a href="#cb27-307" aria-hidden="true" tabindex="-1"></a>  networks_phylum[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Phylum"</span>, <span class="fl">0.10</span>)</span>
-<span id="cb27-308"><a href="#cb27-308" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-309"><a href="#cb27-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-310"><a href="#cb27-310" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb27-311"><a href="#cb27-311" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_phylum, <span class="st">"Phylum"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Phylum Level"</span>)</span>
-<span id="cb27-312"><a href="#cb27-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-313"><a href="#cb27-313" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
-<span id="cb27-314"><a href="#cb27-314" aria-hidden="true" tabindex="-1"></a>Network_phylum <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_phylum, <span class="st">"Phylum"</span>)</span>
-<span id="cb27-315"><a href="#cb27-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-316"><a href="#cb27-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-317"><a href="#cb27-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-318"><a href="#cb27-318" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Phylum)</span></span>
-<span id="cb27-319"><a href="#cb27-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-320"><a href="#cb27-320" aria-hidden="true" tabindex="-1"></a>At the **Phylum** level, the global consensus network exhibits extremely low density and highly limited interactions. This layout exemplifies the concept of **functional redundancy** and the mathematical smoothing effect.</span>
-<span id="cb27-321"><a href="#cb27-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-322"><a href="#cb27-322" aria-hidden="true" tabindex="-1"></a>Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.</span>
-<span id="cb27-323"><a href="#cb27-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-324"><a href="#cb27-324" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Family Level Analysis (Meso-Ecology)</span></span>
-<span id="cb27-325"><a href="#cb27-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-328"><a href="#cb27-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-329"><a href="#cb27-329" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-family</span></span>
-<span id="cb27-330"><a href="#cb27-330" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb27-331"><a href="#cb27-331" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb27-332"><a href="#cb27-332" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb27-333"><a href="#cb27-333" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb27-334"><a href="#cb27-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-335"><a href="#cb27-335" aria-hidden="true" tabindex="-1"></a>networks_family <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb27-336"><a href="#cb27-336" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb27-337"><a href="#cb27-337" aria-hidden="true" tabindex="-1"></a>  networks_family[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Family"</span>, <span class="fl">0.15</span>)</span>
-<span id="cb27-338"><a href="#cb27-338" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-339"><a href="#cb27-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-340"><a href="#cb27-340" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb27-341"><a href="#cb27-341" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_family, <span class="st">"Family"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Family Level"</span>)</span>
-<span id="cb27-342"><a href="#cb27-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-343"><a href="#cb27-343" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
-<span id="cb27-344"><a href="#cb27-344" aria-hidden="true" tabindex="-1"></a>Network_family <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_family, <span class="st">"Family"</span>)</span>
-<span id="cb27-345"><a href="#cb27-345" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-346"><a href="#cb27-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-347"><a href="#cb27-347" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Family)</span></span>
-<span id="cb27-348"><a href="#cb27-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-349"><a href="#cb27-349" aria-hidden="true" tabindex="-1"></a>The **Family** level provides an ideal analytical sweet spot, revealing clear pathological restructuring and disease-specific modular guilds:</span>
-<span id="cb27-350"><a href="#cb27-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-351"><a href="#cb27-351" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.</span>
-<span id="cb27-352"><a href="#cb27-352" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.</span>
-<span id="cb27-353"><a href="#cb27-353" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).</span>
-<span id="cb27-354"><a href="#cb27-354" aria-hidden="true" tabindex="-1"></a><span class="ss">    -   </span>**The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.</span>
-<span id="cb27-355"><a href="#cb27-355" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.</span>
-<span id="cb27-356"><a href="#cb27-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-357"><a href="#cb27-357" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Genus Level Analysis (Micro-Ecology)</span></span>
-<span id="cb27-358"><a href="#cb27-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-361"><a href="#cb27-361" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-362"><a href="#cb27-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-genus</span></span>
-<span id="cb27-363"><a href="#cb27-363" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb27-364"><a href="#cb27-364" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb27-365"><a href="#cb27-365" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
-<span id="cb27-366"><a href="#cb27-366" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb27-367"><a href="#cb27-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-368"><a href="#cb27-368" aria-hidden="true" tabindex="-1"></a>networks_genus <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb27-369"><a href="#cb27-369" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
-<span id="cb27-370"><a href="#cb27-370" aria-hidden="true" tabindex="-1"></a>  networks_genus[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Genus"</span>, <span class="fl">0.20</span>)</span>
-<span id="cb27-371"><a href="#cb27-371" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-372"><a href="#cb27-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-373"><a href="#cb27-373" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
-<span id="cb27-374"><a href="#cb27-374" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
-<span id="cb27-375"><a href="#cb27-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-376"><a href="#cb27-376" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
-<span id="cb27-377"><a href="#cb27-377" aria-hidden="true" tabindex="-1"></a>Network_genre <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span>
-<span id="cb27-378"><a href="#cb27-378" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-379"><a href="#cb27-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-382"><a href="#cb27-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-383"><a href="#cb27-383" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb27-384"><a href="#cb27-384" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genre, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span>
-<span id="cb27-385"><a href="#cb27-385" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb27-386"><a href="#cb27-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-387"><a href="#cb27-387" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genre)</span></span>
-<span id="cb27-388"><a href="#cb27-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-389"><a href="#cb27-389" aria-hidden="true" tabindex="-1"></a>At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).</span>
-<span id="cb27-390"><a href="#cb27-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-391"><a href="#cb27-391" aria-hidden="true" tabindex="-1"></a>At this scale, data sparse properties significantly expand due to **zero-inflation** (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to **20%** effectively trims down background noise and isolates true **Microbial Hubs** (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.</span>
-<span id="cb27-392"><a href="#cb27-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-393"><a href="#cb27-393" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. General Conclusion</span></span>
-<span id="cb27-394"><a href="#cb27-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-395"><a href="#cb27-395" aria-hidden="true" tabindex="-1"></a>This study demonstrates the immense value of using a consensus-based network inference approach to decode the complex dynamics of the gut microbiome across different chronic diseases. By combining neighborhood selection (MB), global precision matrix estimation (Glasso), and compositional correlation modeling (SparCC), we successfully mitigated the inherent statistical biases of metagenomic data, yielding highly robust and biologically relevant microbial interaction networks.</span>
-<span id="cb27-396"><a href="#cb27-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-397"><a href="#cb27-397" aria-hidden="true" tabindex="-1"></a>The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Etiological Guilds:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).</span>
-<span id="cb27-398"><a href="#cb27-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-399"><a href="#cb27-399" aria-hidden="true" tabindex="-1"></a>Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.</span>
-<span id="cb27-400"><a href="#cb27-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-401"><a href="#cb27-401" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
-<span id="cb27-402"><a href="#cb27-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-405"><a href="#cb27-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb27-406"><a href="#cb27-406" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
-<span id="cb27-407"><a href="#cb27-407" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-141"><a href="#cb27-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-142"><a href="#cb27-142" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb27-143"><a href="#cb27-143" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb27-144"><a href="#cb27-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-145"><a href="#cb27-145" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading necessary network and data manipulation libraries</span></span>
+<span id="cb27-146"><a href="#cb27-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-147"><a href="#cb27-147" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SpiecEasi)</span>
+<span id="cb27-148"><a href="#cb27-148" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb27-149"><a href="#cb27-149" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb27-150"><a href="#cb27-150" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb27-151"><a href="#cb27-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-152"><a href="#cb27-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting unique disease cohorts from the included dataset</span></span>
+<span id="cb27-153"><a href="#cb27-153" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample_data</span>(metagenomics)<span class="sc">$</span>disease)</span>
+<span id="cb27-154"><a href="#cb27-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-155"><a href="#cb27-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-158"><a href="#cb27-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-159"><a href="#cb27-159" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: core-functions</span></span>
+<span id="cb27-160"><a href="#cb27-160" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb27-161"><a href="#cb27-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-162"><a href="#cb27-162" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to build the multi-method consensus network</span></span>
+<span id="cb27-163"><a href="#cb27-163" aria-hidden="true" tabindex="-1"></a>build_consensus_network <span class="ot">&lt;-</span> <span class="cf">function</span>(ps_obj, group_name, group_var, tax_level, prevalence_threshold) {</span>
+<span id="cb27-164"><a href="#cb27-164" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-165"><a href="#cb27-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  -&gt; Inferring sub-network for group:"</span>, group_name, <span class="st">"...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb27-166"><a href="#cb27-166" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-167"><a href="#cb27-167" aria-hidden="true" tabindex="-1"></a>  <span class="co"># A. Subsampling and phylogenetic taxonomic agglomeration</span></span>
+<span id="cb27-168"><a href="#cb27-168" aria-hidden="true" tabindex="-1"></a>  sdata <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(ps_obj)</span>
+<span id="cb27-169"><a href="#cb27-169" aria-hidden="true" tabindex="-1"></a>  ps_sub <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(sdata[[group_var]] <span class="sc">==</span> group_name, ps_obj)</span>
+<span id="cb27-170"><a href="#cb27-170" aria-hidden="true" tabindex="-1"></a>  ps_tax <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(ps_sub, <span class="at">taxrank =</span> tax_level)</span>
+<span id="cb27-171"><a href="#cb27-171" aria-hidden="true" tabindex="-1"></a>  ps_tax <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(<span class="fu">taxa_sums</span>(ps_tax) <span class="sc">&gt;</span> <span class="dv">0</span>, ps_tax)</span>
+<span id="cb27-172"><a href="#cb27-172" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-173"><a href="#cb27-173" aria-hidden="true" tabindex="-1"></a>  <span class="co"># B. Count matrix extraction and orientation</span></span>
+<span id="cb27-174"><a href="#cb27-174" aria-hidden="true" tabindex="-1"></a>  otu <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">otu_table</span>(ps_tax), <span class="st">"matrix"</span>)</span>
+<span id="cb27-175"><a href="#cb27-175" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">taxa_are_rows</span>(ps_tax)) otu <span class="ot">&lt;-</span> <span class="fu">t</span>(otu)</span>
+<span id="cb27-176"><a href="#cb27-176" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-177"><a href="#cb27-177" aria-hidden="true" tabindex="-1"></a>  <span class="co"># C. Prevalence filtering to control zero-inflation noise</span></span>
+<span id="cb27-178"><a href="#cb27-178" aria-hidden="true" tabindex="-1"></a>  prevalence <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(otu <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb27-179"><a href="#cb27-179" aria-hidden="true" tabindex="-1"></a>  otu_filt <span class="ot">&lt;-</span> otu[prevalence <span class="sc">&gt;=</span> prevalence_threshold, ]</span>
+<span id="cb27-180"><a href="#cb27-180" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-181"><a href="#cb27-181" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(otu_filt) <span class="sc">&lt;</span> <span class="dv">3</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb27-182"><a href="#cb27-182" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-183"><a href="#cb27-183" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transposition: SpiecEasi and SparCC require samples in rows (n x p)</span></span>
+<span id="cb27-184"><a href="#cb27-184" aria-hidden="true" tabindex="-1"></a>  otu_input <span class="ot">&lt;-</span> <span class="fu">t</span>(otu_filt)</span>
+<span id="cb27-185"><a href="#cb27-185" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-186"><a href="#cb27-186" aria-hidden="true" tabindex="-1"></a>  <span class="co"># D. Sequential execution of inference algorithms (Silent Mode)</span></span>
+<span id="cb27-187"><a href="#cb27-187" aria-hidden="true" tabindex="-1"></a>  se_mb <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">spiec.easi</span>(otu_input, <span class="at">method =</span> <span class="st">'mb'</span>, <span class="at">lambda.min.ratio =</span> <span class="fl">1e-2</span>, <span class="at">nlambda =</span> <span class="dv">20</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">20</span>)))</span>
+<span id="cb27-188"><a href="#cb27-188" aria-hidden="true" tabindex="-1"></a>  se_gl <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">spiec.easi</span>(otu_input, <span class="at">method =</span> <span class="st">'glasso'</span>, <span class="at">lambda.min.ratio =</span> <span class="fl">1e-2</span>, <span class="at">nlambda =</span> <span class="dv">20</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">20</span>)))</span>
+<span id="cb27-189"><a href="#cb27-189" aria-hidden="true" tabindex="-1"></a>  sparcc_res <span class="ot">&lt;-</span> <span class="fu">sparcc</span>(otu_input)</span>
+<span id="cb27-190"><a href="#cb27-190" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-191"><a href="#cb27-191" aria-hidden="true" tabindex="-1"></a>  <span class="co"># E. Adjacency matrix extraction and binarization</span></span>
+<span id="cb27-192"><a href="#cb27-192" aria-hidden="true" tabindex="-1"></a>  adj_mb <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">getRefit</span>(se_mb))</span>
+<span id="cb27-193"><a href="#cb27-193" aria-hidden="true" tabindex="-1"></a>  adj_gl <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">getRefit</span>(se_gl))</span>
+<span id="cb27-194"><a href="#cb27-194" aria-hidden="true" tabindex="-1"></a>  adj_sparcc <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">abs</span>(sparcc_res<span class="sc">$</span>Cor) <span class="sc">&gt;=</span> <span class="fl">0.4</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb27-195"><a href="#cb27-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diag</span>(adj_sparcc) <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># Removing self-loops</span></span>
+<span id="cb27-196"><a href="#cb27-196" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-197"><a href="#cb27-197" aria-hidden="true" tabindex="-1"></a>  <span class="co"># F. Computing Majority Vote Consensus (OneNet-Mean)</span></span>
+<span id="cb27-198"><a href="#cb27-198" aria-hidden="true" tabindex="-1"></a>  adj_mean <span class="ot">&lt;-</span> (adj_mb <span class="sc">+</span> adj_gl <span class="sc">+</span> adj_sparcc) <span class="sc">/</span> <span class="dv">3</span></span>
+<span id="cb27-199"><a href="#cb27-199" aria-hidden="true" tabindex="-1"></a>  adj_consensus <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(adj_mean <span class="sc">&gt;=</span> <span class="fl">0.66</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb27-200"><a href="#cb27-200" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-201"><a href="#cb27-201" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Retaining weights only for consensus-validated edges</span></span>
+<span id="cb27-202"><a href="#cb27-202" aria-hidden="true" tabindex="-1"></a>  adj_weighted <span class="ot">&lt;-</span> adj_mean</span>
+<span id="cb27-203"><a href="#cb27-203" aria-hidden="true" tabindex="-1"></a>  adj_weighted[adj_consensus <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb27-204"><a href="#cb27-204" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-205"><a href="#cb27-205" aria-hidden="true" tabindex="-1"></a>  <span class="co"># G. Creating a weighted, undirected igraph object</span></span>
+<span id="cb27-206"><a href="#cb27-206" aria-hidden="true" tabindex="-1"></a>  net <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(adj_weighted, <span class="at">mode =</span> <span class="st">"undirected"</span>, <span class="at">weighted =</span> <span class="cn">TRUE</span>, <span class="at">diag =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb27-207"><a href="#cb27-207" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-208"><a href="#cb27-208" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping formal taxonomy to node names</span></span>
+<span id="cb27-209"><a href="#cb27-209" aria-hidden="true" tabindex="-1"></a>  tax_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps_tax))</span>
+<span id="cb27-210"><a href="#cb27-210" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(net)<span class="sc">$</span>name  <span class="ot">&lt;-</span> tax_info[<span class="fu">rownames</span>(otu_filt), tax_level]</span>
+<span id="cb27-211"><a href="#cb27-211" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(net)<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">V</span>(net)<span class="sc">$</span>name</span>
+<span id="cb27-212"><a href="#cb27-212" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-213"><a href="#cb27-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(net)</span>
+<span id="cb27-214"><a href="#cb27-214" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-215"><a href="#cb27-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-216"><a href="#cb27-216" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to compile and summarize topological metrics</span></span>
+<span id="cb27-217"><a href="#cb27-217" aria-hidden="true" tabindex="-1"></a>print_network_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level) {</span>
+<span id="cb27-218"><a href="#cb27-218" aria-hidden="true" tabindex="-1"></a>  stats_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(network_list), <span class="cf">function</span>(g) {</span>
+<span id="cb27-219"><a href="#cb27-219" aria-hidden="true" tabindex="-1"></a>    net <span class="ot">&lt;-</span> network_list[[g]]</span>
+<span id="cb27-220"><a href="#cb27-220" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">is.null</span>(net)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb27-221"><a href="#cb27-221" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-222"><a href="#cb27-222" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb27-223"><a href="#cb27-223" aria-hidden="true" tabindex="-1"></a>      <span class="at">Tax_Level       =</span> tax_level,</span>
+<span id="cb27-224"><a href="#cb27-224" aria-hidden="true" tabindex="-1"></a>      <span class="at">Disease_Cohort  =</span> g,</span>
+<span id="cb27-225"><a href="#cb27-225" aria-hidden="true" tabindex="-1"></a>      <span class="at">Nodes_Count     =</span> <span class="fu">vcount</span>(net),</span>
+<span id="cb27-226"><a href="#cb27-226" aria-hidden="true" tabindex="-1"></a>      <span class="at">Edges_Count     =</span> <span class="fu">ecount</span>(net),</span>
+<span id="cb27-227"><a href="#cb27-227" aria-hidden="true" tabindex="-1"></a>      <span class="at">Graph_Density   =</span> <span class="fu">round</span>(<span class="fu">edge_density</span>(net), <span class="dv">3</span>),</span>
+<span id="cb27-228"><a href="#cb27-228" aria-hidden="true" tabindex="-1"></a>      <span class="at">Average_Degree  =</span> <span class="fu">round</span>(<span class="fu">mean</span>(<span class="fu">degree</span>(net)), <span class="dv">2</span>)</span>
+<span id="cb27-229"><a href="#cb27-229" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-230"><a href="#cb27-230" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb27-231"><a href="#cb27-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(stats_df)</span>
+<span id="cb27-232"><a href="#cb27-232" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-233"><a href="#cb27-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-234"><a href="#cb27-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Fonction mise à jour : Génère le graphe, l'affiche, et le retourne</span></span>
+<span id="cb27-235"><a href="#cb27-235" aria-hidden="true" tabindex="-1"></a>plot_global_network <span class="ot">&lt;-</span> <span class="cf">function</span>(network_list, tax_level) {</span>
+<span id="cb27-236"><a href="#cb27-236" aria-hidden="true" tabindex="-1"></a>  all_edges <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb27-237"><a href="#cb27-237" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-238"><a href="#cb27-238" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compiling edge lists across all individual sub-networks</span></span>
+<span id="cb27-239"><a href="#cb27-239" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="fu">names</span>(network_list)) {</span>
+<span id="cb27-240"><a href="#cb27-240" aria-hidden="true" tabindex="-1"></a>    net <span class="ot">&lt;-</span> network_list[[g]]</span>
+<span id="cb27-241"><a href="#cb27-241" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(net) <span class="sc">&amp;&amp;</span> <span class="fu">ecount</span>(net) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb27-242"><a href="#cb27-242" aria-hidden="true" tabindex="-1"></a>      edgelist <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">as_data_frame</span>(net, <span class="at">what =</span> <span class="st">"edges"</span>)</span>
+<span id="cb27-243"><a href="#cb27-243" aria-hidden="true" tabindex="-1"></a>      edgelist<span class="sc">$</span>Disease <span class="ot">&lt;-</span> g</span>
+<span id="cb27-244"><a href="#cb27-244" aria-hidden="true" tabindex="-1"></a>      all_edges <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_edges, edgelist)</span>
+<span id="cb27-245"><a href="#cb27-245" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb27-246"><a href="#cb27-246" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-247"><a href="#cb27-247" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-248"><a href="#cb27-248" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(all_edges) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb27-249"><a href="#cb27-249" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-250"><a href="#cb27-250" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Instantiating the master multi-edge graph</span></span>
+<span id="cb27-251"><a href="#cb27-251" aria-hidden="true" tabindex="-1"></a>  master_net <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(all_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb27-252"><a href="#cb27-252" aria-hidden="true" tabindex="-1"></a>  master_net <span class="ot">&lt;-</span> <span class="fu">delete.vertices</span>(master_net, <span class="fu">degree</span>(master_net) <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># Pruning isolated nodes</span></span>
+<span id="cb27-253"><a href="#cb27-253" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-254"><a href="#cb27-254" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping disease-specific color codes</span></span>
+<span id="cb27-255"><a href="#cb27-255" aria-hidden="true" tabindex="-1"></a>  unique_diseases <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">E</span>(master_net)<span class="sc">$</span>Disease)</span>
+<span id="cb27-256"><a href="#cb27-256" aria-hidden="true" tabindex="-1"></a>  color_palette <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">viridis</span>(<span class="fu">length</span>(unique_diseases), <span class="at">option =</span> <span class="st">"cividis"</span>), unique_diseases)</span>
+<span id="cb27-257"><a href="#cb27-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">E</span>(master_net)<span class="sc">$</span>color <span class="ot">&lt;-</span> color_palette[<span class="fu">E</span>(master_net)<span class="sc">$</span>Disease]</span>
+<span id="cb27-258"><a href="#cb27-258" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-259"><a href="#cb27-259" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Computing geometric curvatures for parallel shared edges</span></span>
+<span id="cb27-260"><a href="#cb27-260" aria-hidden="true" tabindex="-1"></a>  edge_curvatures <span class="ot">&lt;-</span> <span class="fu">curve_multiple</span>(master_net)</span>
+<span id="cb27-261"><a href="#cb27-261" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-262"><a href="#cb27-262" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Adaptive sizing based on taxonomic rank resolution</span></span>
+<span id="cb27-263"><a href="#cb27-263" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(tax_level <span class="sc">==</span> <span class="st">"Phylum"</span>) { v_size <span class="ot">&lt;-</span> <span class="dv">8</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.7</span> }</span>
+<span id="cb27-264"><a href="#cb27-264" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(tax_level <span class="sc">==</span> <span class="st">"Family"</span>) { v_size <span class="ot">&lt;-</span> <span class="dv">5</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.6</span> }</span>
+<span id="cb27-265"><a href="#cb27-265" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> { v_size <span class="ot">&lt;-</span> <span class="dv">3</span>; v_cex <span class="ot">&lt;-</span> <span class="fl">0.45</span> }</span>
+<span id="cb27-266"><a href="#cb27-266" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-267"><a href="#cb27-267" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering (L'affichage en direct)</span></span>
+<span id="cb27-268"><a href="#cb27-268" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
+<span id="cb27-269"><a href="#cb27-269" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
+<span id="cb27-270"><a href="#cb27-270" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
+<span id="cb27-271"><a href="#cb27-271" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
+<span id="cb27-272"><a href="#cb27-272" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
+<span id="cb27-273"><a href="#cb27-273" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-274"><a href="#cb27-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
+<span id="cb27-275"><a href="#cb27-275" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
+<span id="cb27-276"><a href="#cb27-276" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-277"><a href="#cb27-277" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()</span>
+<span id="cb27-278"><a href="#cb27-278" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-279"><a href="#cb27-279" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Inline HTML Quarto Report Rendering</span></span>
+<span id="cb27-280"><a href="#cb27-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(master_net, <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(master_net), <span class="at">vertex.size =</span> v_size,</span>
+<span id="cb27-281"><a href="#cb27-281" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">"grey90"</span>, <span class="at">vertex.frame.color =</span> <span class="st">"white"</span>,</span>
+<span id="cb27-282"><a href="#cb27-282" aria-hidden="true" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">"black"</span>, <span class="at">vertex.label.cex =</span> v_cex,</span>
+<span id="cb27-283"><a href="#cb27-283" aria-hidden="true" tabindex="-1"></a>       <span class="at">edge.color =</span> <span class="fu">E</span>(master_net)<span class="sc">$</span>color, <span class="at">edge.width =</span> <span class="fl">1.5</span>, <span class="at">edge.curved =</span> edge_curvatures,</span>
+<span id="cb27-284"><a href="#cb27-284" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Global Consensus Multi-Disease Network -"</span>, tax_level))</span>
+<span id="cb27-285"><a href="#cb27-285" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">title =</span> <span class="st">"Etiological Signatures"</span>, <span class="at">legend =</span> <span class="fu">names</span>(color_palette), </span>
+<span id="cb27-286"><a href="#cb27-286" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> color_palette, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb27-287"><a href="#cb27-287" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-288"><a href="#cb27-288" aria-hidden="true" tabindex="-1"></a>  <span class="co"># L'Étape clé : On retourne l'objet mathématique du réseau !</span></span>
+<span id="cb27-289"><a href="#cb27-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(master_net)</span>
+<span id="cb27-290"><a href="#cb27-290" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-291"><a href="#cb27-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-292"><a href="#cb27-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-293"><a href="#cb27-293" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Phylum Level Analysis (Macro-Ecology)</span></span>
+<span id="cb27-294"><a href="#cb27-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-297"><a href="#cb27-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-298"><a href="#cb27-298" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-phylum</span></span>
+<span id="cb27-299"><a href="#cb27-299" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb27-300"><a href="#cb27-300" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb27-301"><a href="#cb27-301" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 8</span></span>
+<span id="cb27-302"><a href="#cb27-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
+<span id="cb27-303"><a href="#cb27-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-304"><a href="#cb27-304" aria-hidden="true" tabindex="-1"></a>networks_phylum <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb27-305"><a href="#cb27-305" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb27-306"><a href="#cb27-306" aria-hidden="true" tabindex="-1"></a>  networks_phylum[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Phylum"</span>, <span class="fl">0.10</span>)</span>
+<span id="cb27-307"><a href="#cb27-307" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-308"><a href="#cb27-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-309"><a href="#cb27-309" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb27-310"><a href="#cb27-310" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_phylum, <span class="st">"Phylum"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Phylum Level"</span>)</span>
+<span id="cb27-311"><a href="#cb27-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-312"><a href="#cb27-312" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb27-313"><a href="#cb27-313" aria-hidden="true" tabindex="-1"></a>Network_phylum <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_phylum, <span class="st">"Phylum"</span>)</span>
+<span id="cb27-314"><a href="#cb27-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-315"><a href="#cb27-315" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-316"><a href="#cb27-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-317"><a href="#cb27-317" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Phylum)</span></span>
+<span id="cb27-318"><a href="#cb27-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-319"><a href="#cb27-319" aria-hidden="true" tabindex="-1"></a>At the **Phylum** level, the global consensus network exhibits extremely low density and highly limited interactions. This layout exemplifies the concept of **functional redundancy** and the mathematical smoothing effect.</span>
+<span id="cb27-320"><a href="#cb27-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-321"><a href="#cb27-321" aria-hidden="true" tabindex="-1"></a>Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.</span>
+<span id="cb27-322"><a href="#cb27-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-323"><a href="#cb27-323" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Family Level Analysis (Meso-Ecology)</span></span>
+<span id="cb27-324"><a href="#cb27-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-327"><a href="#cb27-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-328"><a href="#cb27-328" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-family</span></span>
+<span id="cb27-329"><a href="#cb27-329" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb27-330"><a href="#cb27-330" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb27-331"><a href="#cb27-331" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb27-332"><a href="#cb27-332" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb27-333"><a href="#cb27-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-334"><a href="#cb27-334" aria-hidden="true" tabindex="-1"></a>networks_family <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb27-335"><a href="#cb27-335" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb27-336"><a href="#cb27-336" aria-hidden="true" tabindex="-1"></a>  networks_family[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Family"</span>, <span class="fl">0.15</span>)</span>
+<span id="cb27-337"><a href="#cb27-337" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-338"><a href="#cb27-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-339"><a href="#cb27-339" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb27-340"><a href="#cb27-340" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_family, <span class="st">"Family"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Family Level"</span>)</span>
+<span id="cb27-341"><a href="#cb27-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-342"><a href="#cb27-342" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb27-343"><a href="#cb27-343" aria-hidden="true" tabindex="-1"></a>Network_family <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_family, <span class="st">"Family"</span>)</span>
+<span id="cb27-344"><a href="#cb27-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-345"><a href="#cb27-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-346"><a href="#cb27-346" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Family)</span></span>
+<span id="cb27-347"><a href="#cb27-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-348"><a href="#cb27-348" aria-hidden="true" tabindex="-1"></a>The **Family** level provides an ideal analytical sweet spot, revealing clear pathological restructuring and disease-specific modular guilds:</span>
+<span id="cb27-349"><a href="#cb27-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-350"><a href="#cb27-350" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.</span>
+<span id="cb27-351"><a href="#cb27-351" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.</span>
+<span id="cb27-352"><a href="#cb27-352" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).</span>
+<span id="cb27-353"><a href="#cb27-353" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>**The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.</span>
+<span id="cb27-354"><a href="#cb27-354" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.</span>
+<span id="cb27-355"><a href="#cb27-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-356"><a href="#cb27-356" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Genus Level Analysis (Micro-Ecology)</span></span>
+<span id="cb27-357"><a href="#cb27-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-360"><a href="#cb27-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-361"><a href="#cb27-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: analysis-genus</span></span>
+<span id="cb27-362"><a href="#cb27-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb27-363"><a href="#cb27-363" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb27-364"><a href="#cb27-364" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
+<span id="cb27-365"><a href="#cb27-365" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb27-366"><a href="#cb27-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-367"><a href="#cb27-367" aria-hidden="true" tabindex="-1"></a>networks_genus <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb27-368"><a href="#cb27-368" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(g <span class="cf">in</span> groups) {</span>
+<span id="cb27-369"><a href="#cb27-369" aria-hidden="true" tabindex="-1"></a>  networks_genus[[g]] <span class="ot">&lt;-</span> <span class="fu">build_consensus_network</span>(metagenomics, g, <span class="st">"disease"</span>, <span class="st">"Genus"</span>, <span class="fl">0.20</span>)</span>
+<span id="cb27-370"><a href="#cb27-370" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-371"><a href="#cb27-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-372"><a href="#cb27-372" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying topological summary table</span></span>
+<span id="cb27-373"><a href="#cb27-373" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">print_network_stats</span>(networks_genus, <span class="st">"Genre"</span>), <span class="at">caption =</span> <span class="st">"Topological Metrics at the Genus Level"</span>)</span>
+<span id="cb27-374"><a href="#cb27-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-375"><a href="#cb27-375" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting global network</span></span>
+<span id="cb27-376"><a href="#cb27-376" aria-hidden="true" tabindex="-1"></a>Network_genre <span class="ot">&lt;-</span> <span class="fu">plot_global_network</span>(networks_genus, <span class="st">"Genus"</span>)</span>
+<span id="cb27-377"><a href="#cb27-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-378"><a href="#cb27-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-381"><a href="#cb27-381" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-382"><a href="#cb27-382" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
+<span id="cb27-383"><a href="#cb27-383" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(Network_phylum, Network_family, Network_genre, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"Network.RData"</span>))</span>
+<span id="cb27-384"><a href="#cb27-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-385"><a href="#cb27-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-386"><a href="#cb27-386" aria-hidden="true" tabindex="-1"></a><span class="fu">### Biological Interpretation (Genre)</span></span>
+<span id="cb27-387"><a href="#cb27-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-388"><a href="#cb27-388" aria-hidden="true" tabindex="-1"></a>At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).</span>
+<span id="cb27-389"><a href="#cb27-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-390"><a href="#cb27-390" aria-hidden="true" tabindex="-1"></a>At this scale, data sparse properties significantly expand due to **zero-inflation** (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to **20%** effectively trims down background noise and isolates true **Microbial Hubs** (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.</span>
+<span id="cb27-391"><a href="#cb27-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-392"><a href="#cb27-392" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. General Conclusion</span></span>
+<span id="cb27-393"><a href="#cb27-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-394"><a href="#cb27-394" aria-hidden="true" tabindex="-1"></a>This study demonstrates the immense value of using a consensus-based network inference approach to decode the complex dynamics of the gut microbiome across different chronic diseases. By combining neighborhood selection (MB), global precision matrix estimation (Glasso), and compositional correlation modeling (SparCC), we successfully mitigated the inherent statistical biases of metagenomic data, yielding highly robust and biologically relevant microbial interaction networks.</span>
+<span id="cb27-395"><a href="#cb27-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-396"><a href="#cb27-396" aria-hidden="true" tabindex="-1"></a>The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Etiological Guilds:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).</span>
+<span id="cb27-397"><a href="#cb27-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-398"><a href="#cb27-398" aria-hidden="true" tabindex="-1"></a>Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.</span>
+<span id="cb27-399"><a href="#cb27-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-400"><a href="#cb27-400" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
+<span id="cb27-401"><a href="#cb27-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-404"><a href="#cb27-404" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-405"><a href="#cb27-405" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb27-406"><a href="#cb27-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -38,22 +38,16 @@ The network analysis focuses on relationships between microbial taxa through co-
 
 Several resources are available through the navigation bar at the top of the website:
 
--   **Navigation Guide**: How to navigate the blog, what you're reading right now :).
-
-<!-- -->
-
--   **Presentation**: slides summarizing the project and main results.
-
--   **Sources**: references and resources used throughout the analyses.
-
--   **About**: information about the contributors and the context of the project.
-
--   **Social Links**: direct access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
+- **Navigation Guide**: How to navigate the blog, what you're reading right now :).
+- **Presentation**: slides summarizing the project and main results.
+- **Sources**: references and resources used throughout the analyses.
+- **About**: information about the contributors and the context of the project.
+- **Social Links**: access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
 
 ## Reproducibility
 
 This website was developed using:
 
--   [Quarto](https://quarto.org/) for website generation and reproducible reporting.
+- [Quarto](https://quarto.org/) for website generation and reproducible reporting.
 
--   [R Project for Statistical Computing](https://www.r-project.org/) for data analysis and visualization.
+- [R Project for Statistical Computing](https://www.r-project.org/) for data analysis and visualization.
