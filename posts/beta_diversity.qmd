@@ -292,6 +292,12 @@ Beta diversity analysis revealed significant differences in microbial community 
 Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.
 
 ```{r}
+#| label: save-beta-div
+#| include: false
+#| echo: false
+#| warning: false
+#| message: false
+
 save(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
 ```
 
