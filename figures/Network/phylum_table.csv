@@ -4,6 +4,6 @@
 "|Tax_Level |Disease_Cohort         | Nodes_Count| Edges_Count| Graph_Density| Average_Degree|"
 "|:---------|:----------------------|-----------:|-----------:|-------------:|--------------:|"
 "|Phylum    |ibd_ulcerative_colitis |           8|           1|         0.036|           0.25|"
-"|Phylum    |cirrhosis              |           9|           0|         0.000|           0.00|"
+"|Phylum    |cirrhosis              |           9|           2|         0.056|           0.44|"
 "|Phylum    |t2d                    |           9|           1|         0.028|           0.22|"
 "|Phylum    |cancer                 |           7|           1|         0.048|           0.29|"

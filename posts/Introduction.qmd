@@ -14,10 +14,21 @@
 ---
 
 ```{r}
-#| label: setup
+#| label: plotting-theme
 #| include: false
 
-source("../functions/inputData.R")
+library(viridis)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 13))
+
+options(
+  ggplot2.discrete.fill = function(...)
+    scale_fill_viridis_d(option = "cividis", ...),
+
+  ggplot2.discrete.colour = function(...)
+    scale_color_viridis_d(option = "cividis", ...)
+)
 ```
 
 ## Introduction
@@ -52,9 +63,9 @@ Microbial diversity is typically assessed at multiple levels:
 
 Alpha diversity measures the diversity within a single sample. It reflects both:
 
--   **Richness**: the number of taxa present
+- **Richness**: the number of taxa present
 
--   **Evenness**: the distribution of abundances among taxa
+- **Evenness**: the distribution of abundances among taxa
 
 Common indices include Shannon and Simpson. Statistical comparisons between groups can be performed using methods such as ANOVA or non-parametric equivalents.
 
@@ -74,17 +85,23 @@ Metagenomic datasets often exhibit variability in sequencing depth across sample
 
 The analysis is structured into steps:
 
--   Data import and formatting
+- Data import and formatting
 
--   Quality control and preprocessing
+- Quality control and preprocessing
 
--   Alpha diversity analysis
+- Alpha diversity analysis
 
--   Beta diversity analysis
+- Beta diversity analysis
 
 # Packages used
 
-All the R packages used throughout this project are listed at the end of every post.
+The following R packages were used throughout the analysis
+
+```{r}
+#| echo: true
+packages <- c(   "phyloseq",   "ggplot2",   "dplyr",   "readxl",   "tibble" ) 
+packages
+```
 
 # Reproducibility
 
