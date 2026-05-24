@@ -15,52 +15,28 @@
 ---
 
 ```{r}
-#| label: plotting-theme
+#| label: setup
 #| include: false
-
-library(viridis)
-library(ggplot2)
-
-theme_set(theme_minimal(base_size = 13))
-
-options(
-  ggplot2.discrete.fill = function(...)
-    scale_fill_viridis_d(option = "cividis", ...),
-
-  ggplot2.discrete.colour = function(...)
-    scale_color_viridis_d(option = "cividis", ...)
-)
-```
-
-```{r}
-#| label: load-packages
-#| include: false
-
-library("phyloseq")
-library("ggplot2")      
-library("readxl")       
-library("dplyr")       
-library("tibble")       
-library("here")       
-library("tidyr")
+library(here)
+source(here("functions", "inputData.R"))
 ```
 
 # Introduction
 
 Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:
 
-- importing OTU, taxonomy, and metadata tables,
-- creating a phyloseq object,
-- checking for missing values,
-- verifying sequencing depth consistency,
-- exploring taxonomic composition,
-- and visualizing global similarities between samples.
+-   importing OTU, taxonomy, and metadata tables,
+-   creating a phyloseq object,
+-   checking for missing values,
+-   verifying sequencing depth consistency,
+-   exploring taxonomic composition,
+-   and visualizing global similarities between samples.
 
 These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.
 
 ## User Input
 
-In this section, users can load their own dataset.\
+In this section, users can load their own dataset by downloading our repository on github.\
 \
 The workflow expects:\
 - an OTU abundance table,\
@@ -69,16 +45,18 @@ The workflow expects:\
 \
 All three tables are stored in an Excel file and imported separately using their sheet names. You can replace the file path and sheet names below with your own dataset.
 
-```{r}
-#| label: user-input  
+by loading your data in the `M1_metagenomics/data` and going to the the following file `M1_metagenomics/functions/inputData.R` to update the data.
 
-#Load your dataset into file_path
-file_path <- "../data/dataset_MISO_project.xlsx" 
+``` r
+file_path <- "../data/dataset_MISO_project.xlsx"
 
-#Write the name of your variables
-otu_sheet <- "OTU_table" 
-tax_sheet <- "Taxonomy" 
-sample_sheet <- "Sample_data" 
+otu_sheet <- "OTU_table"
+tax_sheet <- "Taxonomy"
+sample_sheet <- "Sample_data"
+
+otu_mat <- read_excel(file_path, sheet = otu_sheet)
+tax_mat <- read_excel(file_path, sheet = tax_sheet)
+samples_df <- read_excel(file_path, sheet = sample_sheet)
 ```
 
 ## Load Data
@@ -87,39 +65,19 @@ The imported tables are converted into a \`phyloseq\` object. \`phyloseq\` is a 
 
 This makes it easier to perform analyses and visualize the microbial data.
 
-```{r}
-#| label: load-data
-#| include: true
-otu_mat <- read_excel(file_path, sheet = otu_sheet)
-tax_mat <- read_excel(file_path, sheet = tax_sheet)
-samples_df <- read_excel(file_path, sheet = sample_sheet)
+``` r
+otu_mat <- otu_mat %>% tibble::column_to_rownames("OTU_ID")
+tax_mat <- tax_mat %>% tibble::column_to_rownames("Tax_ID")
+samples_df <- samples_df %>% tibble::column_to_rownames("Sample_ID")
 
-# Convert data frames to matrices and set row names. Phyloseq objects need to have row.names
-otu_mat <- otu_mat %>%
-  tibble::column_to_rownames("OTU_ID") 
-tax_mat <- tax_mat %>% 
-  tibble::column_to_rownames("Tax_ID")
-samples_df <- samples_df %>% 
-  tibble::column_to_rownames("Sample_ID")
-
-#Transform into matrixes otu and tax tables (sample table can be left as data frame)
 otu_mat <- as.matrix(otu_mat)
 tax_mat <- as.matrix(tax_mat)
 
-# Transform to phyloseq objects
-OTU = otu_table(otu_mat, taxa_are_rows = TRUE)
-TAX = tax_table(tax_mat)
-samples = sample_data(samples_df)
+OTU <- otu_table(otu_mat, taxa_are_rows = TRUE)
+TAX <- tax_table(tax_mat)
+samples <- sample_data(samples_df)
 
 metagenomics <- phyloseq(OTU, TAX, samples)
-
-#sample_names(metagenomics)
-#rank_names(metagenomics)
-#sample_variables(metagenomics)
-
-total = median(sample_sums(metagenomics))
-# standf = function(x, t=total) round(t * (x / sum(x)))
-# metagenomics = transform_sample_counts(metagenomics, standf)
 ```
 
 ## Statistical summary
@@ -137,10 +95,11 @@ This helps verify that the dataset was imported correctly.
 #| include: true
 
 summary(metagenomics)
-
 ```
 
 ```{r}
+#| label: type
+#| include: true
 typeof(otu_mat)
 ```
 
@@ -149,6 +108,8 @@ We can verify that the OTU table is stored as a numeric matrix of type \`double\
 We also checked whether some samples contained only zero values. Such samples can be problematic because they do not contain any detected microbial signal and may affect analyses, if they do exist, we should consider ignoring those samples.
 
 ```{r}
+#| label: zero-check
+#| include: true
 which(colSums(otu_mat != 0) == 0)
 summary(colSums(otu_mat))
 ```
@@ -162,7 +123,9 @@ Missing values can bias analyses and lead to incorrect statistical results.\
 We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis.
 
 ```{r}
-#Check for missing values
+#| label: missing-check
+#| include: true
+# Check for missing values
 sum(is.na(otu_mat))
 sum(is.na(tax_mat))
 sum(is.na(samples_df))
@@ -181,17 +144,13 @@ Sequencing depth corresponds to the total number of reads obtained for each samp
 Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.
 
 ```{r}
+#| label: seq-depth
+#| include: true
 
 sample_depth <- sample_sums(metagenomics)
-
 summary(sample_depth)
-
-```
-
-```{r}
 bp_seq_depth <- ggplot(data.frame(depth = sample_depth), aes(x = depth)) +
   geom_histogram(bins = 30) +
-  theme_minimal() +
   labs(title = "Distribution of Sequencing Depth",
        x = "Reads per sample",
        y = "Frequency")
@@ -203,6 +162,8 @@ Sequencing depth across samples is fairly consistent, with most samples summing 
 However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.
 
 ```{r}
+#| label: outlier
+#| include: true
 sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 ```
 
@@ -216,24 +177,31 @@ Taxonomic composition plots allow visualization of the relative abundance of mic
 
 These representations help identify dominant bacterial taxa and observe potential differences between disease groups or other metadata categories.
 
+::: panel-tabset
+### Phylum Composition
+
 ```{r}
 metagenomics_phylum <- tax_glom(metagenomics, taxrank = "Phylum")
 metagenomics_phylum_per <- transform_sample_counts(metagenomics_phylum, function(x) x / sum(x))
 Tax_phyllum <- plot_bar(metagenomics_phylum_per, fill = "Phylum") +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(title = "Taxonomic composition at Phylum level") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+   geom_bar(stat = "identity") +
+   theme_minimal() +
+   labs(title = "Taxonomic composition at Phylum level") +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 Tax_phyllum
 ```
 
+### Phylum x Disease Composition
+
 ```{r}
 Tax_disease_group <- plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
-  geom_bar(stat = "identity", position = "stack") +
-  theme_minimal() +
-  labs(title = "Phylum composition by disease group")
+   geom_bar(stat = "identity", position = "stack") +
+   theme_minimal() +
+   labs(title = "Phylum composition by disease group")
 Tax_disease_group
 ```
+
+### Top 10 Genera x Disease
 
 To improve readability, only the 10 most abundant genera were retained in the following visualization.
 
@@ -253,83 +221,28 @@ Top10b_disease <- plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus"
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Top10b_disease
 ```
+:::
 
-## Beta Diversity - PCoA
+## Distribution of Samples by Gender
 
-Beta diversity measures differences in microbial composition between samples.\
-Bray-Curtis distance is a statistic used to quantify the dissimilarity in composition between samples, based on abundance data. 
+Let's analyze some distributions of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.
 
-We then visualise sample similarities via Principal Coordinate Analysis (PCoA). Samples positioned close together have more similar microbial compositions, whereas distant samples are more dissimilar.
-
-Firstly, we do a PCoA by gender.
-
-### Beta Diversity - PCoA by gender
-
-This visualization allows us to explore whether microbial communities tend to cluster according to gender.
-
-Strong separation between groups would suggest that gender may influence microbiome composition.
-
-```{r}
-
-pcoa <- ordinate(metagenomics, method = "PCoA", distance = "bray")
-
-Pcoa_gender <- plot_ordination(metagenomics, pcoa, color = "gender") +
-  geom_point(size = 3) +
-  theme_minimal() +
-  labs(title = "PCoA - Bray-Curtis by gender")
-Pcoa_gender
-```
-
-Overall, the plot does not show a clear separation between male and female samples.
-
-Samples from both genders largely overlap, suggesting that gender alone may not strongly influence the overall microbial community composition in this dataset.
-
-However, a few local clusters and dispersion differences can still be observed. Male samples appear slightly more spread out, which could indicate greater variability in microbial composition between individuals.
-
-The first two principal coordinates explain 11.1% and 9.9% of the total variation respectively, meaning that only a portion of the microbiome variability is represented in this plot.
-
-Let's do a PCoA by gender and disease to furthermore evaluate the dataset. Adding disease status as a variable allows visualization of two metadata variables simultaneously and may reveal certain paterns.
-
-### Beta Diversity - PCoA by gender and disease
-
-This PCoA visualization combines both gender and disease information to explore whether microbial composition varies between groups.
-
-```{r}
-pcoagd <- ordinate(metagenomics, method = "PCoA", distance = "bray")
-
-Pcoa_gendre_disease <- plot_ordination(metagenomics, pcoagd, color = "gender", shape = "disease") +
-  geom_point(size = 3) +
-  theme_minimal()
-Pcoa_gendre_disease
-```
-
-Some disease-specific clustering patterns can be observed. Samples associated with cirrhosis tend to be located more frequently in the lower part of the plot, whereas cancer samples appear more concentrated in the upper central region.
-
-In contrast, ulcerative colitis and type 2 diabetes samples show overlap with the other groups, suggesting less distinct microbial separation.
-
-Gender does not appear to create a strong separation within disease groups, as male and female samples remain mostly intermixed through the space.
-
-Overall, disease status may contribute more strongly than gender to differences in microbial composition, although the overlap between groups indicates that these effects are moderate.
-
-## Distribution of samples by gender
-
-Let's analyze the distribution of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.
+::: panel-tabset
+### Samples by Gender
 
 ```{r}
 meta_df <- data.frame(sample_data(metagenomics))
-
 gender_counts <- meta_df %>%
   group_by(gender) %>%
   summarise(Count = n()) %>%
   mutate(Percentage = Count / sum(Count) * 100)
 print(gender_counts)
-```
 
-```{r}
 gender_counts <- meta_df %>%
   group_by(gender) %>%
   summarise(Count = n())
 
+# Plot
 Sample_dist_gender <- ggplot(gender_counts, aes(x = gender, y = Count, fill = gender)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
@@ -341,32 +254,30 @@ Sample_dist_gender
 
 We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.
 
-## Number of samples of diseases by gender
-
-Number of samples of diseases for females:
+### Female x Disease
 
 ```{r}
 meta_df <- data.frame(sample_data(metagenomics))
 
 disease_counts <- meta_df %>%
-  group_by(gender, disease) %>%
-  summarise(Count = n())
+  summarise(Count = n(), .by = c(gender, disease))
+disease_counts
 
 SampleF_dist_disease <- ggplot(disease_counts %>% filter(gender == "female"),
-       aes(x = disease, y = Count, fill = disease)) +
+                               aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Number of Female Samples per Disease") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 SampleF_dist_disease
 ```
 
 Ulcerative colitis (IBD) has the highest number of samples with more than 75 counts, followed by type 2 diabetes (T2D), then cirrhosis, and finally cancer, which has fewer than 25 counts.
 
-Number of samples of diseases for males:
+### Male x Disease
 
 ```{r}
-
 SampleM_dist_disease <- ggplot(disease_counts %>% filter(gender == "male"),
        aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
@@ -377,6 +288,7 @@ SampleM_dist_disease
 ```
 
 Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.
+:::
 
 We can see that there are differences in the number of samples per disease, depending on gender.
 
@@ -384,15 +296,16 @@ We can see that there are differences in the number of samples per disease, depe
 
 Let's analyze the distribution of samples by country.
 
+::: panel-tabset
+### Samples by Country
+
 ```{r}
 country_counts <- meta_df %>%
   group_by(country) %>%
   summarise(Count = n()) %>%
   mutate(Percentage = Count / sum(Count) * 100)
 print(country_counts)
-```
 
-```{r}
 country_counts <- meta_df %>%
   group_by(country) %>%
   summarise(Count = n())
@@ -408,7 +321,7 @@ Sample_dist_country
 
 We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.
 
-## Number of samples of diseases by country
+### Country x Disease
 
 ```{r}
 disease_counts_country <- meta_df %>%
@@ -433,12 +346,16 @@ ggplot(plot_data, aes(x = disease, y = Count, fill = disease)) +
 ```
 
 We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ulcerative colitis (ibd).
+:::
 
-This imbalance should be kept in mind in all analyses.
+There was a lot of variation when finding the distribution of samples by country of origin and disease. This imbalance should be kept in mind in all analyses.
 
-## Distribution of bacterial class by gender
+## Distribution of Bacterial Class by Gender
 
 The taxonomic composition at the class level was compared between genders using relative abundance profiles. Only the most abundant classes (top 10) were retained to improve visualization clarity.
+
+::: panel-tabset
+### Top 10 Classes x Gender
 
 ```{r}
 metagenomics_class <- tax_glom(metagenomics, taxrank = "Class")
@@ -454,10 +371,11 @@ B10class_dist_gender <- plot_bar(metagenomics_class_top, x = "gender", fill = "C
 B10class_dist_gender
 ```
 
-The same analysis but with all the bacterial classes:
+### All Classes x Gender
+
+The same analysis but with all bacterial classes
 
 ```{r}
-
 Bclass_dist_gender <- plot_bar(metagenomics_class, x = "gender", fill = "Class") +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
@@ -465,20 +383,22 @@ Bclass_dist_gender <- plot_bar(metagenomics_class, x = "gender", fill = "Class")
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Bclass_dist_gender
 ```
+:::
 
 It seems that the bacterial distribution is approximately the same for each gender.
-
-```{r}
-#To save all the data/graphs for the presentation
-save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_gender, Pcoa_gendre_disease, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, file = here::here("posts", "datapreparation.RData"))
-```
 
 Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).
 
 These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.
 
+```{r}
+#To save all the data/graphs for the presentation
+save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, file = here::here("posts", "datapreparation.RData"))
+```
+
 # Session info
 
 ```{r}
-sessioninfo::session_info(pkgs = "attached")
+# sessioninfo::session_info(pkgs = "attached")
+print_session_info()
 ```
