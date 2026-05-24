@@ -140,11 +140,13 @@ summary(metagenomics)
 
 ```
 
+The dataset is stored as a `phyloseq` S4 object, a R class designed to integrate abundance, taxonomy, and metadata into one object.
+
 ```{r}
 typeof(otu_mat)
 ```
 
-We can verify that the OTU table is stored as a numeric matrix of type \`double\`, meaning the abundance values are represented as decimal numbers.
+We can verify that the OTU table is stored as a numeric matrix of type **double**, meaning the abundance values are represented as decimal numbers.
 
 We also checked whether some samples contained only zero values. Such samples can be problematic because they do not contain any detected microbial signal and may affect analyses, if they do exist, we should consider ignoring those samples.
 
