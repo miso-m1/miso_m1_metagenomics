@@ -358,8 +358,6 @@ knitr::kable(perm_result,
 
 ### 3. Pairwise comparaison
 
-Tuckey tests to see which diseases induce the variance heterogeneity
-
 ```{r}
 # Bray-Curtis table
 bray_tab <- data.frame(
