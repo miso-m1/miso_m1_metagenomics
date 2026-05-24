@@ -4,4 +4,8 @@
 .Ruserdata
 /.quarto/
 **/*.quarto_ipynb
+<<<<<<< HEAD
+=======
+.positai
+>>>>>>> d8c9dc8943d74acde65c7197ec16333e2c6e7a02
 .DS_Store

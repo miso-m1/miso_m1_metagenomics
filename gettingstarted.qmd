@@ -1,0 +1,55 @@
+---
+title: "Getting Started"
+format: html
+editor: visual
+---
+
+Welcome to our blog on the statistical analysis of metagenomic data. This website presents the different steps of our analysis pipeline, from data preparation to interpretation and network analysis.
+
+The project was carried out as part of the Master’s program in Bioinformatics at [[Université de Lille]{.underline}](https://www.univ-lille.fr/){target="_blank"}.
+
+The link to our GitHub repository is here : [https://github.com/miso-m1/miso_m1_metagenomics](https://github.com/miso-m1/miso_m1_metagenomics){target="_blank"}.
+
+Our data: [https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data](https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data){target="_blank"}
+
+## How to Navigate the Blog
+
+The posts are organized to follow the logical progression of a metagenomic analysis workflow. For the best reading experience, we recommend consulting them in the following order:
+
+### 0. Introduction
+
+This post presents the context, the objectives of the study, and the structure of the project.
+
+### 1. Data Preparation
+
+This section explains how the dataset was imported, cleaned and transformed before the study.
+
+### 2.1 Alpha Diversity
+
+This post explores within-sample diversity using diversity indices and visualizations.
+
+### 2.2 Beta Diversity
+
+This section investigates differences between samples and groups using distance metrics and ordination methods.
+
+### 3. Metagenomic Network Analysis
+
+The network analysis focuses on relationships between microbial taxa through co-occurrence network approaches.
+
+## Additional Resources
+
+Several resources are available through the navigation bar at the top of the website:
+
+-   **Navigation Guide**: How to navigate the blog, what you're reading right now :).
+-   **Presentation**: slides summarizing the project and main results.
+-   **Sources**: references and resources used throughout the analyses.
+-   **About**: information about the contributors and the context of the project.
+-   **Social Links**: access to the contributors’ e-mail addresses, GitHub and LinkedIn profiles.
+
+## Reproducibility
+
+This website was developed using:
+
+-   [Quarto](https://quarto.org/){target="_blank"} for website generation and reproducible reporting.
+
+-   [R Project for Statistical Computing](https://www.r-project.org/){target="_blank"} for data analysis and visualization.

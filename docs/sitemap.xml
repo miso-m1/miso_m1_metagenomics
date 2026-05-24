@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Introduction.html</loc>
-    <lastmod>2026-05-01T15:59:25.299Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/datapreparation.html</loc>
-    <lastmod>2026-05-01T15:56:10.989Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/resources.html</loc>
+    <lastmod>2026-05-24T18:18:41.600Z</lastmod>
   </url>
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/about.html</loc>
-    <lastmod>2026-05-14T20:01:56.842Z</lastmod>
+    <lastmod>2026-05-24T18:18:41.422Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/datapreparation.html</loc>
+    <lastmod>2026-05-24T18:18:41.599Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Network.html</loc>
+    <lastmod>2026-05-24T18:18:41.488Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/alpha_diversity.html</loc>
+    <lastmod>2026-05-24T18:18:41.490Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/Presentation.html</loc>
+    <lastmod>2026-05-24T18:18:41.354Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/beta_diversity.html</loc>
+    <lastmod>2026-05-24T18:23:24.873Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Introduction.html</loc>
+    <lastmod>2026-05-24T18:18:41.487Z</lastmod>
   </url>
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/index.html</loc>
-    <lastmod>2026-05-01T15:25:47.661Z</lastmod>
+    <lastmod>2026-05-24T18:18:41.487Z</lastmod>
   </url>
   <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Exercice_Template.html</loc>
-    <lastmod>2026-05-01T15:25:47.661Z</lastmod>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/gettingstarted.html</loc>
+    <lastmod>2026-05-24T18:18:41.484Z</lastmod>
   </url>
 </urlset>

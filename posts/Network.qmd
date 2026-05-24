@@ -1,0 +1,249 @@
+---
+  title: "3: Metagenomic Network Analysis"
+  format: 
+    html: 
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
+  editor: visual
+  categories: ["Network Analysis"]
+  image: "/img/network.jpg"
+  description: "Network Analysis of Metagenomic Data"
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(here)
+source(here("functions", "inputData.R"))
+dir.create(here("figures", "Network"), recursive = TRUE, showWarnings = FALSE)
+```
+
+## 1. Introduction and Objectives
+
+This document presents an integrated network analysis of the human gut microbiota across different pathological conditions (*ibd_ulcerative_colitis, cirrhosis, t2d, cancer*). The primary goal is to evaluate how microbial populations reorganize, compete, or cooperate depending on the host's disease state.
+
+To ensure the statistical robustness of the inferred interactions and to eliminate false positives inherent to the compositional nature of metagenomic sequencing data, we implement a consensus network approach inspired by the **OneNet-mean** framework. We combine three distinct mathematical network inference methodologies: 1. **SpiecEasi (MB)**: Neighborhood selection based on the Meinshausen-Bühlmann framework. 2. **SpiecEasi (Glasso)**: Global covariance matrix inversion using Graphical Lasso. 3. **SparCC**: Correlation modeling explicitly tailored for high-dimensional compositional count data.
+
+An interaction (edge) is validated in the final consensus network if it is independently confirmed by at least 2 out of the 3 methods (majority vote threshold $\ge 0.66$).
+
+The baseline `phyloseq` object used throughout this pipeline is named `metagenomics` and is automatically loaded via the Quarto preliminary inclusion file.
+
+## 2. Mathematical Foundations of Consensus Network Inference
+
+Before detailing the algorithms, it is critical to address the **compositional data problem**. Metagenomic sequencing yields relative abundances (proportions constrained to a sum of 1), not absolute cell counts. Applying standard Pearson or Spearman correlations directly to such data produces spurious correlations. To mitigate this, both SPIEC-EASI algorithms first apply a **Centered Log-Ratio (CLR)** transformation to the abundance vector $x$:
+
+$$z_i = \log\left(\frac{x_i}{g(x)}\right)$$
+
+*(where* $g(x)$ represents the geometric mean of all taxa abundances).
+
+------------------------------------------------------------------------
+
+### 2.1. SpiecEasi (MB): Meinshausen-Bühlmann Neighborhood Selection
+
+**The Concept:** Instead of calculating the global network covariance at once, the MB method treats network inference as a set of separate supervised machine-learning problems. For each taxon, it performs a regression to predict its CLR-abundance using the abundances of all other taxa.
+
+**The Mathematics:** For a specific node $j$, the algorithm solves a sparse linear regression using the Lasso ($L_1$) penalty to identify which other nodes ($\setminus j$) best predict its variance. The objective function minimized is:
+
+$$\min_{\beta_j} \left( \frac{1}{2n} \| z_j - Z_{\setminus j} \beta_j \|^2_2 + \lambda \| \beta_j \|_1 \right)$$
+
+-   $z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.
+-   $Z_{\setminus j}$ is the matrix of all other taxa.
+-   $\beta_j$ is the coefficient vector (the edge weights).
+-   $\lambda \| \beta_j \|_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.
+
+**Edge Generation:** An undirected edge is drawn between node $i$ and node $j$ if either $\beta_{j}^{(i)} \neq 0$ or $\beta_{i}^{(j)} \neq 0$.
+
+------------------------------------------------------------------------
+
+### 2.2. SpiecEasi (Glasso): Graphical Lasso
+
+**The Concept:** Glasso utilizes a global estimation approach. Assuming a multivariate normal distribution of the CLR-transformed data, two variables are conditionally independent (i.e., no edge exists between them) if their corresponding entry in the **precision matrix** (the inverse of the covariance matrix) is exactly zero. Glasso estimates this sparse precision matrix directly.
+
+**The Mathematics:** Let $S$ be the empirical covariance matrix of the CLR-transformed data $Z$. Glasso seeks the precision matrix $\Theta$ (where $\Theta = \Sigma^{-1}$) that maximizes the penalized log-likelihood of the data:
+
+$$\min_{\Theta \succ 0} \left( \text{tr}(S\Theta) - \log(\det(\Theta)) + \lambda \| \Theta \|_1 \right)$$
+
+-   $\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.
+-   $\lambda \| \Theta \|_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.
+
+**Edge Generation:** An undirected edge is retained between node $i$ and node $j$ if the estimated entry in the precision matrix satisfies $\Theta_{ij} \neq 0$.
+
+------------------------------------------------------------------------
+
+### 2.3. SparCC: Sparse Correlations for Compositional Data
+
+**The Concept:** Unlike SPIEC-EASI, SparCC bypasses the CLR transformation. Instead, it relies on the variance of log-ratios between pairs of taxa. It operates under the assumption that the true underlying microbial network is sparse (most taxa do not biologically interact) and leverages this assumption to approximate the true linear correlation from the compositional data.
+
+**The Mathematics:** Let $t_{ij}$ denote the variance of the log-ratio of the compositional abundances of taxa $i$ and $j$:
+
+$$t_{ij} = \text{Var}\left(\log\left(\frac{x_i}{x_j}\right)\right)$$
+
+According to the laws of variance, this metric relates to the true (unknown) absolute abundances $\omega_i$ and $\omega_j$, and their true correlation coefficient $\rho_{ij}$:
+
+$$t_{ij} = \text{Var}(\log \omega_i) + \text{Var}(\log \omega_j) - 2 \rho_{ij} \sqrt{\text{Var}(\log \omega_i)\text{Var}(\log \omega_j)}$$
+
+Because this system has more unknowns ($\rho_{ij}$ and the basis variances) than equations, it is underdetermined. SparCC approximates a solution iteratively by enforcing the sparsity assumption:
+
+$$\sum_{j \neq i} \rho_{ij} \approx 0$$
+
+**Edge Generation:** SparCC outputs a correlation matrix. In this pipeline, an edge is established if the absolute value of the SparCC correlation coefficient exceeds a predefined threshold: $|\rho_{ij}| \geq 0.4$.
+
+------------------------------------------------------------------------
+
+### 2.4. The Consensus Framework (OneNet-Mean)
+
+Once the three independent methodologies compute their respective unweighted adjacency matrices ($A^{MB}, A^{Glasso}, A^{SparCC}$ where edges $= 1$ and non-edges $= 0$), the pipeline calculates the arithmetic mean for every possible edge across the three models:
+
+$$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$
+
+To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} < 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.
+
+### 2.5. Data Pre-processing: Prevalence Filtering
+
+To streamline the analysis and manage the severe zero-inflation inherent to metagenomic sequencing, a prevalence filter was applied to the count matrix prior to network inference. By keeping only the taxa present in a minimum percentage of samples (e.g., 10% for Phylum, up to 20% for Genus), this preliminary step acts as a noise-reduction mechanism. It allows us to focus on robust, global ecological patterns and major microbial hubs shared across the cohorts.
+
+While this simplification ensures high-confidence interactions and manageable computational loads, it is an exploratory compromise. Future perspectives to refine this analysis could include computing condition-specific networks without any prevalence filtering—provided sufficient computational power is available—to capture rare but potentially critical pathological interactions. Alternatively, adopting emerging statistical frameworks explicitly designed to model zero-inflated networks without preliminary trimming could further preserve the micro-diversity of the ecosystem.
+
+```{r}
+# Extracting unique disease cohorts from the included dataset
+groups <- unique(sample_data(metagenomics)$disease)
+```
+
+## 3. Phylum Level Analysis
+
+::: panel-tabset
+### Phylum plot
+
+```{r}
+#| label: analysis-phylum
+#| fig-width: 9
+#| fig-height: 9
+#| message: false
+#| warning: false
+networks_phylum <- list()
+for(g in groups) {
+  networks_phylum[[g]] <- build_consensus_network(metagenomics, g, "disease", "Phylum", 0.10)
+}
+# Plotting global network
+Network_phylum <- plot_global_network(networks_phylum, "Phylum")
+pdf(here("figures", "Network", "Network_phylum.pdf"), width = 9, height = 9)
+```
+
+### Phylum table
+
+```{r}
+# Displaying topological summary table
+phylum_table <- knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
+phylum_table
+write.csv(phylum_table, here("figures", "Network", "phylum_table.csv"), 
+          row.names = FALSE)
+
+```
+:::
+
+### Biological Interpretation (Phylum)
+
+At the **Phylum** level, the global consensus network exhibits extremely low density and highly limited interactions. This layout exemplifies the concept of **functional redundancy** and the mathematical smoothing effect.
+
+Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.
+
+## 4. Family Level Analysis
+
+::: panel-tabset
+### Family plot
+
+```{r}
+#| label: analysis-family
+#| fig-width: 9
+#| fig-height: 9
+#| message: false
+#| warning: false
+networks_family <- list()
+
+for(g in groups) {
+  networks_family[[g]] <- build_consensus_network(metagenomics, g, "disease", "Family", 0.15)
+}
+
+Network_family <- plot_global_network(networks_family, "Family")
+pdf(here("figures", "Network", "Network_family.pdf"), width = 9, height = 9)
+```
+
+### Family table
+
+```{r}
+family_table <- knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
+family_table
+write.csv(family_table, here("figures", "Network", "family_table.csv"), 
+          row.names = FALSE)
+```
+:::
+
+### Biological Interpretation (Family)
+
+The **Family** level provides an ideal analytical sweet spot, balancing network resolution with readability. It clearly highlights distinct topological modules and shared structural shifts driven by the disease states:
+
+1.  **The Cirrhosis Cohort (Exclusive Grey Sub-network):** A highly interconnected and isolated cluster of nodes (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae*) appears exclusively within the liver cirrhosis cohort. Topologically, this module exhibits a remarkably high edge density compared to the background network, indicating a robust and highly specific structural shift. Biologically, these families are typical residents of the oral cavity. Their strong mathematical co-occurrence and tight clustering in the gut network strongly suggest a systemic breakdown of clinical barriers (like gastric acid filtering), allowing significant oral-to-gut translocation.
+
+2.  **The Shared Core (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal that distinct diseases can trigger parallel network disruptions, often targeting the same high-degree microbial hubs.
+
+3.  **The IBD Inflammatory Axis (Exclusive Blue Edge):** The direct, isolated connection between *Fusobacteriaceae* and *Enterobacteriaceae* stands out as a strong statistical anomaly specific to the IBD cohort. To survive our strict 0.66 majority vote threshold across SparCC and SpiecEasi algorithms, this exclusive link requires an extraordinarily strong covariance. Rather than a random co-occurrence, this points to a highly specific and resilient bacterial alliance that thrives exclusively under the acute mucosal stress of ulcerative colitis.
+
+## 5. Genus Level Analysis
+
+::: panel-tabset
+### Genus plot
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+#| label: analysis-genus
+#| message: false
+#| warning: false
+
+networks_genus <- list()
+for(g in groups) {
+  networks_genus[[g]] <- build_consensus_network(metagenomics, g, "disease", "Genus", 0.20)
+}
+
+# Plotting global network
+Network_genus <- plot_global_network(networks_genus, "Genus")
+pdf(here("figures", "Network", "Network_genus.pdf"), width = 10, height = 10)
+```
+
+### Genus table
+
+```{r}
+# Displaying topological summary table
+genus_table <- knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
+genus_table
+write.csv(genus_table, here("figures", "Network", "genus_table.csv"), 
+          row.names = FALSE)
+```
+:::
+
+### Biological Interpretation (Genus)
+
+At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).
+
+At this scale, data sparse properties significantly expand due to **zero-inflation** (rare genera present only in a subset of individuals). Elevating the prevalence filtering threshold to **20%** effectively trims down background noise and isolates true **Microbial Hubs** (keystone genera driving network topology). The genus-level statistics document a sharp topological collapse (marked by decreased network density and average degree) under diseased states, tracking the loss of metabolic resilience and the fragmentation of cooperative trophic networks in the severely compromised gut ecosystem.
+
+## 6. General Conclusion
+
+This study demonstrates the immense value of using a consensus-based network inference approach to decode the complex dynamics of the gut microbiome across different chronic diseases. By combining neighborhood selection (MB), global precision matrix estimation (Glasso), and compositional correlation modeling (SparCC), we successfully mitigated the inherent statistical biases of metagenomic data, yielding highly robust and biologically relevant microbial interaction networks.
+
+The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylum) suffer from functional redundancy and signal smoothing, the **Family** and **Genus** levels provide critical insights into disease-driven ecological restructuring. Our findings highlight two major phenomenons within the dysbiotic gut: 1. **Disease-Specific Cohorts:** As seen with liver cirrhosis, where a highly interconnected sub-network of oral-derived families (*Neisseriaceae, Campylobacteraceae*) indicates a severe failure of the host's gastric and immune barriers. 2. **Shared Axes of Dysbiosis:** As evidenced by the overlapping structural shifts between Inflammatory Bowel Disease (IBD) and Colorectal Cancer, driven by sulfate-reducing and pro-inflammatory pathobionts (*Desulfovibrionaceae, Fusobacteriaceae*).
+
+Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.
+
+```{r}
+#To save all the data/graphs for the presentation
+save(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, file = here::here("posts", "Network.RData"))
+```
+
+# Session info
+
+```{r}
+print_session_info()
+```

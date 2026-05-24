@@ -1,11 +1,24 @@
 ---
-title: "Introduction"
-format: html
-editor: visual
-categories: ["Introduction"]
-image: "/img/doublehelix.png"
-description: "Metagenomics and Project introduction"
+  title: "0: Introduction"
+  format: 
+    html: 
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      code-tools: true
+  editor: visual
+  categories: ["Introduction"]
+  image: "/img/doublehelix.png"
+  description: "Metagenomics and Project introduction"
 ---
+
+```{r}
+#| label: set-up
+#| include: false
+
+library(here)
+source(here("functions", "inputData.R"))
+```
 
 ## Introduction
 
@@ -71,13 +84,7 @@ The analysis is structured into steps:
 
 # Packages used
 
-The following R packages were used throughout the analysis
-
-```{r}
-#| echo: true
-packages <- c(   "phyloseq",   "ggplot2",   "dplyr",   "readxl",   "tibble" ) 
-packages
-```
+The R packages used throughout this analysis is shown at the end of every file.
 
 # Reproducibility
 

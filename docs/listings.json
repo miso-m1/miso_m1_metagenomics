@@ -2,9 +2,11 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/datapreparation.html",
       "/posts/Introduction.html",
-      "/posts/Exercice_Template.html"
+      "/posts/datapreparation.html",
+      "/posts/alpha_diversity.html",
+      "/posts/beta_diversity.html",
+      "/posts/Network.html"
     ]
   }
 ]
