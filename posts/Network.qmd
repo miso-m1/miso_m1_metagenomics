@@ -44,7 +44,7 @@ The baseline `phyloseq` object used throughout this pipeline is named `metagenom
 
 ### 1.1 Installation
 
-Before running the network analysis, you must install the `SpiecEasi` package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using `devtools`. 
+Before running the network analysis, you must install the `SpiecEasi` package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using `devtools`.
 
 Please run the following code in your R console:
 
@@ -79,10 +79,10 @@ $$z_i = \log\left(\frac{x_i}{g(x)}\right)$$
 
 $$\min_{\beta_j} \left( \frac{1}{2n} \| z_j - Z_{\setminus j} \beta_j \|^2_2 + \lambda \| \beta_j \|_1 \right)$$
 
-- $z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.
-- $Z_{\setminus j}$ is the matrix of all other taxa.
-- $\beta_j$ is the coefficient vector (the edge weights).
-- $\lambda \| \beta_j \|_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.
+-   $z_j$ is the CLR-abundance vector of taxon $j$ across $n$ samples.
+-   $Z_{\setminus j}$ is the matrix of all other taxa.
+-   $\beta_j$ is the coefficient vector (the edge weights).
+-   $\lambda \| \beta_j \|_1$ is the $L_1$ penalty forcing most coefficients to exactly $0$, ensuring a sparse network topology.
 
 **Edge Generation:** An undirected edge is drawn between node $i$ and node $j$ if either $\beta_{j}^{(i)} \neq 0$ or $\beta_{i}^{(j)} \neq 0$.
 
@@ -96,8 +96,8 @@ $$\min_{\beta_j} \left( \frac{1}{2n} \| z_j - Z_{\setminus j} \beta_j \|^2_2 + \
 
 $$\min_{\Theta \succ 0} \left( \text{tr}(S\Theta) - \log(\det(\Theta)) + \lambda \| \Theta \|_1 \right)$$
 
-- $\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.
-- $\lambda \| \Theta \|_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.
+-   $\text{tr}(S\Theta) - \log(\det(\Theta))$ represents the negative log-likelihood of the multivariate Gaussian model.
+-   $\lambda \| \Theta \|_1$ applies an $L_1$ penalty to the elements of the precision matrix to enforce sparsity, driving weak conditional dependencies to $0$.
 
 **Edge Generation:** An undirected edge is retained between node $i$ and node $j$ if the estimated entry in the precision matrix satisfies $\Theta_{ij} \neq 0$.
 
@@ -130,7 +130,6 @@ Once the three independent methodologies compute their respective unweighted adj
 $$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$
 
 To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} < 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.
-
 
 ```{r}
 #| label: setup
@@ -319,13 +318,16 @@ Network_family <- plot_global_network(networks_family, "Family")
 
 ### Biological Interpretation (Family)
 
-The **Family** level provides an ideal analytical sweet spot, revealing clear pathological restructuring and disease-specific modular guilds:
+The **Family** level provides an ideal analytical sweet spot, balancing network resolution with readability. It clearly highlights distinct topological modules and shared structural shifts driven by the disease states:
 
-1.  **The Cirrhosis Etiological Guild (Exclusive Green Sub-network):** A highly interconnected cluster of families appears exclusively within the liver cirrhosis cohort (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae, Leptotrichiaceae*). Phenotypically, these families are typical residents of the human **oral cavity**. Their highly structured co-occurrence in the gut network mathematically confirms a major clinical barrier breakdown (gastric acid and intestinal immune filtering failures), allowing massive saliva-borne bacterial translocation to colonize the lower gastrointestinal tract.
-2.  **The Shared Core Dysbiosis (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal cross-disease core signatures.
-    - **The IBD / Cancer Axis (Red and Purple Edges):** The co-isolation of *Oscillospiraceae*, *Desulfovibrionaceae*, and *Rikenellaceae* in the left module uncovers a shared microenvironment shift between ulcerative colitis and colorectal cancer. These families are heavily involved in mucosal inflammation and sulfate reduction, generating genotoxic hydrogen sulfide ($H_2S$).
-    - **The IBD / T2D Axis (Red and Cyan Edges):** Coupled interactions between *Bacteroidaceae*/*Porphyromonadaceae* and *Streptococcaceae*/*Pasteurellaceae* track a common breakdown of metabolic homeostasis and immune toll-like receptor signaling shared by both metabolic and inflammatory conditions.
-3.  **The Acute Inflammatory Axis in IBD (Exclusive Red Edge):** The isolated, direct connection between **`Fusobacteriaceae`** and **`Enterobacteriaceae`** at the bottom of the graph is a classic etiological hallmark of acute bowel inflammation. These two facultative anaerobic pathobionts exploit the host's oxidative stress to bloom concurrently, outcompeting obligate anaerobic symbionts and exacerbating mucosal ulcerations.
+1.  **The Cirrhosis Cohort (Exclusive Grey Sub-network):** A highly interconnected and isolated cluster of nodes (*Neisseriaceae, Campylobacteraceae, Burkholderiaceae*) appears exclusively within the liver cirrhosis cohort. Topologically, this module exhibits a remarkably high edge density compared to the background network, indicating a robust and highly specific structural shift. Biologically, these families are typical residents of the oral cavity. Their strong mathematical co-occurrence and tight clustering in the gut network strongly suggest a systemic breakdown of clinical barriers (like gastric acid filtering), allowing significant oral-to-gut translocation.
+
+2.  **The Shared Core (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal that distinct diseases can trigger parallel network disruptions, often targeting the same high-degree microbial hubs.
+
+    -   **The IBD / Cancer Axis (Blue and Yellow Edges):** The preserved interactions involving *Oscillospiraceae* and *Desulfovibrionaceae* show a shared topological signature between ulcerative colitis and colorectal cancer. The fact that our multi-method consensus framework identifies the exact same conditional dependencies in both cohorts points to a common degraded microenvironment, likely driven by similar inflammatory pressures and mucosal degradation.
+    -   **The IBD / T2D Axis (Blue and Beige Edges):** Coupled interactions between families like *Bacteroidaceae* and *Streptococcaceae* highlight a common topological breakdown. This cross-disease connectivity suggests that both metabolic (T2D) and inflammatory (IBD) conditions destabilize the exact same structural pillars of the gut ecosystem, ultimately compromising its metabolic homeostasis.
+
+3.  **The IBD Inflammatory Axis (Exclusive Blue Edge):** The direct, isolated connection between *Fusobacteriaceae* and *Enterobacteriaceae* stands out as a strong statistical anomaly specific to the IBD cohort. To survive our strict 0.66 majority vote threshold across SparCC and SpiecEasi algorithms, this exclusive link requires an extraordinarily strong covariance. Rather than a random co-occurrence, this points to a highly specific and resilient bacterial alliance that thrives exclusively under the acute mucosal stress of ulcerative colitis.
 
 ## 5. Genus Level Analysis (Micro-Ecology)
 
