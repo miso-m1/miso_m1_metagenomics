@@ -25,12 +25,12 @@ dir.create(here("figures", "dataPrep"), recursive = TRUE, showWarnings = FALSE)
 
 Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:
 
--   importing OTU, taxonomy, and metadata tables,
--   creating a phyloseq object,
--   checking for missing values,
--   verifying sequencing depth consistency,
--   exploring taxonomic composition,
--   and visualizing global similarities between samples.
+- importing OTU, taxonomy, and metadata tables,
+- creating a phyloseq object,
+- checking for missing values,
+- verifying sequencing depth consistency,
+- exploring taxonomic composition,
+- and visualizing global similarities between samples.
 
 These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.
 

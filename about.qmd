@@ -1,6 +1,6 @@
 ---
 title: "About"
-image: img/space.jpg
+image: img/team.jpg
 about:
   template: trestles
   # links:
@@ -30,27 +30,27 @@ The analysis is performed using reproducible workflows based on **R**, **phylose
 
 The goal of this blog is to:
 
--   Provide a comprehensive analysis of 16S metagenomic data
+- Provide a comprehensive analysis of 16S metagenomic data
 
 <!-- -->
 
--   Explore the taxonomic composition of microbial communities
+- Explore the taxonomic composition of microbial communities
 
 <!-- -->
 
--   Examine alpha and beta diversity across sample groups
+- Examine alpha and beta diversity across sample groups
 
 <!-- -->
 
--   Apply statistical methods suited to count data and their complex structure
+- Apply statistical methods suited to count data and their complex structure
 
 <!-- -->
 
--   Produce clear and interpretable visualizations (PCoA, taxonomic bar plots, etc.)
+- Produce clear and interpretable visualizations (PCoA, taxonomic bar plots, etc.)
 
 <!-- -->
 
--   Establish a reproducible approach to adapt the pipeline to different datasets
+- Establish a reproducible approach to adapt the pipeline to different datasets
 
 ## Contributors
 
