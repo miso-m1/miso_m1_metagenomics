@@ -43,9 +43,7 @@ The workflow expects:\
 - a taxonomy table,\
 - and a sample metadata table.\
 \
-All three tables are stored in an Excel file and imported separately using their sheet names. You can replace the file path and sheet names below with your own dataset.
-
-by loading your data in the `M1_metagenomics/data` and going to the the following file `M1_metagenomics/functions/inputData.R` to update the data.
+All three tables are stored in an Excel file and imported separately using their sheet names. You can replace the file path and sheet names below with your own dataset, by loading your data in the `M1_metagenomics/data` and going to the the following file `M1_metagenomics/functions/inputData.R` to update the data.
 
 ``` r
 file_path <- "../data/dataset_MISO_project.xlsx"
@@ -61,7 +59,7 @@ samples_df <- read_excel(file_path, sheet = sample_sheet)
 
 ## Load Data
 
-The imported tables are converted into a \`phyloseq\` object. \`phyloseq\` is a R package for microbiome analysis that allows abundance data, taxonomy, and sample metadata to be stored together in a single structured object.
+The imported tables are converted into a `phyloseq` object. `phyloseq` is a R package for microbiome analysis that allows abundance data, taxonomy, and sample metadata to be stored together in a single structured object.
 
 This makes it easier to perform analyses and visualize the microbial data.
 
