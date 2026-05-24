@@ -87,7 +87,7 @@ p_bray <- plot_ordination(metagenomics, ord_bray, color = "disease", shape = "di
 
 p_bray
 
-# ggsave("figures/Beta/PCA_distance_bray.pdf", p_bray)
+ggsave(here("figures", "Beta", "pcoa_bray.pdf"), p_bray)
 ```
 
 Samples clustering closely together have more similar microbial compositions. Separation between disease groups suggests differences in microbial community structure associated with disease status.
@@ -110,7 +110,7 @@ p_jaccard <- plot_ordination(metagenomics, ord_jaccard, color = "disease", shape
 
 p_jaccard
 
-# ggsave("figures/Beta/PCA_distance_bray.pdf", p_bray)
+ggsave(here("figures", "Beta", "pcoa_jaccard.pdf"), p_jaccard)
 ```
 
 Jaccard ordination visualizes differences in taxon membership independent of abundance. Group separation indicates disease-associated changes in which taxa are present rather than their relative abundance.
@@ -120,7 +120,7 @@ Jaccard ordination visualizes differences in taxon membership independent of abu
 
 ### Checking Assumption: Homogeneity of Multivariate Dispersion
 
-PERMANOVA is sensitive to differences in within‑group dispersion (variance). We test this using `betadisper()` (multivariate analogue of Levene’s test).
+We want to use PERMANOVA on both beta diversity metrics but it is sensitive to differences in within‑group dispersion (variance). We test this using `betadisper()` (multivariate analogue of Levene’s test).
 
 We performed **`betadisper()`** on both Bray‑Curtis and Jaccard distance matrices, followed by a permutation test. The test evaluates whether the within‑group dispersion (variance around the group median) differs significantly among the four disease groups.
 
@@ -161,6 +161,7 @@ To identify which disease groups differed in multivariate dispersion, we perform
 
 ```{r}
 # Pairwise comparisons
+disp_bray <- betadisper(dist_bray, samples_df$disease)
 pairwise_bray <- permutest(disp_bray, pairwise = TRUE, permutations = 999)
 pairwise_bray
 ```

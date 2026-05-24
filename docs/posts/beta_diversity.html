@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -444,7 +445,7 @@ J(A,B)=1-\frac{A\cup B}{A\cap B}
 <h2 class="anchored" data-anchor-id="permanova">PERMANOVA</h2>
 <section id="checking-assumption-homogeneity-of-multivariate-dispersion" class="level3">
 <h3 class="anchored" data-anchor-id="checking-assumption-homogeneity-of-multivariate-dispersion">Checking Assumption: Homogeneity of Multivariate Dispersion</h3>
-<p>PERMANOVA is sensitive to differences in within‑group dispersion (variance). We test this using <code>betadisper()</code> (multivariate analogue of Levene’s test).</p>
+<p>We want to use PERMANOVA on both beta diversity metrics but it is sensitive to differences in within‑group dispersion (variance). We test this using <code>betadisper()</code> (multivariate analogue of Levene’s test).</p>
 <p>We performed <strong><code>betadisper()</code></strong> on both Bray‑Curtis and Jaccard distance matrices, followed by a permutation test. The test evaluates whether the within‑group dispersion (variance around the group median) differs significantly among the four disease groups.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Bray dispersion</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Jaccard dispersion</a></li></ul>
@@ -535,8 +536,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise comparisons</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pairwise_bray <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pairwise_bray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, samples_df<span class="sc">$</span>disease)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pairwise_bray <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>pairwise_bray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -554,8 +556,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Pairwise comparisons:
 (Observed p-value below diagonal, permuted p-value above diagonal)
                            cancer  cirrhosis ibd_ulcerative_colitis   t2d
-cancer                            1.8700e-01             1.0000e-02 0.026
-cirrhosis              1.8713e-01                        1.0000e-03 0.314
+cancer                            1.8700e-01             1.8000e-02 0.028
+cirrhosis              1.8713e-01                        1.0000e-03 0.273
 ibd_ulcerative_colitis 1.3615e-02 2.4127e-07                        0.001
 t2d                    3.0887e-02 3.0252e-01             1.4536e-11      </code></pre>
 </div>
@@ -586,8 +588,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Pairwise comparisons:
 (Observed p-value below diagonal, permuted p-value above diagonal)
                            cancer  cirrhosis ibd_ulcerative_colitis   t2d
-cancer                            2.1500e-01             1.3000e-02 0.015
-cirrhosis              2.1996e-01                        1.0000e-03 0.205
+cancer                            2.3800e-01             1.5000e-02 0.025
+cirrhosis              2.1996e-01                        1.0000e-03 0.188
 ibd_ulcerative_colitis 1.4762e-02 6.1841e-07                        0.001
 t2d                    2.1386e-02 1.9695e-01             5.0089e-12      </code></pre>
 </div>
@@ -913,6 +915,7 @@ attr(,"class")
  forcats        * 1.0.1   2025-09-25 [1] CRAN (R 4.6.0)
  FSA            * 0.10.1  2026-01-10 [1] CRAN (R 4.6.0)
  ggplot2        * 4.0.3   2026-04-22 [1] CRAN (R 4.6.0)
+ gridExtra      * 2.3     2017-09-09 [1] CRAN (R 4.6.0)
  here           * 1.0.2   2025-09-15 [1] CRAN (R 4.6.0)
  igraph         * 2.3.1   2026-05-04 [1] CRAN (R 4.6.0)
  knitr          * 1.51    2025-12-20 [1] CRAN (R 4.6.0)
@@ -1484,7 +1487,7 @@ attr(,"class")
 <span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-93"><a href="#cb28-93" aria-hidden="true" tabindex="-1"></a>p_bray</span>
 <span id="cb28-94"><a href="#cb28-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Beta/PCA_distance_bray.pdf", p_bray)</span></span>
+<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"figures"</span>, <span class="st">"Beta"</span>, <span class="st">"pcoa_bray.pdf"</span>), p_bray)</span>
 <span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-97"><a href="#cb28-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-98"><a href="#cb28-98" aria-hidden="true" tabindex="-1"></a>Samples clustering closely together have more similar microbial compositions. Separation between disease groups suggests differences in microbial community structure associated with disease status.</span>
@@ -1507,7 +1510,7 @@ attr(,"class")
 <span id="cb28-117"><a href="#cb28-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a>p_jaccard</span>
 <span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("figures/Beta/PCA_distance_bray.pdf", p_bray)</span></span>
+<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"figures"</span>, <span class="st">"Beta"</span>, <span class="st">"pcoa_jaccard.pdf"</span>), p_jaccard)</span>
 <span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-122"><a href="#cb28-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-123"><a href="#cb28-123" aria-hidden="true" tabindex="-1"></a>Jaccard ordination visualizes differences in taxon membership independent of abundance. Group separation indicates disease-associated changes in which taxa are present rather than their relative abundance.</span>
@@ -1517,7 +1520,7 @@ attr(,"class")
 <span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### Checking Assumption: Homogeneity of Multivariate Dispersion</span></span>
 <span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a>PERMANOVA is sensitive to differences in within‑group dispersion (variance). We test this using <span class="in">`betadisper()`</span> (multivariate analogue of Levene’s test).</span>
+<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a>We want to use PERMANOVA on both beta diversity metrics but it is sensitive to differences in within‑group dispersion (variance). We test this using <span class="in">`betadisper()`</span> (multivariate analogue of Levene’s test).</span>
 <span id="cb28-131"><a href="#cb28-131" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a>We performed **`betadisper()`** on both Bray‑Curtis and Jaccard distance matrices, followed by a permutation test. The test evaluates whether the within‑group dispersion (variance around the group median) differs significantly among the four disease groups.</span>
 <span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a></span>
@@ -1558,144 +1561,145 @@ attr(,"class")
 <span id="cb28-172"><a href="#cb28-172" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-175"><a href="#cb28-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb28-176"><a href="#cb28-176" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise comparisons</span></span>
-<span id="cb28-177"><a href="#cb28-177" aria-hidden="true" tabindex="-1"></a>pairwise_bray <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-178"><a href="#cb28-178" aria-hidden="true" tabindex="-1"></a>pairwise_bray</span>
-<span id="cb28-179"><a href="#cb28-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-180"><a href="#cb28-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-181"><a href="#cb28-181" aria-hidden="true" tabindex="-1"></a>The IBD group has significantly different dispersion from all other three groups (cancer, cirrhosis, T2D). In contrast, cancer, cirrhosis, and T2D do not differ from each other (except cancer vs T2D is borderline significant at 0.031 – still significant, but weaker).</span>
-<span id="cb28-182"><a href="#cb28-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-183"><a href="#cb28-183" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
-<span id="cb28-184"><a href="#cb28-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-187"><a href="#cb28-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-188"><a href="#cb28-188" aria-hidden="true" tabindex="-1"></a>disp_jaccard <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_jaccard, samples_df<span class="sc">$</span>disease)</span>
-<span id="cb28-189"><a href="#cb28-189" aria-hidden="true" tabindex="-1"></a>pairwise_jaccard <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_jaccard, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-190"><a href="#cb28-190" aria-hidden="true" tabindex="-1"></a>pairwise_jaccard</span>
-<span id="cb28-191"><a href="#cb28-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-192"><a href="#cb28-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-193"><a href="#cb28-193" aria-hidden="true" tabindex="-1"></a>IBD differs significantly from all others (p <span class="sc">\&lt;</span> 0.02 for each). Cancer vs cirrhosis not significant (p = 0.21), cirrhosis vs T2D not significant (p = 0.196). Cancer vs T2D is significant (p = 0.02). The conclusion is the same for Bray, IBD is the main outlier in terms of dispersion.</span>
-<span id="cb28-194"><a href="#cb28-194" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb28-195"><a href="#cb28-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-196"><a href="#cb28-196" aria-hidden="true" tabindex="-1"></a>Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p <span class="sc">\&lt;</span> 0.05 for all comparisons), while dispersions among cancer, cirrhosis, and type 2 diabetes were largely similar (p <span class="sc">\&gt;</span> 0.05 except cancer vs T2D). This indicates that the overall heterogeneity in dispersion is primarily attributable to the IBD group.</span>
-<span id="cb28-197"><a href="#cb28-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-198"><a href="#cb28-198" aria-hidden="true" tabindex="-1"></a><span class="fu">### PERMANOVA</span></span>
-<span id="cb28-199"><a href="#cb28-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-200"><a href="#cb28-200" aria-hidden="true" tabindex="-1"></a>PERMANOVA (adonis2) is used to test whether the centroids of the groups (disease status) are significantly different in the multivariate space defined by the distance metrics. When dispersions are unequal, a significant PERMANOVA p-value may reflect dispersion differences rather than true centroid differences.</span>
-<span id="cb28-201"><a href="#cb28-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-202"><a href="#cb28-202" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a><span class="fu">#### PERMANOVA Bray</span></span>
-<span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-207"><a href="#cb28-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-208"><a href="#cb28-208" aria-hidden="true" tabindex="-1"></a>permanova_bray <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_bray <span class="sc">~</span> disease, </span>
-<span id="cb28-209"><a href="#cb28-209" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> samples_df, </span>
-<span id="cb28-210"><a href="#cb28-210" aria-hidden="true" tabindex="-1"></a>                          <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-211"><a href="#cb28-211" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_bray)</span>
-<span id="cb28-212"><a href="#cb28-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-213"><a href="#cb28-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-214"><a href="#cb28-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-215"><a href="#cb28-215" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Disease explains 8.7% of the total variation in community composition (abundance‑sensitive).</span>
-<span id="cb28-216"><a href="#cb28-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-217"><a href="#cb28-217" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Residual (unexplained) = 91.3%.</span>
-<span id="cb28-218"><a href="#cb28-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-219"><a href="#cb28-219" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>F = 15.2 – large relative to null permutations.</span>
-<span id="cb28-220"><a href="#cb28-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-221"><a href="#cb28-221" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>p = 0.001 – significant</span>
-<span id="cb28-222"><a href="#cb28-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-223"><a href="#cb28-223" aria-hidden="true" tabindex="-1"></a><span class="fu">#### PERMANOVA Jaccard</span></span>
-<span id="cb28-224"><a href="#cb28-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-227"><a href="#cb28-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-228"><a href="#cb28-228" aria-hidden="true" tabindex="-1"></a>permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_jaccard <span class="sc">~</span> disease, </span>
-<span id="cb28-229"><a href="#cb28-229" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> samples_df, </span>
-<span id="cb28-230"><a href="#cb28-230" aria-hidden="true" tabindex="-1"></a>                             <span class="at">permutations =</span> <span class="dv">999</span>)</span>
-<span id="cb28-231"><a href="#cb28-231" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_jaccard)</span>
-<span id="cb28-232"><a href="#cb28-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-233"><a href="#cb28-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-234"><a href="#cb28-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-235"><a href="#cb28-235" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Disease explains 5.6% of variation (presence/absence only).</span>
-<span id="cb28-236"><a href="#cb28-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-237"><a href="#cb28-237" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Residuals = 94.4%</span>
-<span id="cb28-238"><a href="#cb28-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-239"><a href="#cb28-239" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>F = 9.4 – also large.</span>
-<span id="cb28-240"><a href="#cb28-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-241"><a href="#cb28-241" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>p = 0.001 – significant.</span>
-<span id="cb28-242"><a href="#cb28-242" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb28-243"><a href="#cb28-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-244"><a href="#cb28-244" aria-hidden="true" tabindex="-1"></a>Both metrics show a statistically significant association between disease status and microbial community dissimilarity. The effect sizes (R²) are small. Bray‑Curtis explains more variation than Jaccard (8.7% vs 5.6%), suggesting that abundance differences are more discriminative than just presence/absence.</span>
-<span id="cb28-245"><a href="#cb28-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-246"><a href="#cb28-246" aria-hidden="true" tabindex="-1"></a>Both PERMANOVA and beta dispersion tests were significant (p = 0.001 for both Bray‑Curtis and Jaccard). This indicates that disease status is associated with differences in both the average microbial community composition and the within‑group variability.</span>
-<span id="cb28-247"><a href="#cb28-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-248"><a href="#cb28-248" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pairwise PERMANOVA</span></span>
-<span id="cb28-249"><a href="#cb28-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-250"><a href="#cb28-250" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA is a post‑hoc test used after a significant PERMANOVA (which tells you “at least one group differs”). It performs separate PERMANOVA tests on each combination of two groups (e.g., cancer vs cirrhosis, cancer vs IBD, etc.) to determine which specific pairs of groups are significantly different from each other.</span>
-<span id="cb28-251"><a href="#cb28-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-252"><a href="#cb28-252" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb28-253"><a href="#cb28-253" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Bray</span></span>
-<span id="cb28-254"><a href="#cb28-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-257"><a href="#cb28-257" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-258"><a href="#cb28-258" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb28-259"><a href="#cb28-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-260"><a href="#cb28-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-261"><a href="#cb28-261" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
-<span id="cb28-262"><a href="#cb28-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-265"><a href="#cb28-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-266"><a href="#cb28-266" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb28-267"><a href="#cb28-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-268"><a href="#cb28-268" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb28-269"><a href="#cb28-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-270"><a href="#cb28-270" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA (999 permutations) revealed that all disease groups were significantly different from each other for both Bray‑Curtis (p = 0.001 for all comparisons) and Jaccard (p = 0.001 for all comparisons) distances. However, because the PERMDISP test showed heterogeneous multivariate dispersions (driven primarily by the IBD group), the significant pairwise PERMANOVA results may reflect a combination of differences in both centroid location and within‑group dispersion.</span>
-<span id="cb28-271"><a href="#cb28-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-272"><a href="#cb28-272" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
-<span id="cb28-273"><a href="#cb28-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-276"><a href="#cb28-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-277"><a href="#cb28-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
-<span id="cb28-278"><a href="#cb28-278" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb28-279"><a href="#cb28-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-280"><a href="#cb28-280" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb28-281"><a href="#cb28-281" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(<span class="st">"Bray-Curtis"</span>, <span class="st">"Jaccard"</span>),</span>
-<span id="cb28-282"><a href="#cb28-282" aria-hidden="true" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>)),</span>
-<span id="cb28-283"><a href="#cb28-283" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
-<span id="cb28-284"><a href="#cb28-284" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
-<span id="cb28-285"><a href="#cb28-285" aria-hidden="true" tabindex="-1"></a>                <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>)),</span>
-<span id="cb28-286"><a href="#cb28-286" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Dispersion p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(disp_test_bray<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
-<span id="cb28-287"><a href="#cb28-287" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
-<span id="cb28-288"><a href="#cb28-288" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-289"><a href="#cb28-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-290"><a href="#cb28-290" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span>
-<span id="cb28-291"><a href="#cb28-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-292"><a href="#cb28-292" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-293"><a href="#cb28-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-294"><a href="#cb28-294" aria-hidden="true" tabindex="-1"></a>The table summarizes:</span>
-<span id="cb28-295"><a href="#cb28-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-296"><a href="#cb28-296" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>effect size (R²)</span>
-<span id="cb28-297"><a href="#cb28-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-298"><a href="#cb28-298" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>PERMANOVA significance</span>
-<span id="cb28-299"><a href="#cb28-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-300"><a href="#cb28-300" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>homogeneity of dispersion testing</span>
-<span id="cb28-301"><a href="#cb28-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-302"><a href="#cb28-302" aria-hidden="true" tabindex="-1"></a>Higher R² values indicate stronger disease-associated microbial differences.</span>
-<span id="cb28-303"><a href="#cb28-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-304"><a href="#cb28-304" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
-<span id="cb28-305"><a href="#cb28-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-306"><a href="#cb28-306" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test. Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion testing and pairwise PERMANOVA were evaluated to identify which disease groups differed in dispersion.</span>
-<span id="cb28-307"><a href="#cb28-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-308"><a href="#cb28-308" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
-<span id="cb28-309"><a href="#cb28-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-310"><a href="#cb28-310" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
-<span id="cb28-311"><a href="#cb28-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-312"><a href="#cb28-312" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
-<span id="cb28-313"><a href="#cb28-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-314"><a href="#cb28-314" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, primarily due to the IBD group differing in variance from the others.</span>
-<span id="cb28-315"><a href="#cb28-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-316"><a href="#cb28-316" aria-hidden="true" tabindex="-1"></a>Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.</span>
-<span id="cb28-317"><a href="#cb28-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-320"><a href="#cb28-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-321"><a href="#cb28-321" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"beta_diversity.RData"</span>))</span>
-<span id="cb28-322"><a href="#cb28-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-323"><a href="#cb28-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-324"><a href="#cb28-324" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
-<span id="cb28-325"><a href="#cb28-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-328"><a href="#cb28-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb28-329"><a href="#cb28-329" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
-<span id="cb28-330"><a href="#cb28-330" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-177"><a href="#cb28-177" aria-hidden="true" tabindex="-1"></a>disp_bray <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_bray, samples_df<span class="sc">$</span>disease)</span>
+<span id="cb28-178"><a href="#cb28-178" aria-hidden="true" tabindex="-1"></a>pairwise_bray <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_bray, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb28-179"><a href="#cb28-179" aria-hidden="true" tabindex="-1"></a>pairwise_bray</span>
+<span id="cb28-180"><a href="#cb28-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-181"><a href="#cb28-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-182"><a href="#cb28-182" aria-hidden="true" tabindex="-1"></a>The IBD group has significantly different dispersion from all other three groups (cancer, cirrhosis, T2D). In contrast, cancer, cirrhosis, and T2D do not differ from each other (except cancer vs T2D is borderline significant at 0.031 – still significant, but weaker).</span>
+<span id="cb28-183"><a href="#cb28-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-184"><a href="#cb28-184" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
+<span id="cb28-185"><a href="#cb28-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-188"><a href="#cb28-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-189"><a href="#cb28-189" aria-hidden="true" tabindex="-1"></a>disp_jaccard <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(dist_jaccard, samples_df<span class="sc">$</span>disease)</span>
+<span id="cb28-190"><a href="#cb28-190" aria-hidden="true" tabindex="-1"></a>pairwise_jaccard <span class="ot">&lt;-</span> <span class="fu">permutest</span>(disp_jaccard, <span class="at">pairwise =</span> <span class="cn">TRUE</span>, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb28-191"><a href="#cb28-191" aria-hidden="true" tabindex="-1"></a>pairwise_jaccard</span>
+<span id="cb28-192"><a href="#cb28-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-193"><a href="#cb28-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-194"><a href="#cb28-194" aria-hidden="true" tabindex="-1"></a>IBD differs significantly from all others (p <span class="sc">\&lt;</span> 0.02 for each). Cancer vs cirrhosis not significant (p = 0.21), cirrhosis vs T2D not significant (p = 0.196). Cancer vs T2D is significant (p = 0.02). The conclusion is the same for Bray, IBD is the main outlier in terms of dispersion.</span>
+<span id="cb28-195"><a href="#cb28-195" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb28-196"><a href="#cb28-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-197"><a href="#cb28-197" aria-hidden="true" tabindex="-1"></a>Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p <span class="sc">\&lt;</span> 0.05 for all comparisons), while dispersions among cancer, cirrhosis, and type 2 diabetes were largely similar (p <span class="sc">\&gt;</span> 0.05 except cancer vs T2D). This indicates that the overall heterogeneity in dispersion is primarily attributable to the IBD group.</span>
+<span id="cb28-198"><a href="#cb28-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-199"><a href="#cb28-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### PERMANOVA</span></span>
+<span id="cb28-200"><a href="#cb28-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-201"><a href="#cb28-201" aria-hidden="true" tabindex="-1"></a>PERMANOVA (adonis2) is used to test whether the centroids of the groups (disease status) are significantly different in the multivariate space defined by the distance metrics. When dispersions are unequal, a significant PERMANOVA p-value may reflect dispersion differences rather than true centroid differences.</span>
+<span id="cb28-202"><a href="#cb28-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a><span class="fu">#### PERMANOVA Bray</span></span>
+<span id="cb28-205"><a href="#cb28-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-208"><a href="#cb28-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-209"><a href="#cb28-209" aria-hidden="true" tabindex="-1"></a>permanova_bray <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_bray <span class="sc">~</span> disease, </span>
+<span id="cb28-210"><a href="#cb28-210" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> samples_df, </span>
+<span id="cb28-211"><a href="#cb28-211" aria-hidden="true" tabindex="-1"></a>                          <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb28-212"><a href="#cb28-212" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_bray)</span>
+<span id="cb28-213"><a href="#cb28-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-214"><a href="#cb28-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-215"><a href="#cb28-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-216"><a href="#cb28-216" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Disease explains 8.7% of the total variation in community composition (abundance‑sensitive).</span>
+<span id="cb28-217"><a href="#cb28-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-218"><a href="#cb28-218" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Residual (unexplained) = 91.3%.</span>
+<span id="cb28-219"><a href="#cb28-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-220"><a href="#cb28-220" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>F = 15.2 – large relative to null permutations.</span>
+<span id="cb28-221"><a href="#cb28-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-222"><a href="#cb28-222" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>p = 0.001 – significant</span>
+<span id="cb28-223"><a href="#cb28-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-224"><a href="#cb28-224" aria-hidden="true" tabindex="-1"></a><span class="fu">#### PERMANOVA Jaccard</span></span>
+<span id="cb28-225"><a href="#cb28-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-228"><a href="#cb28-228" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-229"><a href="#cb28-229" aria-hidden="true" tabindex="-1"></a>permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(dist_jaccard <span class="sc">~</span> disease, </span>
+<span id="cb28-230"><a href="#cb28-230" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> samples_df, </span>
+<span id="cb28-231"><a href="#cb28-231" aria-hidden="true" tabindex="-1"></a>                             <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb28-232"><a href="#cb28-232" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_jaccard)</span>
+<span id="cb28-233"><a href="#cb28-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-234"><a href="#cb28-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-235"><a href="#cb28-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-236"><a href="#cb28-236" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Disease explains 5.6% of variation (presence/absence only).</span>
+<span id="cb28-237"><a href="#cb28-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-238"><a href="#cb28-238" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Residuals = 94.4%</span>
+<span id="cb28-239"><a href="#cb28-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-240"><a href="#cb28-240" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>F = 9.4 – also large.</span>
+<span id="cb28-241"><a href="#cb28-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-242"><a href="#cb28-242" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>p = 0.001 – significant.</span>
+<span id="cb28-243"><a href="#cb28-243" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb28-244"><a href="#cb28-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-245"><a href="#cb28-245" aria-hidden="true" tabindex="-1"></a>Both metrics show a statistically significant association between disease status and microbial community dissimilarity. The effect sizes (R²) are small. Bray‑Curtis explains more variation than Jaccard (8.7% vs 5.6%), suggesting that abundance differences are more discriminative than just presence/absence.</span>
+<span id="cb28-246"><a href="#cb28-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-247"><a href="#cb28-247" aria-hidden="true" tabindex="-1"></a>Both PERMANOVA and beta dispersion tests were significant (p = 0.001 for both Bray‑Curtis and Jaccard). This indicates that disease status is associated with differences in both the average microbial community composition and the within‑group variability.</span>
+<span id="cb28-248"><a href="#cb28-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-249"><a href="#cb28-249" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pairwise PERMANOVA</span></span>
+<span id="cb28-250"><a href="#cb28-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-251"><a href="#cb28-251" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA is a post‑hoc test used after a significant PERMANOVA (which tells you “at least one group differs”). It performs separate PERMANOVA tests on each combination of two groups (e.g., cancer vs cirrhosis, cancer vs IBD, etc.) to determine which specific pairs of groups are significantly different from each other.</span>
+<span id="cb28-252"><a href="#cb28-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-253"><a href="#cb28-253" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb28-254"><a href="#cb28-254" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Bray</span></span>
+<span id="cb28-255"><a href="#cb28-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-258"><a href="#cb28-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-259"><a href="#cb28-259" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb28-260"><a href="#cb28-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-261"><a href="#cb28-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-262"><a href="#cb28-262" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
+<span id="cb28-263"><a href="#cb28-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-266"><a href="#cb28-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-267"><a href="#cb28-267" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb28-268"><a href="#cb28-268" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-269"><a href="#cb28-269" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb28-270"><a href="#cb28-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-271"><a href="#cb28-271" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA (999 permutations) revealed that all disease groups were significantly different from each other for both Bray‑Curtis (p = 0.001 for all comparisons) and Jaccard (p = 0.001 for all comparisons) distances. However, because the PERMDISP test showed heterogeneous multivariate dispersions (driven primarily by the IBD group), the significant pairwise PERMANOVA results may reflect a combination of differences in both centroid location and within‑group dispersion.</span>
+<span id="cb28-272"><a href="#cb28-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-273"><a href="#cb28-273" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb28-274"><a href="#cb28-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-277"><a href="#cb28-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-278"><a href="#cb28-278" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
+<span id="cb28-279"><a href="#cb28-279" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb28-280"><a href="#cb28-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-281"><a href="#cb28-281" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-282"><a href="#cb28-282" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(<span class="st">"Bray-Curtis"</span>, <span class="st">"Jaccard"</span>),</span>
+<span id="cb28-283"><a href="#cb28-283" aria-hidden="true" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>)),</span>
+<span id="cb28-284"><a href="#cb28-284" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
+<span id="cb28-285"><a href="#cb28-285" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb28-286"><a href="#cb28-286" aria-hidden="true" tabindex="-1"></a>                <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>)),</span>
+<span id="cb28-287"><a href="#cb28-287" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Dispersion p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(disp_test_bray<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb28-288"><a href="#cb28-288" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
+<span id="cb28-289"><a href="#cb28-289" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-290"><a href="#cb28-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-291"><a href="#cb28-291" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span>
+<span id="cb28-292"><a href="#cb28-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-293"><a href="#cb28-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-294"><a href="#cb28-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-295"><a href="#cb28-295" aria-hidden="true" tabindex="-1"></a>The table summarizes:</span>
+<span id="cb28-296"><a href="#cb28-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-297"><a href="#cb28-297" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>effect size (R²)</span>
+<span id="cb28-298"><a href="#cb28-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-299"><a href="#cb28-299" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>PERMANOVA significance</span>
+<span id="cb28-300"><a href="#cb28-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-301"><a href="#cb28-301" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>homogeneity of dispersion testing</span>
+<span id="cb28-302"><a href="#cb28-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-303"><a href="#cb28-303" aria-hidden="true" tabindex="-1"></a>Higher R² values indicate stronger disease-associated microbial differences.</span>
+<span id="cb28-304"><a href="#cb28-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-305"><a href="#cb28-305" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb28-306"><a href="#cb28-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-307"><a href="#cb28-307" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test. Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion testing and pairwise PERMANOVA were evaluated to identify which disease groups differed in dispersion.</span>
+<span id="cb28-308"><a href="#cb28-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-309"><a href="#cb28-309" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
+<span id="cb28-310"><a href="#cb28-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-311"><a href="#cb28-311" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
+<span id="cb28-312"><a href="#cb28-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-313"><a href="#cb28-313" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
+<span id="cb28-314"><a href="#cb28-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-315"><a href="#cb28-315" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, primarily due to the IBD group differing in variance from the others.</span>
+<span id="cb28-316"><a href="#cb28-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-317"><a href="#cb28-317" aria-hidden="true" tabindex="-1"></a>Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.</span>
+<span id="cb28-318"><a href="#cb28-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-321"><a href="#cb28-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-322"><a href="#cb28-322" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"beta_diversity.RData"</span>))</span>
+<span id="cb28-323"><a href="#cb28-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-324"><a href="#cb28-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-325"><a href="#cb28-325" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
+<span id="cb28-326"><a href="#cb28-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-329"><a href="#cb28-329" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-330"><a href="#cb28-330" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb28-331"><a href="#cb28-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

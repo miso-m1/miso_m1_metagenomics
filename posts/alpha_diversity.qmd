@@ -18,11 +18,12 @@
 #| include: false
 library(here)
 source(here("functions", "inputData.R"))
+dir.create(here("plots&tables", "Alpha"), recursive = TRUE, showWarnings = FALSE)
 ```
 
 # Alpha Diversity
 
-Alpha diversity is a term used to describe the "within-sample" diversity. It measures how complex a single microbial community is. Alpha diversity combines two main ecological properties, richness (how many species are present) and evenness (how evenly distributed are the species.
+Alpha diversity is a term used to describe the "within-sample" diversity. It measures how complex a single microbial community is. Alpha diversity combines two main ecological properties, richness (how many species are present) and evenness (how evenly distributed are the species).
 
 We use four indexes (metrics) to calculate alpha diversity:
 
@@ -74,15 +75,11 @@ In this study, raw sequencing count data were not available, and the dataset con
 
 We use four indexes (metrics) to calculate alpha diversity (Shannon, Simpson, Inverse Simpson, Observed).
 
-The `phyloseq` package in R already has built in functions to calculate these metrics for data, but with raw counts required (whole numbers ≥0).
+The `phyloseq` package in R already has built in functions to calculate these metrics for data, but for data with raw counts required (whole numbers ≥0).
 
 `alpha_div <- estimate_richness(metagenomics, measures = c("Shannon", "Simpson", "InvSimpson", "Observed"))`
 
 ## Alpha Diversity Formulas
-
-The `phyloseq` package in R already has built in functions to calculate the different metrics, but for data with required **raw counts** (whole numbers, ≥0).
-
-`alpha_div <- estimate_richness(metagenomics, measures = c("Shannon", "Simpson", "InvSimpson", "Observed"))`
 
 Because our data only contains only relative abundance, we will create functions to calculate these metrics manually using using the formulas:
 
@@ -126,9 +123,13 @@ $R$ = the number of different taxa observed in a sample
 
 $p_i$​ = proportion of observations belonging to the $i$th species
 
+## Calculate alpha diversity
+
 ```{r}
 alpha_df <- compute_alpha_from_rel(metagenomics)
 head(alpha_df)
+write.csv(alpha_df, here("figures", "Alpha", "alpha_df.csv"), 
+          row.names = FALSE)
 ```
 
 ## Alpha Diversity Plots
@@ -140,6 +141,7 @@ head(alpha_df)
 p_shannon <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
   geom_boxplot()
 p_shannon
+ggsave(here("figures", "Alpha", "alpha_shannon.pdf"), p_shannon)
 ```
 
 In general, Shannon values of 3.50 and above for the Shannon index indicates high diversity while values below 2.0 indicate low diversity (Baliton et al., 2020).
@@ -150,6 +152,7 @@ In general, Shannon values of 3.50 and above for the Shannon index indicates hig
 p_simpson <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
   geom_boxplot()
 p_simpson
+ggsave(here("figures", "Alpha", "alpha_simpson.pdf"), p_simpson)
 ```
 
 Simpson values close to 1 indicate higher diversity and values near 0 indicate lower diversity (dominance).
@@ -160,6 +163,7 @@ Simpson values close to 1 indicate higher diversity and values near 0 indicate l
 p_invsimpson <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
   geom_boxplot()
 p_invsimpson
+ggsave(here("figures", "Alpha", "alpha_InvSimpson.pdf"), p_invsimpson)
 ```
 
 Inverse Simpson Values can range from 1 (only one taxon) to S (all taxa equally abundant).
@@ -170,7 +174,7 @@ Inverse Simpson Values can range from 1 (only one taxon) to S (all taxa equally 
 p_observed <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
   geom_boxplot()
 p_observed
-# ggsave("figures/Alpha/alpha_boxplot_shannon.pdf", p3)
+ggsave(here("figures", "Alpha", "alpha_observed.pdf"), p_observed)
 ```
 
 Number of unique tax (OTUs) present in each.
@@ -184,6 +188,8 @@ Shapiro–Wilk tests assess whether diversity metric values follows a normal dis
 metrics <- c("Shannon", "Simpson", "InvSimpson", "Observed")
 shapiro_table <- normality_tests(alpha_df, metrics)
 print(shapiro_table)
+write.csv(shapiro_table, here("figures", "Alpha", "shapiro.csv"), 
+          row.names = FALSE)
 ```
 
 If p-value \> alpha 0.05, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).
@@ -194,6 +200,8 @@ kw_table <- kruskal_tests(
   metrics
 )
 print(kw_table)
+write.csv(kw_table, here("figures", "Alpha", "kruskal-Wallis.csv"), 
+          row.names = FALSE)
 ```
 
 The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.
@@ -210,12 +218,14 @@ PW_Wilcox_table <- pairwise_wilcox_tests(
 )
 
 print(PW_Wilcox_table, n=25)
-
+write.csv(PW_Wilcox_table, here("figures", "Alpha", "Pairwise_Wilcoxon.csv"), 
+          row.names = FALSE)
 ```
 
 Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.
 
 ```{r}
+
 #To save all the data/graphs for the presentation
 save(kw_table, PW_Wilcox_table, shapiro_table, alpha_df, p_shannon, p_simpson, p_invsimpson, p_observed, file = here::here("posts", "alpha_diversity.RData"))
 ```

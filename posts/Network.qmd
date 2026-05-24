@@ -30,6 +30,20 @@ An interaction (edge) is validated in the final consensus network if it is indep
 
 The baseline `phyloseq` object used throughout this pipeline is named `metagenomics` and is automatically loaded via the Quarto preliminary inclusion file.
 
+### 1.1 Installation
+
+Before running the network analysis, you must install the `SpiecEasi` package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using `devtools`.
+
+Please run the following code in your R console:
+
+```{r}
+#| label: install-spieceasi
+#| include: true
+
+# Download and install SpiecEasi from its official GitHub repository
+# devtools::install_github("zdk123/SpiecEasi")
+```
+
 ## 2. Mathematical Foundations of Consensus Network Inference
 
 Before detailing the algorithms, it is critical to address the **compositional data problem**. Metagenomic sequencing yields relative abundances (proportions constrained to a sum of 1), not absolute cell counts. Applying standard Pearson or Spearman correlations directly to such data produces spurious correlations. To mitigate this, both SPIEC-EASI algorithms first apply a **Centered Log-Ratio (CLR)** transformation to the abundance vector $x$:
@@ -120,7 +134,11 @@ for(g in groups) {
 }
 
 # Displaying topological summary table
-knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
+phylum_table <- knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
+phylum_table
+write.csv(phylum_table, here("figures", "Network", "phylum_table.csv"), 
+          row.names = FALSE)
+
 ```
 
 ### Phylum plot
@@ -130,6 +148,10 @@ knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topologi
 #| fig-height: 9
 # Plotting global network
 Network_phylum <- plot_global_network(networks_phylum, "Phylum")
+Network_phylum
+
+pdf(here("figures", "Network", "Network_phylum.pdf"), width = 9, height = 9)
+plot(Network_phylum, main = "Phylum-level network")
 
 ```
 :::
@@ -155,7 +177,10 @@ for(g in groups) {
   networks_family[[g]] <- build_consensus_network(metagenomics, g, "disease", "Family", 0.15)
 }
 
-knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
+family_table <- knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
+family_table
+write.csv(family_table, here("figures", "Network", "family_table.csv"), 
+          row.names = FALSE)
 ```
 
 ### Family plot
@@ -164,6 +189,10 @@ knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topologi
 #| fig-width: 9
 #| fig-height: 9
 Network_family <- plot_global_network(networks_family, "Family")
+Network_family
+
+pdf(here("figures", "Network", "Network_family.pdf"), width = 9, height = 9)
+plot(Network_family, main = "family-level network")
 ```
 :::
 
@@ -193,7 +222,10 @@ for(g in groups) {
 }
 
 # Displaying topological summary table
-knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
+genus_table <- knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
+genus_table
+write.csv(genus_table, here("figures", "Network", "genus_table.csv"), 
+          row.names = FALSE)
 ```
 
 ### Genus plot
@@ -203,11 +235,14 @@ knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topologica
 #| fig-height: 10
 
 # Plotting global network
-Network_genre <- plot_global_network(networks_genus, "Genus")
+Network_genus <- plot_global_network(networks_genus, "Genus")
+Network_genus
+pdf(here("figures", "Network", "Network_genus.pdf"), width = 10, height = 10)
+plot(Network_genus, main = "genus-level network")
 ```
 :::
 
-### Biological Interpretation (Genre)
+### Biological Interpretation (Genus)
 
 At the **Genus** level, the pipeline reaches a high-resolution window, critical for identifying precise therapeutic targets or key probiotic leads (e.g., *Faecalibacterium, Akkermansia*).
 
@@ -223,7 +258,7 @@ Ultimately, these network topologies show that chronic diseases do not merely al
 
 ```{r}
 #To save all the data/graphs for the presentation
-save(Network_phylum, Network_family, Network_genre, file = here::here("posts", "Network.RData"))
+save(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, file = here::here("posts", "Network.RData"))
 ```
 
 # Session info

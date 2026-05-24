@@ -97,13 +97,15 @@ This helps verify that the dataset was imported correctly.
 summary(metagenomics)
 ```
 
+The dataset is stored as a `phyloseq` S4 object, a R class designed to integrate abundance, taxonomy, and metadata into one object.
+
 ```{r}
 #| label: type
 #| include: true
 typeof(otu_mat)
 ```
 
-We can verify that the OTU table is stored as a numeric matrix of type \`double\`, meaning the abundance values are represented as decimal numbers.
+We can verify that the OTU table is stored as a numeric matrix of type **double**, meaning the abundance values are represented as decimal numbers.
 
 We also checked whether some samples contained only zero values. Such samples can be problematic because they do not contain any detected microbial signal and may affect analyses, if they do exist, we should consider ignoring those samples.
 
@@ -118,9 +120,7 @@ No sample composed only of zeroes was found.
 
 ## Missing values check
 
-Missing values can bias analyses and lead to incorrect statistical results.\
-\
-We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis.
+Missing values can bias analyses and lead to incorrect statistical results. We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis. **`is.na()`** is used to deal with missing values in the dataset. In order to check missing values, we can sum up the number of missing values of each table and if the sum equals 0, then there are no missing values.
 
 ```{r}
 #| label: missing-check
@@ -130,17 +130,15 @@ sum(is.na(otu_mat))
 sum(is.na(tax_mat))
 sum(is.na(samples_df))
 
-#visualize missingness
 colSums(is.na(samples_df))
 
 ```
 
-We can see that there is no missing values.
+We can see that there are no missing values.
 
 ## Distribution of Sequencing Depth.
 
 Sequencing depth corresponds to the total number of reads obtained for each sample.\
-\
 Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.
 
 ```{r}
@@ -157,7 +155,7 @@ bp_seq_depth <- ggplot(data.frame(depth = sample_depth), aes(x = depth)) +
 bp_seq_depth
 ```
 
-Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been normalized to relative abundances.
+Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been probably normalized to relative abundances.
 
 However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.
 
@@ -167,9 +165,9 @@ However, we can notice one potential outlier, a sample exhibiting a lower total 
 sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 ```
 
-Most samples show similar sequencing depth values, suggesting that the dataset was already normalized before analysis.\
+Most samples show similar sequencing depth values, confirming that the dataset was already normalized before analysis.\
 \
-One sample (\*\*Sample_3482\*\*) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
+One sample (**Sample_3482**) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
 
 ## Taxonomic composition
 
@@ -194,12 +192,15 @@ Tax_phyllum
 ### Phylum x Disease Composition
 
 ```{r}
+
 Tax_disease_group <- plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
    geom_bar(stat = "identity", position = "stack") +
    theme_minimal() +
    labs(title = "Phylum composition by disease group")
 Tax_disease_group
 ```
+
+It seems that the most present phylum are Bacteroidetes and Actinobacteria, for all diseases.
 
 ### Top 10 Genera x Disease
 
@@ -221,6 +222,8 @@ Top10b_disease <- plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus"
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Top10b_disease
 ```
+
+We observe that Bacteroides, a genus within the Bacteroidetes phylum, is the most abundant genus across all disease groups in the dataset. This confirms the high abundance of the Bacteroidetes phylum in these samples.
 :::
 
 ## Distribution of Samples by Gender
@@ -261,7 +264,6 @@ meta_df <- data.frame(sample_data(metagenomics))
 
 disease_counts <- meta_df %>%
   summarise(Count = n(), .by = c(gender, disease))
-disease_counts
 
 SampleF_dist_disease <- ggplot(disease_counts %>% filter(gender == "female"),
                                aes(x = disease, y = Count, fill = disease)) +
@@ -383,9 +385,9 @@ Bclass_dist_gender <- plot_bar(metagenomics_class, x = "gender", fill = "Class")
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Bclass_dist_gender
 ```
-:::
 
 It seems that the bacterial distribution is approximately the same for each gender.
+:::
 
 Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).
 
