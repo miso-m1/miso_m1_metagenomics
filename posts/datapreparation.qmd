@@ -176,9 +176,7 @@ We can see that there are no missing values.
 
 ## Distribution of Sequencing Depth.
 
-Sequencing depth corresponds to the total number of reads obtained for each sample.
-
-\
+Sequencing depth corresponds to the total number of reads obtained for each sample.\
 Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.
 
 ```{r}

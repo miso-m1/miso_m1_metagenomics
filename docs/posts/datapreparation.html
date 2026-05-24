@@ -469,8 +469,7 @@ sequencing_technology              pubmedid
 </section>
 <section id="distribution-of-sequencing-depth." class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-sequencing-depth.">Distribution of Sequencing Depth.</h2>
-<p>Sequencing depth corresponds to the total number of reads obtained for each sample.</p>
-<p><br>
+<p>Sequencing depth corresponds to the total number of reads obtained for each sample.<br>
 Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.</p>
 <div class="cell">
 <details class="code-fold">
@@ -913,7 +912,7 @@ Bray-Curtis distance is a statistic used to quantify the dissimilarity in compos
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in system2("quarto", "-V", stdout = TRUE, env = paste0("TMPDIR=", :
 l'exécution de la commande '"quarto"
-TMPDIR=C:/Users/inesb/AppData/Local/Temp/RtmpeEkrfa/file18b87360726a -V'
+TMPDIR=C:/Users/inesb/AppData/Local/Temp/RtmpGUAcGl/file1cbc3ead2d45 -V'
 renvoie un statut 1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -1586,316 +1585,314 @@ renvoie un statut 1</code></pre>
 <span id="cb46-192"><a href="#cb46-192" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-193"><a href="#cb46-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of Sequencing Depth.</span></span>
 <span id="cb46-194"><a href="#cb46-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-195"><a href="#cb46-195" aria-hidden="true" tabindex="-1"></a>Sequencing depth corresponds to the total number of reads obtained for each sample.</span>
-<span id="cb46-196"><a href="#cb46-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-197"><a href="#cb46-197" aria-hidden="true" tabindex="-1"></a>\</span>
-<span id="cb46-198"><a href="#cb46-198" aria-hidden="true" tabindex="-1"></a>Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.</span>
-<span id="cb46-199"><a href="#cb46-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-202"><a href="#cb46-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-203"><a href="#cb46-203" aria-hidden="true" tabindex="-1"></a>sample_depth <span class="ot">&lt;-</span> <span class="fu">sample_sums</span>(metagenomics)</span>
+<span id="cb46-195"><a href="#cb46-195" aria-hidden="true" tabindex="-1"></a>Sequencing depth corresponds to the total number of reads obtained for each sample.\</span>
+<span id="cb46-196"><a href="#cb46-196" aria-hidden="true" tabindex="-1"></a>Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.</span>
+<span id="cb46-197"><a href="#cb46-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-200"><a href="#cb46-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-201"><a href="#cb46-201" aria-hidden="true" tabindex="-1"></a>sample_depth <span class="ot">&lt;-</span> <span class="fu">sample_sums</span>(metagenomics)</span>
+<span id="cb46-202"><a href="#cb46-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-203"><a href="#cb46-203" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_depth)</span>
 <span id="cb46-204"><a href="#cb46-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-205"><a href="#cb46-205" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_depth)</span>
+<span id="cb46-205"><a href="#cb46-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb46-206"><a href="#cb46-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-207"><a href="#cb46-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-208"><a href="#cb46-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-211"><a href="#cb46-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-212"><a href="#cb46-212" aria-hidden="true" tabindex="-1"></a>bp_seq_depth <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">depth =</span> sample_depth), <span class="fu">aes</span>(<span class="at">x =</span> depth)) <span class="sc">+</span></span>
-<span id="cb46-213"><a href="#cb46-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
-<span id="cb46-214"><a href="#cb46-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-215"><a href="#cb46-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Sequencing Depth"</span>,</span>
-<span id="cb46-216"><a href="#cb46-216" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Reads per sample"</span>,</span>
-<span id="cb46-217"><a href="#cb46-217" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span>
-<span id="cb46-218"><a href="#cb46-218" aria-hidden="true" tabindex="-1"></a>bp_seq_depth</span>
-<span id="cb46-219"><a href="#cb46-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-209"><a href="#cb46-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-210"><a href="#cb46-210" aria-hidden="true" tabindex="-1"></a>bp_seq_depth <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">depth =</span> sample_depth), <span class="fu">aes</span>(<span class="at">x =</span> depth)) <span class="sc">+</span></span>
+<span id="cb46-211"><a href="#cb46-211" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb46-212"><a href="#cb46-212" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-213"><a href="#cb46-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Sequencing Depth"</span>,</span>
+<span id="cb46-214"><a href="#cb46-214" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Reads per sample"</span>,</span>
+<span id="cb46-215"><a href="#cb46-215" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb46-216"><a href="#cb46-216" aria-hidden="true" tabindex="-1"></a>bp_seq_depth</span>
+<span id="cb46-217"><a href="#cb46-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-218"><a href="#cb46-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-219"><a href="#cb46-219" aria-hidden="true" tabindex="-1"></a>Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been probably normalized to relative abundances.</span>
 <span id="cb46-220"><a href="#cb46-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-221"><a href="#cb46-221" aria-hidden="true" tabindex="-1"></a>Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been probably normalized to relative abundances.</span>
+<span id="cb46-221"><a href="#cb46-221" aria-hidden="true" tabindex="-1"></a>However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.</span>
 <span id="cb46-222"><a href="#cb46-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-223"><a href="#cb46-223" aria-hidden="true" tabindex="-1"></a>However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.</span>
-<span id="cb46-224"><a href="#cb46-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-227"><a href="#cb46-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-228"><a href="#cb46-228" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_sums</span>(metagenomics)[<span class="fu">sample_sums</span>(metagenomics) <span class="sc">&lt;</span> <span class="dv">90</span>]</span>
-<span id="cb46-229"><a href="#cb46-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-230"><a href="#cb46-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-231"><a href="#cb46-231" aria-hidden="true" tabindex="-1"></a>Most samples show similar sequencing depth values, confirming that the dataset was already normalized before analysis.\</span>
-<span id="cb46-232"><a href="#cb46-232" aria-hidden="true" tabindex="-1"></a>\</span>
-<span id="cb46-233"><a href="#cb46-233" aria-hidden="true" tabindex="-1"></a>One sample (**Sample_3482**) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.</span>
+<span id="cb46-225"><a href="#cb46-225" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-226"><a href="#cb46-226" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_sums</span>(metagenomics)[<span class="fu">sample_sums</span>(metagenomics) <span class="sc">&lt;</span> <span class="dv">90</span>]</span>
+<span id="cb46-227"><a href="#cb46-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-228"><a href="#cb46-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-229"><a href="#cb46-229" aria-hidden="true" tabindex="-1"></a>Most samples show similar sequencing depth values, confirming that the dataset was already normalized before analysis.\</span>
+<span id="cb46-230"><a href="#cb46-230" aria-hidden="true" tabindex="-1"></a>\</span>
+<span id="cb46-231"><a href="#cb46-231" aria-hidden="true" tabindex="-1"></a>One sample (**Sample_3482**) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.</span>
+<span id="cb46-232"><a href="#cb46-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-233"><a href="#cb46-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## Taxonomic composition</span></span>
 <span id="cb46-234"><a href="#cb46-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-235"><a href="#cb46-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Taxonomic composition</span></span>
+<span id="cb46-235"><a href="#cb46-235" aria-hidden="true" tabindex="-1"></a>Taxonomic composition plots allow visualization of the relative abundance of microbial groups across samples.</span>
 <span id="cb46-236"><a href="#cb46-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-237"><a href="#cb46-237" aria-hidden="true" tabindex="-1"></a>Taxonomic composition plots allow visualization of the relative abundance of microbial groups across samples.</span>
+<span id="cb46-237"><a href="#cb46-237" aria-hidden="true" tabindex="-1"></a>These representations help identify dominant bacterial taxa and observe potential differences between disease groups or other metadata categories.</span>
 <span id="cb46-238"><a href="#cb46-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-239"><a href="#cb46-239" aria-hidden="true" tabindex="-1"></a>These representations help identify dominant bacterial taxa and observe potential differences between disease groups or other metadata categories.</span>
-<span id="cb46-240"><a href="#cb46-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-243"><a href="#cb46-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-244"><a href="#cb46-244" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Phylum"</span>)</span>
-<span id="cb46-245"><a href="#cb46-245" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_phylum, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb46-246"><a href="#cb46-246" aria-hidden="true" tabindex="-1"></a>Tax_phyllum <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
-<span id="cb46-247"><a href="#cb46-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-248"><a href="#cb46-248" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-249"><a href="#cb46-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Taxonomic composition at Phylum level"</span>) <span class="sc">+</span></span>
-<span id="cb46-250"><a href="#cb46-250" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">size=</span><span class="dv">1</span>))</span>
-<span id="cb46-251"><a href="#cb46-251" aria-hidden="true" tabindex="-1"></a>Tax_phyllum</span>
-<span id="cb46-252"><a href="#cb46-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-241"><a href="#cb46-241" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-242"><a href="#cb46-242" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Phylum"</span>)</span>
+<span id="cb46-243"><a href="#cb46-243" aria-hidden="true" tabindex="-1"></a>metagenomics_phylum_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_phylum, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
+<span id="cb46-244"><a href="#cb46-244" aria-hidden="true" tabindex="-1"></a>Tax_phyllum <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
+<span id="cb46-245"><a href="#cb46-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-246"><a href="#cb46-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-247"><a href="#cb46-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Taxonomic composition at Phylum level"</span>) <span class="sc">+</span></span>
+<span id="cb46-248"><a href="#cb46-248" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">size=</span><span class="dv">1</span>))</span>
+<span id="cb46-249"><a href="#cb46-249" aria-hidden="true" tabindex="-1"></a>Tax_phyllum</span>
+<span id="cb46-250"><a href="#cb46-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-251"><a href="#cb46-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-252"><a href="#cb46-252" aria-hidden="true" tabindex="-1"></a>Let's do a barplot as to get a clearer visualization, using the disease groups.</span>
 <span id="cb46-253"><a href="#cb46-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-254"><a href="#cb46-254" aria-hidden="true" tabindex="-1"></a>Let's do a barplot as to get a clearer visualization, using the disease groups.</span>
-<span id="cb46-255"><a href="#cb46-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-258"><a href="#cb46-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-259"><a href="#cb46-259" aria-hidden="true" tabindex="-1"></a>Tax_disease_group <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
-<span id="cb46-260"><a href="#cb46-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb46-261"><a href="#cb46-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-262"><a href="#cb46-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Phylum composition by disease group"</span>)</span>
-<span id="cb46-263"><a href="#cb46-263" aria-hidden="true" tabindex="-1"></a>Tax_disease_group</span>
-<span id="cb46-264"><a href="#cb46-264" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-256"><a href="#cb46-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-257"><a href="#cb46-257" aria-hidden="true" tabindex="-1"></a>Tax_disease_group <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_phylum_per, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Phylum"</span>) <span class="sc">+</span></span>
+<span id="cb46-258"><a href="#cb46-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb46-259"><a href="#cb46-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-260"><a href="#cb46-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Phylum composition by disease group"</span>)</span>
+<span id="cb46-261"><a href="#cb46-261" aria-hidden="true" tabindex="-1"></a>Tax_disease_group</span>
+<span id="cb46-262"><a href="#cb46-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-263"><a href="#cb46-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-264"><a href="#cb46-264" aria-hidden="true" tabindex="-1"></a>it seems that the most present phylum are Bacteroidetes and Actinobacteria, for all diseases.</span>
 <span id="cb46-265"><a href="#cb46-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-266"><a href="#cb46-266" aria-hidden="true" tabindex="-1"></a>it seems that the most present phylum are Bacteroidetes and Actinobacteria, for all diseases.</span>
+<span id="cb46-266"><a href="#cb46-266" aria-hidden="true" tabindex="-1"></a>To improve readability, only the 10 most abundant genera were retained in the following visualization.</span>
 <span id="cb46-267"><a href="#cb46-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-268"><a href="#cb46-268" aria-hidden="true" tabindex="-1"></a>To improve readability, only the 10 most abundant genera were retained in the following visualization.</span>
-<span id="cb46-269"><a href="#cb46-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-272"><a href="#cb46-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-273"><a href="#cb46-273" aria-hidden="true" tabindex="-1"></a>metagenomics_genus <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Genus"</span>)</span>
+<span id="cb46-270"><a href="#cb46-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-271"><a href="#cb46-271" aria-hidden="true" tabindex="-1"></a>metagenomics_genus <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Genus"</span>)</span>
+<span id="cb46-272"><a href="#cb46-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-273"><a href="#cb46-273" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_genus, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
 <span id="cb46-274"><a href="#cb46-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-275"><a href="#cb46-275" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_genus, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb46-276"><a href="#cb46-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-277"><a href="#cb46-277" aria-hidden="true" tabindex="-1"></a><span class="co"># keep top 10 genera to avoid clutter</span></span>
-<span id="cb46-278"><a href="#cb46-278" aria-hidden="true" tabindex="-1"></a>top_genera <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_genus_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb46-279"><a href="#cb46-279" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_genera, metagenomics_genus_per)</span>
-<span id="cb46-280"><a href="#cb46-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-281"><a href="#cb46-281" aria-hidden="true" tabindex="-1"></a>Top10b_disease <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_genus_top, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
-<span id="cb46-282"><a href="#cb46-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb46-283"><a href="#cb46-283" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-284"><a href="#cb46-284" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 10 Genera Composition by Disease"</span>) <span class="sc">+</span></span>
-<span id="cb46-285"><a href="#cb46-285" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb46-286"><a href="#cb46-286" aria-hidden="true" tabindex="-1"></a>Top10b_disease</span>
-<span id="cb46-287"><a href="#cb46-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-275"><a href="#cb46-275" aria-hidden="true" tabindex="-1"></a><span class="co"># keep top 10 genera to avoid clutter</span></span>
+<span id="cb46-276"><a href="#cb46-276" aria-hidden="true" tabindex="-1"></a>top_genera <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_genus_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb46-277"><a href="#cb46-277" aria-hidden="true" tabindex="-1"></a>metagenomics_genus_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_genera, metagenomics_genus_per)</span>
+<span id="cb46-278"><a href="#cb46-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-279"><a href="#cb46-279" aria-hidden="true" tabindex="-1"></a>Top10b_disease <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_genus_top, <span class="at">x =</span> <span class="st">"disease"</span>, <span class="at">fill =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
+<span id="cb46-280"><a href="#cb46-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb46-281"><a href="#cb46-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-282"><a href="#cb46-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 10 Genera Composition by Disease"</span>) <span class="sc">+</span></span>
+<span id="cb46-283"><a href="#cb46-283" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb46-284"><a href="#cb46-284" aria-hidden="true" tabindex="-1"></a>Top10b_disease</span>
+<span id="cb46-285"><a href="#cb46-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-286"><a href="#cb46-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-287"><a href="#cb46-287" aria-hidden="true" tabindex="-1"></a>We observe that Bacteroides, a genus within the Bacteroidetes phylum, is the most abundant genus across all disease groups in the dataset. This confirms the high abundance of the Bacteroidetes phylum in these samples.</span>
 <span id="cb46-288"><a href="#cb46-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-289"><a href="#cb46-289" aria-hidden="true" tabindex="-1"></a>We observe that Bacteroides, a genus within the Bacteroidetes phylum, is the most abundant genus across all disease groups in the dataset. This confirms the high abundance of the Bacteroidetes phylum in these samples.</span>
+<span id="cb46-289"><a href="#cb46-289" aria-hidden="true" tabindex="-1"></a><span class="fu">## Beta Diversity - PCoA</span></span>
 <span id="cb46-290"><a href="#cb46-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-291"><a href="#cb46-291" aria-hidden="true" tabindex="-1"></a><span class="fu">## Beta Diversity - PCoA</span></span>
-<span id="cb46-292"><a href="#cb46-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-293"><a href="#cb46-293" aria-hidden="true" tabindex="-1"></a>We can use Beta diversity to measure differences in microbial composition between samples.\</span>
-<span id="cb46-294"><a href="#cb46-294" aria-hidden="true" tabindex="-1"></a>Bray-Curtis distance is a statistic used to quantify the dissimilarity in composition between samples, based on abundance data.&nbsp;</span>
+<span id="cb46-291"><a href="#cb46-291" aria-hidden="true" tabindex="-1"></a>We can use Beta diversity to measure differences in microbial composition between samples.\</span>
+<span id="cb46-292"><a href="#cb46-292" aria-hidden="true" tabindex="-1"></a>Bray-Curtis distance is a statistic used to quantify the dissimilarity in composition between samples, based on abundance data.&nbsp;</span>
+<span id="cb46-293"><a href="#cb46-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-294"><a href="#cb46-294" aria-hidden="true" tabindex="-1"></a>We then visualise sample similarities via Principal Coordinate Analysis (PCoA). Samples positioned close together have more similar microbial compositions, whereas distant samples are more dissimilar.</span>
 <span id="cb46-295"><a href="#cb46-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-296"><a href="#cb46-296" aria-hidden="true" tabindex="-1"></a>We then visualise sample similarities via Principal Coordinate Analysis (PCoA). Samples positioned close together have more similar microbial compositions, whereas distant samples are more dissimilar.</span>
+<span id="cb46-296"><a href="#cb46-296" aria-hidden="true" tabindex="-1"></a>Firstly, we do a PCoA by gender.</span>
 <span id="cb46-297"><a href="#cb46-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-298"><a href="#cb46-298" aria-hidden="true" tabindex="-1"></a>Firstly, we do a PCoA by gender.</span>
+<span id="cb46-298"><a href="#cb46-298" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beta Diversity - PCoA by gender</span></span>
 <span id="cb46-299"><a href="#cb46-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-300"><a href="#cb46-300" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beta Diversity - PCoA by gender</span></span>
+<span id="cb46-300"><a href="#cb46-300" aria-hidden="true" tabindex="-1"></a>This visualization allows us to explore whether microbial communities tend to cluster according to gender.</span>
 <span id="cb46-301"><a href="#cb46-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-302"><a href="#cb46-302" aria-hidden="true" tabindex="-1"></a>This visualization allows us to explore whether microbial communities tend to cluster according to gender.</span>
+<span id="cb46-302"><a href="#cb46-302" aria-hidden="true" tabindex="-1"></a>Strong separation between groups would suggest that gender may influence microbiome composition.</span>
 <span id="cb46-303"><a href="#cb46-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-304"><a href="#cb46-304" aria-hidden="true" tabindex="-1"></a>Strong separation between groups would suggest that gender may influence microbiome composition.</span>
-<span id="cb46-305"><a href="#cb46-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-308"><a href="#cb46-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-309"><a href="#cb46-309" aria-hidden="true" tabindex="-1"></a>pcoa <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb46-310"><a href="#cb46-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-311"><a href="#cb46-311" aria-hidden="true" tabindex="-1"></a>Pcoa_gender <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, pcoa, <span class="at">color =</span> <span class="st">"gender"</span>) <span class="sc">+</span></span>
-<span id="cb46-312"><a href="#cb46-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb46-313"><a href="#cb46-313" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-314"><a href="#cb46-314" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCoA - Bray-Curtis by gender"</span>)</span>
-<span id="cb46-315"><a href="#cb46-315" aria-hidden="true" tabindex="-1"></a>Pcoa_gender</span>
-<span id="cb46-316"><a href="#cb46-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-306"><a href="#cb46-306" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-307"><a href="#cb46-307" aria-hidden="true" tabindex="-1"></a>pcoa <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb46-308"><a href="#cb46-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-309"><a href="#cb46-309" aria-hidden="true" tabindex="-1"></a>Pcoa_gender <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, pcoa, <span class="at">color =</span> <span class="st">"gender"</span>) <span class="sc">+</span></span>
+<span id="cb46-310"><a href="#cb46-310" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb46-311"><a href="#cb46-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-312"><a href="#cb46-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCoA - Bray-Curtis by gender"</span>)</span>
+<span id="cb46-313"><a href="#cb46-313" aria-hidden="true" tabindex="-1"></a>Pcoa_gender</span>
+<span id="cb46-314"><a href="#cb46-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-315"><a href="#cb46-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-316"><a href="#cb46-316" aria-hidden="true" tabindex="-1"></a>Overall, the plot does not show a clear separation between male and female samples.</span>
 <span id="cb46-317"><a href="#cb46-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-318"><a href="#cb46-318" aria-hidden="true" tabindex="-1"></a>Overall, the plot does not show a clear separation between male and female samples.</span>
+<span id="cb46-318"><a href="#cb46-318" aria-hidden="true" tabindex="-1"></a>Samples from both genders largely overlap, suggesting that gender alone may not strongly influence the overall microbial community composition in this dataset.</span>
 <span id="cb46-319"><a href="#cb46-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-320"><a href="#cb46-320" aria-hidden="true" tabindex="-1"></a>Samples from both genders largely overlap, suggesting that gender alone may not strongly influence the overall microbial community composition in this dataset.</span>
+<span id="cb46-320"><a href="#cb46-320" aria-hidden="true" tabindex="-1"></a>However, a few local clusters and dispersion differences can still be observed. Male samples appear slightly more spread out, which could indicate greater variability in microbial composition between individuals.</span>
 <span id="cb46-321"><a href="#cb46-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-322"><a href="#cb46-322" aria-hidden="true" tabindex="-1"></a>However, a few local clusters and dispersion differences can still be observed. Male samples appear slightly more spread out, which could indicate greater variability in microbial composition between individuals.</span>
+<span id="cb46-322"><a href="#cb46-322" aria-hidden="true" tabindex="-1"></a>The first two principal coordinates explain 11.1% and 9.9% of the total variation respectively, meaning that only a portion of the microbiome variability is represented in this plot.</span>
 <span id="cb46-323"><a href="#cb46-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-324"><a href="#cb46-324" aria-hidden="true" tabindex="-1"></a>The first two principal coordinates explain 11.1% and 9.9% of the total variation respectively, meaning that only a portion of the microbiome variability is represented in this plot.</span>
+<span id="cb46-324"><a href="#cb46-324" aria-hidden="true" tabindex="-1"></a>Let's do a PCoA by gender and disease to furthermore evaluate the dataset. Adding disease status as a variable allows visualization of two metadata variables simultaneously and may reveal certain paterns.</span>
 <span id="cb46-325"><a href="#cb46-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-326"><a href="#cb46-326" aria-hidden="true" tabindex="-1"></a>Let's do a PCoA by gender and disease to furthermore evaluate the dataset. Adding disease status as a variable allows visualization of two metadata variables simultaneously and may reveal certain paterns.</span>
+<span id="cb46-326"><a href="#cb46-326" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beta Diversity - PCoA by gender and disease</span></span>
 <span id="cb46-327"><a href="#cb46-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-328"><a href="#cb46-328" aria-hidden="true" tabindex="-1"></a><span class="fu">### Beta Diversity - PCoA by gender and disease</span></span>
+<span id="cb46-328"><a href="#cb46-328" aria-hidden="true" tabindex="-1"></a>This PCoA visualization combines both gender and disease information to explore whether microbial composition varies between groups.</span>
 <span id="cb46-329"><a href="#cb46-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-330"><a href="#cb46-330" aria-hidden="true" tabindex="-1"></a>This PCoA visualization combines both gender and disease information to explore whether microbial composition varies between groups.</span>
-<span id="cb46-331"><a href="#cb46-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-334"><a href="#cb46-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-335"><a href="#cb46-335" aria-hidden="true" tabindex="-1"></a>pcoagd <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb46-336"><a href="#cb46-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-337"><a href="#cb46-337" aria-hidden="true" tabindex="-1"></a>Pcoa_gendre_disease <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, pcoagd, <span class="at">color =</span> <span class="st">"gender"</span>, <span class="at">shape =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
-<span id="cb46-338"><a href="#cb46-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb46-339"><a href="#cb46-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb46-340"><a href="#cb46-340" aria-hidden="true" tabindex="-1"></a>Pcoa_gendre_disease</span>
-<span id="cb46-341"><a href="#cb46-341" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-332"><a href="#cb46-332" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-333"><a href="#cb46-333" aria-hidden="true" tabindex="-1"></a>pcoagd <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(metagenomics, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb46-334"><a href="#cb46-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-335"><a href="#cb46-335" aria-hidden="true" tabindex="-1"></a>Pcoa_gendre_disease <span class="ot">&lt;-</span> <span class="fu">plot_ordination</span>(metagenomics, pcoagd, <span class="at">color =</span> <span class="st">"gender"</span>, <span class="at">shape =</span> <span class="st">"disease"</span>) <span class="sc">+</span></span>
+<span id="cb46-336"><a href="#cb46-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb46-337"><a href="#cb46-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb46-338"><a href="#cb46-338" aria-hidden="true" tabindex="-1"></a>Pcoa_gendre_disease</span>
+<span id="cb46-339"><a href="#cb46-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-340"><a href="#cb46-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-341"><a href="#cb46-341" aria-hidden="true" tabindex="-1"></a>Some disease-specific clustering patterns can be observed. Samples associated with cirrhosis tend to be located more frequently in the lower part of the plot, whereas cancer samples appear more concentrated in the upper central region.</span>
 <span id="cb46-342"><a href="#cb46-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-343"><a href="#cb46-343" aria-hidden="true" tabindex="-1"></a>Some disease-specific clustering patterns can be observed. Samples associated with cirrhosis tend to be located more frequently in the lower part of the plot, whereas cancer samples appear more concentrated in the upper central region.</span>
+<span id="cb46-343"><a href="#cb46-343" aria-hidden="true" tabindex="-1"></a>In contrast, ulcerative colitis and type 2 diabetes samples show overlap with the other groups, suggesting less distinct microbial separation.</span>
 <span id="cb46-344"><a href="#cb46-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-345"><a href="#cb46-345" aria-hidden="true" tabindex="-1"></a>In contrast, ulcerative colitis and type 2 diabetes samples show overlap with the other groups, suggesting less distinct microbial separation.</span>
+<span id="cb46-345"><a href="#cb46-345" aria-hidden="true" tabindex="-1"></a>Gender does not appear to create a strong separation within disease groups, as male and female samples remain mostly intermixed through the space.</span>
 <span id="cb46-346"><a href="#cb46-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-347"><a href="#cb46-347" aria-hidden="true" tabindex="-1"></a>Gender does not appear to create a strong separation within disease groups, as male and female samples remain mostly intermixed through the space.</span>
+<span id="cb46-347"><a href="#cb46-347" aria-hidden="true" tabindex="-1"></a>Overall, disease status may contribute more strongly than gender to differences in microbial composition, although the overlap between groups indicates that these effects are moderate.</span>
 <span id="cb46-348"><a href="#cb46-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-349"><a href="#cb46-349" aria-hidden="true" tabindex="-1"></a>Overall, disease status may contribute more strongly than gender to differences in microbial composition, although the overlap between groups indicates that these effects are moderate.</span>
+<span id="cb46-349"><a href="#cb46-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of samples by gender</span></span>
 <span id="cb46-350"><a href="#cb46-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-351"><a href="#cb46-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of samples by gender</span></span>
+<span id="cb46-351"><a href="#cb46-351" aria-hidden="true" tabindex="-1"></a>Let's analyze the distribution of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.</span>
 <span id="cb46-352"><a href="#cb46-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-353"><a href="#cb46-353" aria-hidden="true" tabindex="-1"></a>Let's analyze the distribution of samples by gender. Strong imbalance between groups may influence statistical interpretation and reduce the reliability of comparisons.</span>
-<span id="cb46-354"><a href="#cb46-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-357"><a href="#cb46-357" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-358"><a href="#cb46-358" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
-<span id="cb46-359"><a href="#cb46-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-360"><a href="#cb46-360" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-361"><a href="#cb46-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb46-362"><a href="#cb46-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb46-363"><a href="#cb46-363" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
-<span id="cb46-364"><a href="#cb46-364" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gender_counts)</span>
+<span id="cb46-355"><a href="#cb46-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-356"><a href="#cb46-356" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
+<span id="cb46-357"><a href="#cb46-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-358"><a href="#cb46-358" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-359"><a href="#cb46-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb46-360"><a href="#cb46-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb46-361"><a href="#cb46-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb46-362"><a href="#cb46-362" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gender_counts)</span>
+<span id="cb46-363"><a href="#cb46-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-364"><a href="#cb46-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb46-365"><a href="#cb46-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-366"><a href="#cb46-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-367"><a href="#cb46-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-370"><a href="#cb46-370" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-371"><a href="#cb46-371" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-372"><a href="#cb46-372" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb46-373"><a href="#cb46-373" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
-<span id="cb46-374"><a href="#cb46-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-375"><a href="#cb46-375" aria-hidden="true" tabindex="-1"></a>Sample_dist_gender <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">y =</span> Count, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
-<span id="cb46-376"><a href="#cb46-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-377"><a href="#cb46-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-378"><a href="#cb46-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Gender"</span>,</span>
-<span id="cb46-379"><a href="#cb46-379" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb46-380"><a href="#cb46-380" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span>
-<span id="cb46-381"><a href="#cb46-381" aria-hidden="true" tabindex="-1"></a>Sample_dist_gender</span>
-<span id="cb46-382"><a href="#cb46-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-368"><a href="#cb46-368" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-369"><a href="#cb46-369" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-370"><a href="#cb46-370" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb46-371"><a href="#cb46-371" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb46-372"><a href="#cb46-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-373"><a href="#cb46-373" aria-hidden="true" tabindex="-1"></a>Sample_dist_gender <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">y =</span> Count, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb46-374"><a href="#cb46-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-375"><a href="#cb46-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-376"><a href="#cb46-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Gender"</span>,</span>
+<span id="cb46-377"><a href="#cb46-377" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb46-378"><a href="#cb46-378" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span>
+<span id="cb46-379"><a href="#cb46-379" aria-hidden="true" tabindex="-1"></a>Sample_dist_gender</span>
+<span id="cb46-380"><a href="#cb46-380" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-381"><a href="#cb46-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-382"><a href="#cb46-382" aria-hidden="true" tabindex="-1"></a>We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.</span>
 <span id="cb46-383"><a href="#cb46-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-384"><a href="#cb46-384" aria-hidden="true" tabindex="-1"></a>We observe that 44.8% of the samples are female and 55.2% are male, indicating a slightly higher representation of males. However, the distribution remains relatively balanced between the two groups.</span>
+<span id="cb46-384"><a href="#cb46-384" aria-hidden="true" tabindex="-1"></a><span class="fu">## Number of samples of diseases by gender</span></span>
 <span id="cb46-385"><a href="#cb46-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-386"><a href="#cb46-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Number of samples of diseases by gender</span></span>
+<span id="cb46-386"><a href="#cb46-386" aria-hidden="true" tabindex="-1"></a>Number of samples of diseases for females:</span>
 <span id="cb46-387"><a href="#cb46-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-388"><a href="#cb46-388" aria-hidden="true" tabindex="-1"></a>Number of samples of diseases for females:</span>
-<span id="cb46-389"><a href="#cb46-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-392"><a href="#cb46-392" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-393"><a href="#cb46-393" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
-<span id="cb46-394"><a href="#cb46-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-395"><a href="#cb46-395" aria-hidden="true" tabindex="-1"></a>disease_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-396"><a href="#cb46-396" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender, disease) <span class="sc">%&gt;%</span></span>
-<span id="cb46-397"><a href="#cb46-397" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb46-398"><a href="#cb46-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-399"><a href="#cb46-399" aria-hidden="true" tabindex="-1"></a>SampleF_dist_disease <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"female"</span>),</span>
-<span id="cb46-400"><a href="#cb46-400" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
-<span id="cb46-401"><a href="#cb46-401" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-402"><a href="#cb46-402" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-403"><a href="#cb46-403" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Female Samples per Disease"</span>) <span class="sc">+</span></span>
-<span id="cb46-404"><a href="#cb46-404" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb46-405"><a href="#cb46-405" aria-hidden="true" tabindex="-1"></a>SampleF_dist_disease</span>
-<span id="cb46-406"><a href="#cb46-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-390"><a href="#cb46-390" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-391"><a href="#cb46-391" aria-hidden="true" tabindex="-1"></a>meta_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(metagenomics))</span>
+<span id="cb46-392"><a href="#cb46-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-393"><a href="#cb46-393" aria-hidden="true" tabindex="-1"></a>disease_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-394"><a href="#cb46-394" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender, disease) <span class="sc">%&gt;%</span></span>
+<span id="cb46-395"><a href="#cb46-395" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb46-396"><a href="#cb46-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-397"><a href="#cb46-397" aria-hidden="true" tabindex="-1"></a>SampleF_dist_disease <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"female"</span>),</span>
+<span id="cb46-398"><a href="#cb46-398" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb46-399"><a href="#cb46-399" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-400"><a href="#cb46-400" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-401"><a href="#cb46-401" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Female Samples per Disease"</span>) <span class="sc">+</span></span>
+<span id="cb46-402"><a href="#cb46-402" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb46-403"><a href="#cb46-403" aria-hidden="true" tabindex="-1"></a>SampleF_dist_disease</span>
+<span id="cb46-404"><a href="#cb46-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-405"><a href="#cb46-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-406"><a href="#cb46-406" aria-hidden="true" tabindex="-1"></a>Ulcerative colitis (IBD) has the highest number of samples with more than 75 counts, followed by type 2 diabetes (T2D), then cirrhosis, and finally cancer, which has fewer than 25 counts.</span>
 <span id="cb46-407"><a href="#cb46-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-408"><a href="#cb46-408" aria-hidden="true" tabindex="-1"></a>Ulcerative colitis (IBD) has the highest number of samples with more than 75 counts, followed by type 2 diabetes (T2D), then cirrhosis, and finally cancer, which has fewer than 25 counts.</span>
+<span id="cb46-408"><a href="#cb46-408" aria-hidden="true" tabindex="-1"></a>Number of samples of diseases for males:</span>
 <span id="cb46-409"><a href="#cb46-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-410"><a href="#cb46-410" aria-hidden="true" tabindex="-1"></a>Number of samples of diseases for males:</span>
-<span id="cb46-411"><a href="#cb46-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-414"><a href="#cb46-414" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-415"><a href="#cb46-415" aria-hidden="true" tabindex="-1"></a>SampleM_dist_disease <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"male"</span>),</span>
-<span id="cb46-416"><a href="#cb46-416" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
-<span id="cb46-417"><a href="#cb46-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-418"><a href="#cb46-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-419"><a href="#cb46-419" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Male Samples per Disease"</span>) <span class="sc">+</span></span>
-<span id="cb46-420"><a href="#cb46-420" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb46-421"><a href="#cb46-421" aria-hidden="true" tabindex="-1"></a>SampleM_dist_disease</span>
-<span id="cb46-422"><a href="#cb46-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-412"><a href="#cb46-412" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-413"><a href="#cb46-413" aria-hidden="true" tabindex="-1"></a>SampleM_dist_disease <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(disease_counts <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gender <span class="sc">==</span> <span class="st">"male"</span>),</span>
+<span id="cb46-414"><a href="#cb46-414" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb46-415"><a href="#cb46-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-416"><a href="#cb46-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-417"><a href="#cb46-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Male Samples per Disease"</span>) <span class="sc">+</span></span>
+<span id="cb46-418"><a href="#cb46-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb46-419"><a href="#cb46-419" aria-hidden="true" tabindex="-1"></a>SampleM_dist_disease</span>
+<span id="cb46-420"><a href="#cb46-420" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-421"><a href="#cb46-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-422"><a href="#cb46-422" aria-hidden="true" tabindex="-1"></a>Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.</span>
 <span id="cb46-423"><a href="#cb46-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-424"><a href="#cb46-424" aria-hidden="true" tabindex="-1"></a>Type 2 diabetes (T2D) has the highest number of samples with more than 100 counts, followed by type cirrhosis, then Ulcerative colitis (IBD), and finally cancer, which has around 25 counts.</span>
+<span id="cb46-424"><a href="#cb46-424" aria-hidden="true" tabindex="-1"></a>We can see that there are differences in the number of samples per disease, depending on gender.</span>
 <span id="cb46-425"><a href="#cb46-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-426"><a href="#cb46-426" aria-hidden="true" tabindex="-1"></a>We can see that there are differences in the number of samples per disease, depending on gender.</span>
+<span id="cb46-426"><a href="#cb46-426" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of samples by country</span></span>
 <span id="cb46-427"><a href="#cb46-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-428"><a href="#cb46-428" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of samples by country</span></span>
+<span id="cb46-428"><a href="#cb46-428" aria-hidden="true" tabindex="-1"></a>Let's analyze the distribution of samples by country.</span>
 <span id="cb46-429"><a href="#cb46-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-430"><a href="#cb46-430" aria-hidden="true" tabindex="-1"></a>Let's analyze the distribution of samples by country.</span>
-<span id="cb46-431"><a href="#cb46-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-434"><a href="#cb46-434" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-435"><a href="#cb46-435" aria-hidden="true" tabindex="-1"></a>country_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-436"><a href="#cb46-436" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb46-437"><a href="#cb46-437" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb46-438"><a href="#cb46-438" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
-<span id="cb46-439"><a href="#cb46-439" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(country_counts)</span>
-<span id="cb46-440"><a href="#cb46-440" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-441"><a href="#cb46-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-444"><a href="#cb46-444" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-445"><a href="#cb46-445" aria-hidden="true" tabindex="-1"></a>country_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-446"><a href="#cb46-446" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
-<span id="cb46-447"><a href="#cb46-447" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
-<span id="cb46-448"><a href="#cb46-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-449"><a href="#cb46-449" aria-hidden="true" tabindex="-1"></a>Sample_dist_country<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(country_counts, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> Count, <span class="at">fill =</span> country)) <span class="sc">+</span></span>
-<span id="cb46-450"><a href="#cb46-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-451"><a href="#cb46-451" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-452"><a href="#cb46-452" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Country"</span>,</span>
-<span id="cb46-453"><a href="#cb46-453" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
-<span id="cb46-454"><a href="#cb46-454" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span>
-<span id="cb46-455"><a href="#cb46-455" aria-hidden="true" tabindex="-1"></a>Sample_dist_country</span>
-<span id="cb46-456"><a href="#cb46-456" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-432"><a href="#cb46-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-433"><a href="#cb46-433" aria-hidden="true" tabindex="-1"></a>country_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-434"><a href="#cb46-434" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb46-435"><a href="#cb46-435" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb46-436"><a href="#cb46-436" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb46-437"><a href="#cb46-437" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(country_counts)</span>
+<span id="cb46-438"><a href="#cb46-438" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-439"><a href="#cb46-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-442"><a href="#cb46-442" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-443"><a href="#cb46-443" aria-hidden="true" tabindex="-1"></a>country_counts <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-444"><a href="#cb46-444" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb46-445"><a href="#cb46-445" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb46-446"><a href="#cb46-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-447"><a href="#cb46-447" aria-hidden="true" tabindex="-1"></a>Sample_dist_country<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(country_counts, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> Count, <span class="at">fill =</span> country)) <span class="sc">+</span></span>
+<span id="cb46-448"><a href="#cb46-448" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-449"><a href="#cb46-449" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-450"><a href="#cb46-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Samples by Country"</span>,</span>
+<span id="cb46-451"><a href="#cb46-451" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb46-452"><a href="#cb46-452" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Samples"</span>)</span>
+<span id="cb46-453"><a href="#cb46-453" aria-hidden="true" tabindex="-1"></a>Sample_dist_country</span>
+<span id="cb46-454"><a href="#cb46-454" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-455"><a href="#cb46-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-456"><a href="#cb46-456" aria-hidden="true" tabindex="-1"></a>We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.</span>
 <span id="cb46-457"><a href="#cb46-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-458"><a href="#cb46-458" aria-hidden="true" tabindex="-1"></a>We can see that 59.5% of the samples are from China, 30.6% from Spain and only 9.92% from France, indicating a higher representation of samples from China, followed by Spain and then a very small percentage of samples are from France.</span>
+<span id="cb46-458"><a href="#cb46-458" aria-hidden="true" tabindex="-1"></a><span class="fu">## Number of samples of diseases by country</span></span>
 <span id="cb46-459"><a href="#cb46-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-460"><a href="#cb46-460" aria-hidden="true" tabindex="-1"></a><span class="fu">## Number of samples of diseases by country</span></span>
-<span id="cb46-461"><a href="#cb46-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-464"><a href="#cb46-464" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-465"><a href="#cb46-465" aria-hidden="true" tabindex="-1"></a>disease_counts_country <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
-<span id="cb46-466"><a href="#cb46-466" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country, disease) <span class="sc">%&gt;%</span></span>
-<span id="cb46-467"><a href="#cb46-467" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb46-468"><a href="#cb46-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-469"><a href="#cb46-469" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> disease_counts_country <span class="sc">%&gt;%</span></span>
-<span id="cb46-470"><a href="#cb46-470" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb46-471"><a href="#cb46-471" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(country, disease, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">Count =</span> <span class="dv">0</span>))</span>
-<span id="cb46-472"><a href="#cb46-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-473"><a href="#cb46-473" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
-<span id="cb46-474"><a href="#cb46-474" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb46-475"><a href="#cb46-475" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>country) <span class="sc">+</span></span>
-<span id="cb46-476"><a href="#cb46-476" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-477"><a href="#cb46-477" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb46-478"><a href="#cb46-478" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of samples per disease by Country"</span>,</span>
-<span id="cb46-479"><a href="#cb46-479" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Disease"</span>,</span>
-<span id="cb46-480"><a href="#cb46-480" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of samples"</span></span>
-<span id="cb46-481"><a href="#cb46-481" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb46-482"><a href="#cb46-482" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>), <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">linewidth =</span> <span class="dv">1</span>), <span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>)</span>
-<span id="cb46-483"><a href="#cb46-483" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb46-484"><a href="#cb46-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-462"><a href="#cb46-462" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-463"><a href="#cb46-463" aria-hidden="true" tabindex="-1"></a>disease_counts_country <span class="ot">&lt;-</span> meta_df <span class="sc">%&gt;%</span></span>
+<span id="cb46-464"><a href="#cb46-464" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country, disease) <span class="sc">%&gt;%</span></span>
+<span id="cb46-465"><a href="#cb46-465" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb46-466"><a href="#cb46-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-467"><a href="#cb46-467" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> disease_counts_country <span class="sc">%&gt;%</span></span>
+<span id="cb46-468"><a href="#cb46-468" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb46-469"><a href="#cb46-469" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(country, disease, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">Count =</span> <span class="dv">0</span>))</span>
+<span id="cb46-470"><a href="#cb46-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-471"><a href="#cb46-471" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> disease, <span class="at">y =</span> Count, <span class="at">fill =</span> disease)) <span class="sc">+</span></span>
+<span id="cb46-472"><a href="#cb46-472" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb46-473"><a href="#cb46-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>country) <span class="sc">+</span></span>
+<span id="cb46-474"><a href="#cb46-474" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-475"><a href="#cb46-475" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb46-476"><a href="#cb46-476" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of samples per disease by Country"</span>,</span>
+<span id="cb46-477"><a href="#cb46-477" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Disease"</span>,</span>
+<span id="cb46-478"><a href="#cb46-478" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of samples"</span></span>
+<span id="cb46-479"><a href="#cb46-479" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-480"><a href="#cb46-480" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>), <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">linewidth =</span> <span class="dv">1</span>), <span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>)</span>
+<span id="cb46-481"><a href="#cb46-481" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb46-482"><a href="#cb46-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-483"><a href="#cb46-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-484"><a href="#cb46-484" aria-hidden="true" tabindex="-1"></a>We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ulcerative colitis (ibd).</span>
 <span id="cb46-485"><a href="#cb46-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-486"><a href="#cb46-486" aria-hidden="true" tabindex="-1"></a>We can observe that there is no country with total complete data on every disease. Indeed, for China, there are samples for cirrhosis and type 2 diabetes only, for France, there are solely samples for cancer and for Spain, we only have the samples for ulcerative colitis (ibd).</span>
+<span id="cb46-486"><a href="#cb46-486" aria-hidden="true" tabindex="-1"></a>This imbalance should be kept in mind in all analyses.</span>
 <span id="cb46-487"><a href="#cb46-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-488"><a href="#cb46-488" aria-hidden="true" tabindex="-1"></a>This imbalance should be kept in mind in all analyses.</span>
+<span id="cb46-488"><a href="#cb46-488" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of bacterial class by gender</span></span>
 <span id="cb46-489"><a href="#cb46-489" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-490"><a href="#cb46-490" aria-hidden="true" tabindex="-1"></a><span class="fu">## Distribution of bacterial class by gender</span></span>
+<span id="cb46-490"><a href="#cb46-490" aria-hidden="true" tabindex="-1"></a>The taxonomic composition at the class level was compared between genders using relative abundance profiles. Only the most abundant classes (top 10) were retained to improve visualization clarity.</span>
 <span id="cb46-491"><a href="#cb46-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-492"><a href="#cb46-492" aria-hidden="true" tabindex="-1"></a>The taxonomic composition at the class level was compared between genders using relative abundance profiles. Only the most abundant classes (top 10) were retained to improve visualization clarity.</span>
-<span id="cb46-493"><a href="#cb46-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-496"><a href="#cb46-496" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-497"><a href="#cb46-497" aria-hidden="true" tabindex="-1"></a>metagenomics_class <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Class"</span>)</span>
-<span id="cb46-498"><a href="#cb46-498" aria-hidden="true" tabindex="-1"></a>metagenomics_class_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_class, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb46-499"><a href="#cb46-499" aria-hidden="true" tabindex="-1"></a>top_classes <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_class_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb46-500"><a href="#cb46-500" aria-hidden="true" tabindex="-1"></a>metagenomics_class_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_classes, metagenomics_class_per)</span>
-<span id="cb46-501"><a href="#cb46-501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-502"><a href="#cb46-502" aria-hidden="true" tabindex="-1"></a>B10class_dist_gender <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_class_top, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
-<span id="cb46-503"><a href="#cb46-503" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb46-504"><a href="#cb46-504" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-505"><a href="#cb46-505" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial TOP 10 Classes Distribution by Gender"</span>) <span class="sc">+</span></span>
-<span id="cb46-506"><a href="#cb46-506" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb46-507"><a href="#cb46-507" aria-hidden="true" tabindex="-1"></a>B10class_dist_gender</span>
-<span id="cb46-508"><a href="#cb46-508" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-494"><a href="#cb46-494" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-495"><a href="#cb46-495" aria-hidden="true" tabindex="-1"></a>metagenomics_class <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(metagenomics, <span class="at">taxrank =</span> <span class="st">"Class"</span>)</span>
+<span id="cb46-496"><a href="#cb46-496" aria-hidden="true" tabindex="-1"></a>metagenomics_class_per <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(metagenomics_class, <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
+<span id="cb46-497"><a href="#cb46-497" aria-hidden="true" tabindex="-1"></a>top_classes <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(<span class="fu">taxa_sums</span>(metagenomics_class_per), <span class="at">decreasing =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb46-498"><a href="#cb46-498" aria-hidden="true" tabindex="-1"></a>metagenomics_class_top <span class="ot">&lt;-</span> <span class="fu">prune_taxa</span>(top_classes, metagenomics_class_per)</span>
+<span id="cb46-499"><a href="#cb46-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-500"><a href="#cb46-500" aria-hidden="true" tabindex="-1"></a>B10class_dist_gender <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_class_top, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
+<span id="cb46-501"><a href="#cb46-501" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb46-502"><a href="#cb46-502" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-503"><a href="#cb46-503" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial TOP 10 Classes Distribution by Gender"</span>) <span class="sc">+</span></span>
+<span id="cb46-504"><a href="#cb46-504" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb46-505"><a href="#cb46-505" aria-hidden="true" tabindex="-1"></a>B10class_dist_gender</span>
+<span id="cb46-506"><a href="#cb46-506" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-507"><a href="#cb46-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-508"><a href="#cb46-508" aria-hidden="true" tabindex="-1"></a>The same analysis but with all the bacterial classes:</span>
 <span id="cb46-509"><a href="#cb46-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-510"><a href="#cb46-510" aria-hidden="true" tabindex="-1"></a>The same analysis but with all the bacterial classes:</span>
-<span id="cb46-511"><a href="#cb46-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-514"><a href="#cb46-514" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-515"><a href="#cb46-515" aria-hidden="true" tabindex="-1"></a>Bclass_dist_gender <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_class, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
-<span id="cb46-516"><a href="#cb46-516" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb46-517"><a href="#cb46-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb46-518"><a href="#cb46-518" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial Class Distribution by Gender"</span>) <span class="sc">+</span></span>
-<span id="cb46-519"><a href="#cb46-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb46-520"><a href="#cb46-520" aria-hidden="true" tabindex="-1"></a>Bclass_dist_gender</span>
-<span id="cb46-521"><a href="#cb46-521" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-512"><a href="#cb46-512" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-513"><a href="#cb46-513" aria-hidden="true" tabindex="-1"></a>Bclass_dist_gender <span class="ot">&lt;-</span> <span class="fu">plot_bar</span>(metagenomics_class, <span class="at">x =</span> <span class="st">"gender"</span>, <span class="at">fill =</span> <span class="st">"Class"</span>) <span class="sc">+</span></span>
+<span id="cb46-514"><a href="#cb46-514" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb46-515"><a href="#cb46-515" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb46-516"><a href="#cb46-516" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bacterial Class Distribution by Gender"</span>) <span class="sc">+</span></span>
+<span id="cb46-517"><a href="#cb46-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb46-518"><a href="#cb46-518" aria-hidden="true" tabindex="-1"></a>Bclass_dist_gender</span>
+<span id="cb46-519"><a href="#cb46-519" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-520"><a href="#cb46-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-521"><a href="#cb46-521" aria-hidden="true" tabindex="-1"></a>It seems that the bacterial distribution is approximately the same for each gender.</span>
 <span id="cb46-522"><a href="#cb46-522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-523"><a href="#cb46-523" aria-hidden="true" tabindex="-1"></a>It seems that the bacterial distribution is approximately the same for each gender.</span>
-<span id="cb46-524"><a href="#cb46-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-527"><a href="#cb46-527" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-528"><a href="#cb46-528" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb46-529"><a href="#cb46-529" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_gender, Pcoa_gendre_disease, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"data_preparation.RData"</span>))</span>
-<span id="cb46-530"><a href="#cb46-530" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-525"><a href="#cb46-525" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-526"><a href="#cb46-526" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
+<span id="cb46-527"><a href="#cb46-527" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Pcoa_gender, Pcoa_gendre_disease, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"data_preparation.RData"</span>))</span>
+<span id="cb46-528"><a href="#cb46-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-529"><a href="#cb46-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-530"><a href="#cb46-530" aria-hidden="true" tabindex="-1"></a>Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).</span>
 <span id="cb46-531"><a href="#cb46-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-532"><a href="#cb46-532" aria-hidden="true" tabindex="-1"></a>Overall, the data preparation step provided a clear overview of the dataset and ensured its suitability for the study. We examined key characteristics such as sample distribution across disease groups and gender, revealing a slight imbalance in both cases (more male samples than female, and varying representation across conditions).</span>
+<span id="cb46-532"><a href="#cb46-532" aria-hidden="true" tabindex="-1"></a>These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.</span>
 <span id="cb46-533"><a href="#cb46-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-534"><a href="#cb46-534" aria-hidden="true" tabindex="-1"></a>These checks helped confirm data quality, identify potential biases, and ensure that the analyses are interpreted in the right context.</span>
+<span id="cb46-534"><a href="#cb46-534" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
 <span id="cb46-535"><a href="#cb46-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-536"><a href="#cb46-536" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
-<span id="cb46-537"><a href="#cb46-537" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-540"><a href="#cb46-540" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-541"><a href="#cb46-541" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
-<span id="cb46-542"><a href="#cb46-542" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb46-538"><a href="#cb46-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb46-539"><a href="#cb46-539" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb46-540"><a href="#cb46-540" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
