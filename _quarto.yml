@@ -75,7 +75,6 @@ website:
     left: Copyright 2025, Clément Poupelin
     right: This blog is built with [Quarto](https://quarto.org/){target="_blank"}
 
-
 format:
 
   html:

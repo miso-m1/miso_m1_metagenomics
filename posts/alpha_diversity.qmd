@@ -174,7 +174,7 @@ p_observed
 ggsave(here("figures", "Alpha", "alpha_observed.pdf"), p_observed)
 ```
 
-Number of unique tax (OTUs) present in each.
+Number of unique taxa (OTUs) present in each.
 :::
 
 ## Normality Testing
