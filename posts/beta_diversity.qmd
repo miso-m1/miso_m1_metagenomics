@@ -2,7 +2,6 @@
   title: "2.2: Beta Diversity"
   format: 
     html: 
-      theme: cosmo
       toc: true
       code-fold: true
       code-summary: "Show code"
@@ -18,6 +17,7 @@
 #| include: false
 library(here)
 source(here("functions", "inputData.R"))
+dir.create(here("figures", "Beta"), recursive = TRUE, showWarnings = FALSE)
 ```
 
 # Beta Diversity
@@ -74,6 +74,7 @@ This method is also known as MDS (Metric Multidimensional Scaling). PCoA provide
 
 ```{r}
 ord_bray <- ordinate(metagenomics, method = "MDS", distance = dist_bray)
+
 # For MDS/PCoA, the ordination object contains eigenvalues
 var_exp <- round(ord_bray$values$Eigenvalues / sum(ord_bray$values$Eigenvalues) * 100, 1)
 
@@ -114,6 +115,22 @@ ggsave(here("figures", "Beta", "pcoa_jaccard.pdf"), p_jaccard)
 ```
 
 Jaccard ordination visualizes differences in taxon membership independent of abundance. Group separation indicates disease-associated changes in which taxa are present rather than their relative abundance.
+
+### Comparison
+
+```{r}
+#| label: combined-bray-jaccard
+#| include: true
+#| fig-width: 15
+#| fig-height: 10
+#| message: false
+#| warning: false
+
+combined_bray_jaccard <- p_bray | p_jaccard
+combined_bray_jaccard
+ggsave(here("figures", "Beta", "combined_bray_jaccard.pdf"), combined_bray_jaccard)
+
+```
 :::
 
 ## PERMANOVA

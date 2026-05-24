@@ -11,6 +11,7 @@ website:
     title: Statistical Analysis of Metagenomic Data
     logo: img/lille_logo.png
     logo-href: https://www.univ-lille.fr/
+    logo-target: _blank
     left:
       - icon: house-fills
         text: Home
@@ -21,6 +22,7 @@ website:
       - icon: file-earmark-bar-graph-fill
         text: Presentation
         href: Presentation.html
+        target: _blank
       - icon: book-fill
         text: Sources
         href: resources.qmd
@@ -34,20 +36,27 @@ website:
         menu:
           - href: https://github.com/inesbakli
             text: Ines Bakli
+            target: _blank
           - href: https://github.com/Akanhnheanh
             text: Paul Lemonnier
+            target: _blank
           - href: https://github.com/asnth-bio
             text: Alden Sneath
+            target: _blank
           - href: https://github.com/Clement-Poupelin
             text: Clément Poupelin
+            target: _blank
       - icon: linkedin
         menu:
           - href: https://www.linkedin.com/in/ines-bakli-513b1126b/
             text: Ines Bakli
+            target: _blank
           - href: https://www.linkedin.com/in/pl49000/
             text: Paul Lemonnier
+            target: _blank
           - href: http://www.linkedin.com/in/cl%C3%A9ment-poupelin-7675311a7/
             text: Clément Poupelin
+            target: _blank
       - icon: envelope
         menu:
           - href: mailto:ines.bakli2002@gmail.com
@@ -64,7 +73,7 @@ website:
   page-footer:
     background: light
     left: Copyright 2025, Clément Poupelin
-    right: This blog is built with [Quarto](https://quarto.org/)
+    right: This blog is built with [Quarto](https://quarto.org/){target="_blank"}
 
 
 format:

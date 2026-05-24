@@ -15,7 +15,6 @@ if (!requireNamespace("SpiecEasi", quietly = TRUE)) {
 if (!requireNamespace("pairwiseAdonis", quietly = TRUE)) {
   # Prevent the installation from failing due to minor warnings
   Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = TRUE)
-  
   # The installation must point to the specific sub-directory within the repository
   devtools::install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
 }
@@ -38,6 +37,8 @@ library(FSA)
 library(broom)
 library(pairwiseAdonis)
 library(gridExtra)
+library(patchwork)
+
 
 options(lifecycle_verbosity = "quiet")
 

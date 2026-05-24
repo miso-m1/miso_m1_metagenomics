@@ -1,5 +1,5 @@
 "statistic","p.value","method","Metric"
-0.949123324389918,7.57654039915893e-12,"Shapiro-Wilk normality test","Shannon"
-0.758020885513999,4.82203355368119e-26,"Shapiro-Wilk normality test","Simpson"
-0.977312614235845,7.62466718274375e-07,"Shapiro-Wilk normality test","InvSimpson"
+0.949123324389919,7.5765403991611e-12,"Shapiro-Wilk normality test","Shannon"
+0.758020885514,4.82203355368128e-26,"Shapiro-Wilk normality test","Simpson"
+0.977312614235846,7.62466718274663e-07,"Shapiro-Wilk normality test","InvSimpson"
 0.986735524762127,0.000216064625071568,"Shapiro-Wilk normality test","Observed"

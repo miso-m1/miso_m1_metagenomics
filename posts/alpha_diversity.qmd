@@ -2,7 +2,6 @@
   title: "2.1: Alpha Diversity"
   format: 
     html: 
-      theme: cosmo
       toc: true
       code-fold: true
       code-summary: "Show code"
@@ -18,7 +17,7 @@
 #| include: false
 library(here)
 source(here("functions", "inputData.R"))
-dir.create(here("plots&tables", "Alpha"), recursive = TRUE, showWarnings = FALSE)
+dir.create(here("figures", "Alpha"), recursive = TRUE, showWarnings = FALSE)
 ```
 
 # Alpha Diversity
@@ -88,18 +87,6 @@ $R$ = the number of different taxa observed in a sample
 $p_i$​ = proportion of observations belonging to the $i$th species
 
 ::: panel-tabset
-### Observed (Richness)
-
-$$
-R = \sum I(p_i > 0)
-$$
-
-where $1_{p_i >0}$ is an indicator:
-
--   = 1 if taxon i is present
-
--   = 0 if absent
-
 ### Shannon
 
 $$
@@ -112,15 +99,25 @@ $$
 D = 1 - \lambda
 $$
 
-$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.
+$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuals taken from the sample at random represent different species.
 
 ### Inverse Simpson
 
 $$
 \frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}
 $$
-$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.
 
+### Observed (Richness)
+
+$$
+R = \sum 1(p_i > 0)
+$$
+
+where $1_{p_i >0}$ is an indicator:
+
+-   = 1 if taxon i is present
+
+-   = 0 if absent
 :::
 
 ## Calculate alpha diversity
@@ -224,12 +221,6 @@ write.csv(PW_Wilcox_table, here("figures", "Alpha", "Pairwise_Wilcoxon.csv"),
 
 Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.
 
-```{r}
-
-#To save all the data/graphs for the presentation
-save(kw_table, PW_Wilcox_table, shapiro_table, alpha_df, p_shannon, p_simpson, p_invsimpson, p_observed, file = here::here("posts", "alpha_diversity.RData"))
-```
-
 ## Summary
 
 Alpha diversity analysis evaluates whether "within-sample" microbial community structure differs between disease groups in terms of richness and evenness. If significant differences are observed across metrics, this suggests that disease status is associated with broad ecological shifts in the microbiome, such as loss of diversity, increased dominance, or reduced richness.
@@ -237,6 +228,11 @@ Alpha diversity analysis evaluates whether "within-sample" microbial community s
 Consistency across multiple indices strengthens biological inference, while divergence between metrics may indicate changes in community structure rather than simple loss or gain of taxa.
 
 Alpha diversity was assessed using Shannon, Simpson, Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.
+
+```{r}
+#To save all the data/graphs for the presentation
+save(kw_table, PW_Wilcox_table, shapiro_table, alpha_df, p_shannon, p_simpson, p_invsimpson, p_observed, file = here::here("posts", "alpha_diversity.RData"))
+```
 
 # Session info
 

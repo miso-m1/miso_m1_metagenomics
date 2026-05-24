@@ -2,7 +2,6 @@
   title: "3: Metagenomic Network Analysis"
   format: 
     html: 
-      theme: cosmo
       toc: true
       code-fold: true
       code-summary: "Show code"
@@ -18,6 +17,7 @@
 #| include: false
 library(here)
 source(here("functions", "inputData.R"))
+dir.create(here("figures", "Network"), recursive = TRUE, showWarnings = FALSE)
 ```
 
 ## 1. Introduction and Objectives
@@ -102,7 +102,7 @@ To eliminate algorithmic artifacts and increase the positive predictive value of
 
 ### 2.5. Data Pre-processing: Prevalence Filtering
 
-To streamline the analysis and manage the severe zero-inflation inherent to metagenomic sequencing, a prevalence filter was applied to the count matrix prior to network inference. By keeping only the taxa present in a minimum percentage of samples (e.g., 10% for Phylum, up to 20% for Genus), this preliminary step acts as a noise-reduction mechanism. It allows us to focus on robust, global ecological patterns and major microbial hubs shared across the cohorts. 
+To streamline the analysis and manage the severe zero-inflation inherent to metagenomic sequencing, a prevalence filter was applied to the count matrix prior to network inference. By keeping only the taxa present in a minimum percentage of samples (e.g., 10% for Phylum, up to 20% for Genus), this preliminary step acts as a noise-reduction mechanism. It allows us to focus on robust, global ecological patterns and major microbial hubs shared across the cohorts.
 
 While this simplification ensures high-confidence interactions and manageable computational loads, it is an exploratory compromise. Future perspectives to refine this analysis could include computing condition-specific networks without any prevalence filtering—provided sufficient computational power is available—to capture rare but potentially critical pathological interactions. Alternatively, adopting emerging statistical frameworks explicitly designed to model zero-inflated networks without preliminary trimming could further preserve the micro-diversity of the ecosystem.
 
@@ -114,7 +114,6 @@ groups <- unique(sample_data(metagenomics)$disease)
 ## 3. Phylum Level Analysis
 
 ::: panel-tabset
-
 ### Phylum plot
 
 ```{r}
@@ -142,7 +141,6 @@ write.csv(phylum_table, here("figures", "Network", "phylum_table.csv"),
           row.names = FALSE)
 
 ```
-
 :::
 
 ### Biological Interpretation (Phylum)
@@ -154,7 +152,6 @@ Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of disti
 ## 4. Family Level Analysis
 
 ::: panel-tabset
-
 ### Family plot
 
 ```{r}
@@ -181,7 +178,6 @@ family_table
 write.csv(family_table, here("figures", "Network", "family_table.csv"), 
           row.names = FALSE)
 ```
-
 :::
 
 ### Biological Interpretation (Family)
@@ -197,7 +193,6 @@ The **Family** level provides an ideal analytical sweet spot, balancing network 
 ## 5. Genus Level Analysis
 
 ::: panel-tabset
-
 ### Genus plot
 
 ```{r}
@@ -226,7 +221,6 @@ genus_table
 write.csv(genus_table, here("figures", "Network", "genus_table.csv"), 
           row.names = FALSE)
 ```
-
 :::
 
 ### Biological Interpretation (Genus)
