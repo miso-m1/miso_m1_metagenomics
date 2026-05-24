@@ -14,29 +14,21 @@
 ---
 
 ```{r}
-#| label: plotting-theme
+#| label: setup
 #| include: false
-#| 
-source("inputData.R")
-library(viridis)
-library(ggplot2)
-
-theme_set(theme_minimal(base_size = 13))
-
-options(
-  ggplot2.discrete.fill = function(...)
-    scale_fill_viridis_d(option = "cividis", ...),
-
-  ggplot2.discrete.colour = function(...)
-    scale_color_viridis_d(option = "cividis", ...)
-)
+library(here)
+source(here("functions", "inputData.R"))
 ```
 
-## Beta Diversity
+# Beta Diversity
 
-Beta diversity quantifies the dissimilarity between pairs of samples. It answers how different are the microbial communities across groups. We examine whether gut microbiomes differ significantly between disease groups using common distance metrics:
+Beta diversity quantifies the dissimilarity between pairs of samples. It answers how different are the microbial communities across groups. Unlike alpha diversity (within-sample richness/diversity), beta diversity asks:“How different are microbial communities across samples or disease groups?”
 
-**Bray-Curtis** - Considers both presence/absence and relative abundance. The sum of lesser counts for species present in both communities divided by the sum of all counts in both communities. This can be thought of as a quantitative version of the Sørensen index.
+We examine whether gut microbiomes differ significantly between disease groups using two distance metrics. These metrics measure the degree of dissimilarity between pairs of samples but differ in the ecological information they capture.
+
+### Bray–Curtis
+
+Bray-Curtis dissimilarity is an abundance-sensitive metric that considers both the presence and relative abundance of taxa within samples. It is widely used in microbiome research because it emphasizes compositional differences driven by changes in dominant organisms. Values range from 0 to 1, where 0 indicates identical community composition and 1 indicates complete dissimilarity. Bray–Curtis is particularly useful for detecting shifts in microbial abundance associated with disease or environmental factors.
 
 $$
 BC = \frac{\sum_{i=1}^{n} |p^a_{i} - p^b_{i}|}{\sum_{i=1}^{n} (p^a_{i} + p^b_{i})}
@@ -44,137 +36,177 @@ $$
 
 $n$ = total number of species
 
-$p^a_{i} and p^b_{i}$ = are the relative frequencies of species $i$ in plots $a$ and $b$
+$p^a_{i}$ and $p^b_{i}$ = are the relative abundance of species $i$ in samples $a$ and $b$
 
-**Jaccard** - Considers only presence/absence. The number of species common to both communities divided by the number of species in either community.
+### **Jaccard**
 
-$$
-J=(B+C)/(A+B+C)
-$$
-
-**Sorensen** - This Index focuses exclusively on shared presence and addresses "how similar are two communities?". Two times the number of species common to both communities divided by the sum of the number of species in each community.
+Jaccard distance is a presence–absence based metric that measures differences in taxonomic membership independently of abundance. It evaluates whether the same taxa are shared between samples and is therefore sensitive to taxon turnover rather than abundance variation. This metric is useful for identifying whether disease-associated microbial changes reflect the loss or gain of taxa rather than changes in relative abundance.
 
 $$
-S=(B+C)/(2A+B+C)
+J(A,B)=1-\frac{A\cup B}{A\cap B}
 $$
 
-$A$ = the number of species shared by two communities
+where $A$ and $B$ represent the sets of taxa present in two samples.
 
-$B, C$ = are the number of species unique to each of the two communities
+Using both Bray–Curtis and Jaccard metrics provides complementary ecological perspectives on microbial community structure. Bray–Curtis captures abundance-driven compositional changes, whereas Jaccard focuses on differences in taxon presence and absence. Together, these approaches allow a more comprehensive assessment of microbiome variation across disease groups.
 
-We then visualise sample similarities via Principal Coordinate Analysis (PCoA) and test for group differences using PERMANOVA. A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test.
+## Ordination
 
 ### Distance Matrices
 
-We compute distance matrices from the normalised counts
+We first compute distance matrices from relative abundance for each beta diversity metric.
 
 ```{r}
-library("tidyverse")
-library("phyloseq")
-library("vegan")
 
 # Bray-Curtis (abundance‑sensitive)
 dist_bray <- distance(metagenomics, method = "bray")
 
 # Jaccard (presence/absence only)
 dist_jaccard <- distance(metagenomics, method = "jaccard")
-
-# Convert abundance matrix to presence/absence (0/1)
-# pa_matrix <- ifelse(otu_table(metagenomics) > 0, 1, 0)
-# Bray–Curtis on binary data gives Sørensen
-# dist_sorensen <- vegdist(pa_matrix, method = "bray")
 ```
 
-## Ordination (PCoA)
+### **Principal Correspondence Analysis (PCoA)**
 
-PCoA (also called metric MDS) projects the high‑dimensional distance matrix into two dimensions, allowing us to visualize how samples cluster by disease status.
+This method is also known as MDS (Metric Multidimensional Scaling). PCoA provides Euclidean representation of a set of objects whose relationship is measured by any dissimilarity index. This projects the high‑dimensional distance matrix into two dimensions, allowing us to visualize how samples cluster by disease status.
+
+::: panel-tabset
+### Bray-Curtis
 
 ```{r}
-# Perform PCoA on distance matrices
 ord_bray <- ordinate(metagenomics, method = "MDS", distance = dist_bray)
+# For MDS/PCoA, the ordination object contains eigenvalues
+var_exp <- round(ord_bray$values$Eigenvalues / sum(ord_bray$values$Eigenvalues) * 100, 1)
+
 p_bray <- plot_ordination(metagenomics, ord_bray, color = "disease", shape = "disease") +
   geom_point(size = 3, alpha = 0.8) +
   stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
   ggtitle("Bray-Curtis Dissimilarity") +
+  labs(x = paste0("PCoA1 (", var_exp[1], "%)"), 
+       y = paste0("PCoA2 (", var_exp[2], "%)")) +
   theme(legend.position = "bottom")
+
 p_bray
 
-# ggsave("figures/Beta/PCA_distance_bray.pdf", p_bray)
-
-
-ord_jaccard <- ordinate(metagenomics, method = "MDS", distance = dist_jaccard)
-p_jaccard <- plot_ordination(metagenomics, ord_jaccard, color = "disease", shape = "disease") +
-  geom_point(size = 3, alpha = 0.8) +
-  stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
-  ggtitle("Jaccard Distance") +
-  theme(legend.position = "bottom")
-p_jaccard
-
-# ggsave("figures/Beta/PCA_distance_jaccard.pdf", p_jaccard)
-
-# ord_sorensen <- ordinate(metagenomics, method = "MDS", distance = dist_sorensen)
-# p_sorensen <- plot_ordination(metagenomics, ord_sorensen, color = "disease") +
-#   geom_point(size = 3, alpha = 0.8) +
-#   stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
-#   theme_bw(base_size = 12) +
-#   ggtitle("Sorensen Distance") +
-#   theme(legend.position = "bottom")
-# p_jaccard
+ggsave(here("figures", "Beta", "pcoa_bray.pdf"), p_bray)
 ```
-
-### Bray–Curtis ordination
 
 Samples clustering closely together have more similar microbial compositions. Separation between disease groups suggests differences in microbial community structure associated with disease status.
 
-### Jaccard ordination
+### Jaccard
+
+```{r}
+ord_jaccard <- ordinate(metagenomics, method = "MDS", distance = dist_jaccard)
+
+# For MDS/PCoA, the ordination object contains eigenvalues
+var_exp <- round(ord_jaccard$values$Eigenvalues / sum(ord_jaccard$values$Eigenvalues) * 100, 1)
+
+p_jaccard <- plot_ordination(metagenomics, ord_jaccard, color = "disease", shape = "disease") +
+  geom_point(size = 3, alpha = 0.8) +
+  stat_ellipse(aes(group = disease), linetype = 2, level = 0.95) +
+  ggtitle("Jaccard Dissimilarity") +
+  labs(x = paste0("PCoA1 (", var_exp[1], "%)"), 
+       y = paste0("PCoA2 (", var_exp[2], "%)")) +
+  theme(legend.position = "bottom")
+
+p_jaccard
+
+ggsave(here("figures", "Beta", "pcoa_jaccard.pdf"), p_jaccard)
+```
 
 Jaccard ordination visualizes differences in taxon membership independent of abundance. Group separation indicates disease-associated changes in which taxa are present rather than their relative abundance.
+:::
 
-## Statistical Testing: PERMANOVA
+## PERMANOVA
 
 ### Checking Assumption: Homogeneity of Multivariate Dispersion
 
-PERMANOVA is sensitive to differences in within‑group dispersion (variance). We test this using `betadisper()` (multivariate analogue of Levene’s test).
+We want to use PERMANOVA on both beta diversity metrics but it is sensitive to differences in within‑group dispersion (variance). We test this using `betadisper()` (multivariate analogue of Levene’s test).
 
 We performed **`betadisper()`** on both Bray‑Curtis and Jaccard distance matrices, followed by a permutation test. The test evaluates whether the within‑group dispersion (variance around the group median) differs significantly among the four disease groups.
 
+::: panel-tabset
+#### Bray dispersion
+
 ```{r}
-library("vegan")
 disp_bray <- betadisper(dist_bray, samples_df$disease)
 # pdf("figures/Beta/boxplot_betaDisperson_bray.pdf")
 boxplot(disp_bray, col = viridis(4, option = "cividis"), main = "Bray-Curtis dispersion per diseases")
 
-disp_jaccard <- betadisper(dist_jaccard, samples_df$disease)
-# pdf("figures/Beta/boxplot_betaDisperson_jaccard.pdf")
-boxplot(disp_jaccard, col = viridis(4, option = "cividis"), main = "Jaccard dispersion per diseases")
-
-
 # Permutation test for homogeneity
 disp_test_bray <- permutest(disp_bray, permutations = 999)
 disp_test_bray
+```
+
+#### Jaccard dispersion
+
+```{r}
+disp_jaccard <- betadisper(dist_jaccard, samples_df$disease)
+boxplot(disp_jaccard, col = viridis(4, option = "cividis"), main = "Jaccard dispersion per diseases")
 
 disp_test_jaccard <- permutest(disp_jaccard, permutations = 999)
 disp_test_jaccard
-
 ```
+:::
 
 Both tests are highly significant (p \< 0.001), meaning: Only 1 out of 1000 permutations produced an F‑statistic as extreme as the one observed.
 
-This is very strong evidence that the groups do NOT have equal multivariate dispersions. The assumption of homogeneity of variances is violated for both distance metrics.
+This is very strong evidence that the groups do NOT have equal multivariate dispersions. In other words, the within-group variability (how scattered samples are) is not equal across diseases. The assumption of homogeneity of variances is violated for both distance metrics.
 
-**PERMANOVA**
+### Pairwise Dispersion
 
-PERMANOVA (adonis2) is used to test whether the centroids of the groups (disease status) are significantly different in the multivariate space defined by the distance metrics.
+To identify which disease groups differed in multivariate dispersion, we performed pairwise comparisons using the `betadisper` function with 999 permutations.
+
+::: panel-tabset
+#### Bray
 
 ```{r}
-# Bray-Curtis
+# Pairwise comparisons
+disp_bray <- betadisper(dist_bray, samples_df$disease)
+pairwise_bray <- permutest(disp_bray, pairwise = TRUE, permutations = 999)
+pairwise_bray
+```
+
+The IBD group has significantly different dispersion from all other three groups (cancer, cirrhosis, T2D). In contrast, cancer, cirrhosis, and T2D do not differ from each other (except cancer vs T2D is borderline significant at 0.031 – still significant, but weaker).
+
+#### Jaccard
+
+```{r}
+disp_jaccard <- betadisper(dist_jaccard, samples_df$disease)
+pairwise_jaccard <- permutest(disp_jaccard, pairwise = TRUE, permutations = 999)
+pairwise_jaccard
+```
+
+IBD differs significantly from all others (p \< 0.02 for each). Cancer vs cirrhosis not significant (p = 0.21), cirrhosis vs T2D not significant (p = 0.196). Cancer vs T2D is significant (p = 0.02). The conclusion is the same for Bray, IBD is the main outlier in terms of dispersion.
+:::
+
+Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p \< 0.05 for all comparisons), while dispersions among cancer, cirrhosis, and type 2 diabetes were largely similar (p \> 0.05 except cancer vs T2D). This indicates that the overall heterogeneity in dispersion is primarily attributable to the IBD group.
+
+### PERMANOVA
+
+PERMANOVA (adonis2) is used to test whether the centroids of the groups (disease status) are significantly different in the multivariate space defined by the distance metrics. When dispersions are unequal, a significant PERMANOVA p-value may reflect dispersion differences rather than true centroid differences.
+
+::: panel-tabset
+#### PERMANOVA Bray
+
+```{r}
 permanova_bray <- adonis2(dist_bray ~ disease, 
                           data = samples_df, 
                           permutations = 999)
 print(permanova_bray)
 
+```
 
-# Jaccard
+-   Disease explains 8.7% of the total variation in community composition (abundance‑sensitive).
+
+-   Residual (unexplained) = 91.3%.
+
+-   F = 15.2 – large relative to null permutations.
+
+-   p = 0.001 – significant
+
+#### PERMANOVA Jaccard
+
+```{r}
 permanova_jaccard <- adonis2(dist_jaccard ~ disease, 
                              data = samples_df, 
                              permutations = 999)
@@ -182,29 +214,38 @@ print(permanova_jaccard)
 
 ```
 
-**Bray Curtis**
+-   Disease explains 5.6% of variation (presence/absence only).
 
-Model (disease) explains **6.4%** of the total variation in community composition (abundance‑sensitive).
+-   Residuals = 94.4%
 
-Residual (unexplained) = 93.6%.
-
-F = 10.97 – large relative to null permutations.
-
-p = 0.001 – significant at α = 0.001.
-
-**Jaccard**
-
--   Disease explains 4.0% of variation (presence/absence only).
-
--   Residuals = 96%
-
--   F = 6.65 – also large.
+-   F = 9.4 – also large.
 
 -   p = 0.001 – significant.
+:::
 
-Both metrics show a statistically significant association between disease status and microbial community dissimilarity. The effect sizes (R²) are small. Bray‑Curtis explains more variation than Jaccard (6.4% vs 4.0%), suggesting that abundance differences are more discriminative than just presence/absence.
+Both metrics show a statistically significant association between disease status and microbial community dissimilarity. The effect sizes (R²) are small. Bray‑Curtis explains more variation than Jaccard (8.7% vs 5.6%), suggesting that abundance differences are more discriminative than just presence/absence.
 
 Both PERMANOVA and beta dispersion tests were significant (p = 0.001 for both Bray‑Curtis and Jaccard). This indicates that disease status is associated with differences in both the average microbial community composition and the within‑group variability.
+
+### Pairwise PERMANOVA
+
+Pairwise PERMANOVA is a post‑hoc test used after a significant PERMANOVA (which tells you “at least one group differs”). It performs separate PERMANOVA tests on each combination of two groups (e.g., cancer vs cirrhosis, cancer vs IBD, etc.) to determine which specific pairs of groups are significantly different from each other.
+
+::: panel-tabset
+#### Bray
+
+```{r}
+pairwise.adonis2(dist_bray ~ disease, data = samples_df, nperm = 999)
+```
+
+#### Jaccard
+
+```{r}
+pairwise.adonis2(dist_jaccard ~ disease, data = samples_df, nperm = 999)
+```
+:::
+
+Pairwise PERMANOVA (999 permutations) revealed that all disease groups were significantly different from each other for both Bray‑Curtis (p = 0.001 for all comparisons) and Jaccard (p = 0.001 for all comparisons) distances. However, because the PERMDISP test showed heterogeneous multivariate dispersions (driven primarily by the IBD group), the significant pairwise PERMANOVA results may reflect a combination of differences in both centroid location and within‑group dispersion.
 
 ## Summary
 
@@ -223,6 +264,7 @@ results_df <- data.frame(
 )
 
 kable(results_df, caption = "PERMANOVA and beta dispersion test results")
+
 ```
 
 The table summarizes:
@@ -235,45 +277,9 @@ The table summarizes:
 
 Higher R² values indicate stronger disease-associated microbial differences.
 
-## Pairwise Comparisons of Dispersion
-
-Pairwise comparisons identify which disease groups differ in within-group variability.
-
--   lower dispersion → more homogeneous microbiome composition
-
--   higher dispersion → greater interpersonal variability
-
-```{r}
-Tuckey_BC <- TukeyHSD(disp_bray)   # shows which disease pairs have different spreads
-Tuckey_BC
-```
-
-IBD has significantly lower dispersion than cirrhosis (IBD is more homogeneous).
-
-T2D has significantly higher dispersion than IBD (T2D is more heterogeneous).
-
-No evidence that cancer differs from others, nor cirrhosis vs T2D.
-
-```{r}
-Tuckey_Jaccard <- TukeyHSD(disp_jaccard)   # shows which disease pairs have different spreads
-Tuckey_Jaccard
-```
-
-IBD less variable than cirrhosis.
-
-T2D more variable than IBD.
-
-Cancer not different from any
-
-Cirrhosis vs T2D not different.
-
-```{r}
-save(disp_bray, disp_jaccard, results_df, Tuckey_BC, Tuckey_Jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
-```
-
 ## Conclusion
 
-Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (`adonis2`, 999 permutations). Homogeneity of multivariate dispersion was assessed using `betadisper()` followed by permutation testing. Pairwise dispersion differences were evaluated using Tukey’s HSD test.
+Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (`adonis2`, 999 permutations). A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test. Homogeneity of multivariate dispersion was assessed using `betadisper()` followed by permutation testing. Pairwise dispersion testing and pairwise PERMANOVA were evaluated to identify which disease groups differed in dispersion.
 
 Beta diversity analysis revealed significant differences in microbial community composition between disease groups.
 
@@ -281,10 +287,13 @@ Beta diversity analysis revealed significant differences in microbial community 
 
 -   Significant PERMANOVA results indicate disease-associated differences in microbiome composition.
 
--   Significant beta dispersion tests indicate unequal within-group variability, suggesting that disease groups differ not only in average composition but also in microbiome heterogeneity.
+-   Significant beta dispersion tests indicate unequal within-group variability, primarily due to the IBD group differing in variance from the others.
 
-Because PERMANOVA is sensitive to dispersion differences, results should be interpreted as reflecting both centroid separation and changes in community variability.
+Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.
 
+```{r}
+save(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
+```
 
 # Session info
 

@@ -14,305 +14,232 @@
 ---
 
 ```{r}
-#| label: plotting-theme
+#| label: setup
 #| include: false
-
-source("inputData.R")
-library(viridis)
-library(ggplot2)
-
-theme_set(theme_minimal(base_size = 13))
-
-options(
-  ggplot2.discrete.fill = function(...)
-    scale_fill_viridis_d(option = "cividis", ...),
-
-  ggplot2.discrete.colour = function(...)
-    scale_color_viridis_d(option = "cividis", ...)
-)
+library(here)
+source(here("functions", "inputData.R"))
+dir.create(here("plots&tables", "Alpha"), recursive = TRUE, showWarnings = FALSE)
 ```
 
-## **Transforming data**
+# Alpha Diversity
 
-### Relative Abundance
+Alpha diversity is a term used to describe the "within-sample" diversity. It measures how complex a single microbial community is. Alpha diversity combines two main ecological properties, richness (how many species are present) and evenness (how evenly distributed are the species).
 
-Data is already normalized with sample sums \~ 100
-
-This is used for Shannon, Simpson and Inverse Simpson as they are robust to sequencing depth if using **relative abundances.**
-
-### Normalize sequencing depth - rarefaction
-
-**Rarefaction** (random subsampling without replacement).
-
-In microbial ecology and amplicon sequencing (e.g., 16S rRNA gene sequencing) where samples often have vastly different numbers of reads. Rarefying aims to **make all samples have the same total number of reads** by randomly drawing a subset of reads from each sample **without replacement**. The chosen target depth is usually the smallest library size among all samples, so that no sample is asked to provide more reads than it originally had. This is only used for observed alpha diversity as rarefaction ensures each sample contributes the same number of reads.
-
-```{r}
-#| label: normalized data  
-#| include: true
-
-library("vegan")
-library("phyloseq")
-# metagenomics_rel <- transform_sample_counts(metagenomics, function(x) x / sum(x))
-# metagenomics_rel
-
-# Test if rarefaction is needed for a phyloseq object (simple version)
-test_rarefaction <- function(ps, cv_thresh = 0.05) {
-  libs <- sample_sums(ps)
-  cv <- sd(libs) / mean(libs)
-  need <- cv > cv_thresh
-  list(cv = cv, rarefy_recommended = need)
-}
-
-res <- test_rarefaction(metagenomics)
-res$cv
-res$rarefy_recommended # TRUE/FALSE
-
-if(res$rarefy_recommended) {
-  min_sample_size <- min(sample_sums(metagenomics))
-  metagenomics_rare <- rarefy_even_depth(metagenomics, sample.size = min_sample_size)
-  print("Rarefaction is recommended.")
-} else {
-  print("No rarefaction needed.")
-}
-
-```
-
-## Rarefaction
-
-## Calculate alpha diversity
-
-```{r}
-# # alpha diversity for Shannon, Simpson, InvSimpson
-# alpha_div <- estimate_richness(metagenomics, measures = c("Shannon", "Simpson", "InvSimpson"))
-# p1 <- plot_richness(metagenomics, x = "disease", measures = c("Shannon", "Simpson", "InvSimpson"))
-# p1
-# ggsave("figures/Alpha/alpha_diversity_shannon_Simpson_invSimpson.pdf", p1)
-# 
-# alpha_obs <- estimate_richness(metagenomics, measures = c("Observed"))
-# p2 <- plot_richness(metagenomics, measures = c("Observed"))
-# p2
-# ggsave("figures/Alpha/alpha_diversity_observed.pdf", p2)
-# 
-# alpha_df <- cbind(alpha_div, alpha_obs)
-# alpha_df$SampleID <- rownames(alpha_div)
-# alpha_df$Disease <- sample_data(metagenomics)$disease
-
-# Manual calculation from relative abundances (works with fractions)
-otu_rel <- as(otu_table(metagenomics), "matrix")
-if (taxa_are_rows(metagenomics)) otu_rel <- t(otu_rel)
-
-# Function to compute Shannon from relative abundances
-shannon_from_rel <- function(x) {
-  x <- x[x > 0]
-  p <- x / sum(x)
-  -sum(p * log(p))
-}
-
-# Function for Simpson (1 - sum(p^2))
-simpson_from_rel <- function(x) {
-  x <- x[x > 0]
-  p <- x / sum(x)
-  1 - sum(p^2)
-}
-
-# Function for Inverse Simpson (1 / sum(p^2))
-invsimpson_from_rel <- function(x) {
-  x <- x[x > 0]
-  p <- x / sum(x)
-  1 / sum(p^2)
-}
-
-# Apply to each sample
-shannon <- apply(otu_rel, 1, shannon_from_rel)
-simpson <- apply(otu_rel, 1, simpson_from_rel)
-invsimpson <- apply(otu_rel, 1, invsimpson_from_rel)
-observed <- apply(otu_rel, 1, function(row) sum(row > 0))
-
-# Create data frame
-alpha_df <- data.frame(
-  SampleID = sample_names(metagenomics),
-  Shannon = shannon,
-  Simpson = simpson,
-  InvSimpson = invsimpson,
-  Observed = observed,
-  Disease = sample_data(metagenomics)$disease
-)
-
-# Plot with ggplot2
-library(ggplot2)
-library(tidyr)
-
-# Reshape for faceting
-alpha_long <- pivot_longer(alpha_df, cols = c(Shannon, Simpson, InvSimpson, Observed), names_to = "Metric", values_to = "Value")
-
-AlphaD_combined <- ggplot(alpha_long, aes(x = Disease, y = Value, fill = Disease)) +
-  geom_boxplot() +
-  facet_wrap(~Metric, scales = "free_y") +
-  labs(title = "Alpha diversity from relative abundances")
-
-AlphaD_combined
-# ggsave("figures/Alpha/alpha_diversity_all.pdf", p_combined, width = 10, height = 6)
-
-```
-
-$R$ = total number of taxa in the community
-
-$p_i$​ = relative abundance of taxon $i$
-
-$I$ = = indicator function (1 if taxon is present, 0 otherwise)
-
-Observed richness: $S = \sum_{i=1}^{R} I(p_i > 0)$
-
-Shannon diversity: $H' = -\sum_{i=1}^{R} p_i \ln(p_i)$
-
-Simpson index: $D = \sum_{i=1}^{R} p_i^2$
-
-Inverse Simpson: $1/D = 1 / \sum_{i=1}^{R} p_i^2$
-
-## Normality Testing
-
-```{r}
-library(dplyr)
-library(broom)
-
-# Check Normality (Shapiro-Wilk) to decide test 
-alpha_metrics <- c("Observed", "Simpson", "InvSimpson", "Shannon")
-shapiro_results <- lapply(alpha_metrics, function(metric) {
-  
-  test <- shapiro.test(alpha_df[[metric]])
-  test_table <- broom::tidy(test)
-  test_table$Metric <- metric
-  return(test_table)
-})
-
-shapiro_table <- bind_rows(shapiro_results) %>%
-  select(Metric, statistic, p.value) %>%
-  arrange(p.value)
-print(shapiro_table)
-```
-
-If p-value \> alpha 0.5, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).
-
-Shapiro–Wilk tests assess whether diversity metrics follow a normal distribution. In microbiome datasets, these metrics are typically non-normal due to compositionality and sparsity. Therefore, results are used as a diagnostic tool rather than a strict decision criterion.
-
-```{r}
-kw_results <- lapply(alpha_metrics, function(metric) {
-  
-  test <- kruskal.test(alpha_df[[metric]] ~ Disease, data = alpha_df)
-  test_table <- broom::tidy(test)
-  test_table$Metric <- metric
-  return(test_table)
-})
-
-kw_table <- bind_rows(kw_results) %>%
-  select(Metric, statistic, p.value) %>%
-  arrange(p.value)
-print(kw_table)
-```
-
-The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.
-
-## Alpha Diversity Visualization
-
-```{r}
-AlphaD_Shannon <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
-  geom_boxplot() +
-  theme_minimal() +
-  ylab("Shannon Diversity") +
-  xlab("Disease") +
-  ggtitle("Alpha Diversity (Shannon)")
-AlphaD_Shannon
-
-AlphaD_Simpson <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
-  geom_boxplot() +
-  theme_minimal() +
-  ylab("Simpson Diversity") +
-  xlab("Disease") +
-  ggtitle("Alpha Diversity (Simpson)")
-AlphaD_Simpson
-
-AlphaD_InvSimpson <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
-  geom_boxplot() +
-  theme_minimal() +
-  ylab("InvSimpson Diversity") +
-  xlab("Disease") +
-  ggtitle("Alpha Diversity (InvSimpson)")
-AlphaD_InvSimpson
-
-AlphaD_Observed <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
-  geom_boxplot() +
-  theme_minimal() +
-  ylab("Observed Diversity") +
-  xlab("Disease") +
-  ggtitle("Alpha Diversity (Observed)")
-AlphaD_Observed
-```
-
-## Alpha Diversity Plot Interpretation
+We use four indexes (metrics) to calculate alpha diversity:
 
 ### Shannon
 
-A popular way to measure the diversity of species in a community. It takes into account both species richness and species evenness. It is calculated based on the logarithm of the relative abundances of species in a community. Higher values of Shannon Diversity indicate higher species richness and evenness. In general, values of 3.50 and above for Shannon-Wiener index indicates high diversity while values below 2.0 indicate low diversity (Baliton et al., 2020).
+A popular way to measure the diversity of species in a community. It takes into account both species richness and species evenness, but with weight on the richness.
+
+The idea behind this metric is that the more species you observe, and the more even their abundances are, the higher the uncertainty of predicting which species you would see next if you were to look at another observation from this sample.
+
+Higher values of Shannon Diversity indicate more diverse and more evenly distributed community. Lower values indicates the community is dominated by a few taxa.
 
 ### Simpson
 
-The Simpson Index is a measure of diversity that quantifies the probability that two randomly selected individuals from a community belong to the same species. It ranges from 0 to 1, with higher values indicating lower diversity. It is often used to assess the dominance of a few abundant species in a community. The value of D ranges between 0 and 1. The value of Simpson's D ranges from 0 to 1, with 0 representing infinite diversity and 1 representing no diversity, so the larger the value of D, the lower the diversity.
+The Simpson Index is another common measure of diversity. It measures the probability that two individuals taken from the sample at random will belong to different species.
+
+Simpson takes into account the number of different types of species in a sample and their relative abundance. As species richness and evenness increase, diversity increases. It is less sensitive to richness than the Shannon index, and more sensitive to evenness. Adding rare species doesn't change Simpson's values as much as Shannon values and therefore the Simpson Index emphasizes dominant species.
+
+Simpson values ranges from 0 to 1, with values close to 1 indicating higher diversity and values near 0 indicating lower diversity (dominance).
 
 ### Inverse Simpson
 
-It is the reciprocal of the Simpson Index and is often used to emphasize the importance of rare species in a community. Higher values indicate greater diversity. It is positively correlated with the Shannon index.
+The Inverse Simpson index is a variation of the Simpson index. This metric is sometimes preferred to other measures of alpha diversity because it is an indication of the richness in a community with uniform evenness that would have the same level of diversity.
+
+Inverse Simpson Values can range from 1 (only one taxon) to S (all taxa equally abundant).
+
+-   Example: If Inverse Simpson = 5, the community is as diverse as a community with 5 taxa each at 20% abundance.
+
+This index provides an intuitive microbiol interpretation of diversity in terms of equivalent species numbers.
 
 ### Observed
 
 Counts the actual number of unique features (OTUs) present.
 
-## Post-Hoc
+## Rarefaction (random subsampling without replacement).
 
-Since Kruskal-Wallis tells you there’s a difference **somewhere among the groups**, we may want to do **post-hoc pairwise comparisons** to see which groups differ. For non-parametric tests, we can use:
+In microbial ecology and amplicon sequencing (e.g., 16S rRNA gene sequencing) where samples often have vastly different numbers of reads. Rarefying aims to make all samples have the same total number of reads by randomly drawing a subset of reads from each sample without replacement. This helps reduce biases introduced by unequal sequencing effort, particularly for richness-based alpha diversity metrics such as Observed richness, which are highly sensitive to sampling depth. Rarefaction curves are also commonly used to evaluate whether sequencing depth is sufficient to capture the majority of microbial diversity within samples.
+
+In this study, raw sequencing count data were not available, and the dataset consisted only of relative abundance values. Because rarefaction requires integer read counts and knowledge of original library sizes, rarefaction-based normalization and sequencing-depth analyses could not be performed. Alpha diversity metrics were therefore calculated directly from relative abundance data using proportion-based formulas.
 
 ```{r}
-library(FSA)
-library(dplyr)
-library(broom)
+#| label: rarefaction  
+#| include: true
 
+# if need, use this to rarefying data
+# rarecurve(t(otu_table(metagenomics)))
+```
+
+## Alpha Diversity Metrics
+
+We use four indexes (metrics) to calculate alpha diversity (Shannon, Simpson, Inverse Simpson, Observed).
+
+The `phyloseq` package in R already has built in functions to calculate these metrics for data, but for data with raw counts required (whole numbers ≥0).
+
+`alpha_div <- estimate_richness(metagenomics, measures = c("Shannon", "Simpson", "InvSimpson", "Observed"))`
+
+## Alpha Diversity Formulas
+
+Because our data only contains only relative abundance, we will create functions to calculate these metrics manually using using the formulas:
+
+::: panel-tabset
+### Observed (Richness)
+
+$$
+R = \sum I(p_i > 0)
+$$
+
+where $I(pi​>0)$ is an indicator:
+
+-   = 1 if taxon i is present
+
+-   = 0 if absent
+
+### Shannon
+
+$$
+H' = -\sum_{i=1}^{R} p_i \log(p_i)
+$$
+
+### Simpson (**Gini–Simpson)**
+
+$$
+D = 1 - \lambda
+$$
+
+where $\lambda$ = $\sum_{i=1}^{R}p_i^2$
+
+### Inverse Simpson
+
+$$
+\frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}
+$$
+:::
+
+$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.
+
+$R$ = the number of different taxa observed in a sample
+
+$p_i$​ = proportion of observations belonging to the $i$th species
+
+## Calculate alpha diversity
+
+```{r}
+alpha_df <- compute_alpha_from_rel(metagenomics)
+head(alpha_df)
+write.csv(alpha_df, here("figures", "Alpha", "alpha_df.csv"), 
+          row.names = FALSE)
+```
+
+## Alpha Diversity Plots
+
+::: panel-tabset
+### Shannon
+
+```{r}
+p_shannon <- ggplot(alpha_df, aes(x = Disease, y = Shannon, fill = Disease)) +
+  geom_boxplot()
+p_shannon
+ggsave(here("figures", "Alpha", "alpha_shannon.pdf"), p_shannon)
+```
+
+In general, Shannon values of 3.50 and above for the Shannon index indicates high diversity while values below 2.0 indicate low diversity (Baliton et al., 2020).
+
+### Simpson
+
+```{r}
+p_simpson <- ggplot(alpha_df, aes(x = Disease, y = Simpson, fill = Disease)) +
+  geom_boxplot()
+p_simpson
+ggsave(here("figures", "Alpha", "alpha_simpson.pdf"), p_simpson)
+```
+
+Simpson values close to 1 indicate higher diversity and values near 0 indicate lower diversity (dominance).
+
+### Inverse Simpson
+
+```{r}
+p_invsimpson <- ggplot(alpha_df, aes(x = Disease, y = InvSimpson, fill = Disease)) +
+  geom_boxplot()
+p_invsimpson
+ggsave(here("figures", "Alpha", "alpha_InvSimpson.pdf"), p_invsimpson)
+```
+
+Inverse Simpson Values can range from 1 (only one taxon) to S (all taxa equally abundant).
+
+### Observed
+
+```{r}
+p_observed <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease))+
+  geom_boxplot()
+p_observed
+ggsave(here("figures", "Alpha", "alpha_observed.pdf"), p_observed)
+```
+
+Number of unique tax (OTUs) present in each.
+:::
+
+## Normality Testing
+
+Shapiro–Wilk tests assess whether diversity metric values follows a normal distribution. In microbial data sets, these metrics are typically non-normal. Therefore, results are used as a diagnostic tool and provide understanding rather than a strict decision criterion.
+
+```{r}
+metrics <- c("Shannon", "Simpson", "InvSimpson", "Observed")
+shapiro_table <- normality_tests(alpha_df, metrics)
+print(shapiro_table)
+write.csv(shapiro_table, here("figures", "Alpha", "shapiro.csv"), 
+          row.names = FALSE)
+```
+
+If p-value \> alpha 0.05, data is normal, use ANOVA. All test rejects the null hypothesis, so we use non-parametric test (Kruskal-Wallis).
+
+```{r}
+kw_table <- kruskal_tests(
+  alpha_df,
+  metrics
+)
+print(kw_table)
+write.csv(kw_table, here("figures", "Alpha", "kruskal-Wallis.csv"), 
+          row.names = FALSE)
+```
+
+The Kruskal–Wallis test evaluates whether median diversity differs across disease groups without assuming normality. A significant result indicates that at least one group differs, but does not specify which groups differ.
+
+## Post-Hoc
+
+Since Kruskal-Wallis tells you there’s a difference somewhere among the groups, we may want to do post-hoc pairwise comparisons to see which groups differ. For non-parametric tests, we can use:
+
+```{r}
 # Pairwise Wilcoxon test with p-value adjustment
-alpha_metrics <- c("Observed", "Simpson", "InvSimpson", "Shannon")
-results_list <- lapply(alpha_metrics, function(metric) {
-  
-  test <- pairwise.wilcox.test(alpha_df[[metric]], 
-                               alpha_df$Disease, 
-                               p.adjust.method = "BH")
-  
-  test_table <- broom::tidy(test)
-  test_table$Metric <- metric
-  
-  return(test_table)
-})
+PW_Wilcox_table <- pairwise_wilcox_tests(
+  alpha_df,
+  metrics
+)
 
-PW_Wilcox_table <- bind_rows(results_list) %>%
-  select(Metric, group1, group2, p.value)%>%
-  arrange(p.value)
-
-print(PW_Wilcox_table)
+print(PW_Wilcox_table, n=25)
+write.csv(PW_Wilcox_table, here("figures", "Alpha", "Pairwise_Wilcoxon.csv"), 
+          row.names = FALSE)
 ```
 
 Wilcox test identifies specific group differences following a significant Kruskal–Wallis result. The Benjamini–Hochberg correction controls the false discovery rate due to multiple pairwise comparisons.
 
 ```{r}
+
 #To save all the data/graphs for the presentation
-save(kw_table, PW_Wilcox_table, shapiro_table, AlphaD_combined, AlphaD_Observed, AlphaD_InvSimpson, AlphaD_Simpson, AlphaD_Shannon, file = here::here("posts", "alpha_diversity.RData"))
+save(kw_table, PW_Wilcox_table, shapiro_table, alpha_df, p_shannon, p_simpson, p_invsimpson, p_observed, file = here::here("posts", "alpha_diversity.RData"))
 ```
 
 ## Summary
 
-Alpha diversity analysis evaluates whether microbial community structure differs between disease groups in terms of richness and evenness. If significant differences are observed across metrics, this suggests that disease status is associated with broad ecological shifts in the microbiome, such as loss of diversity, increased dominance, or reduced richness.
+Alpha diversity analysis evaluates whether "within-sample" microbial community structure differs between disease groups in terms of richness and evenness. If significant differences are observed across metrics, this suggests that disease status is associated with broad ecological shifts in the microbiome, such as loss of diversity, increased dominance, or reduced richness.
 
 Consistency across multiple indices strengthens biological inference, while divergence between metrics may indicate changes in community structure rather than simple loss or gain of taxa.
 
-Alpha diversity was assessed using Shannon, Simpson (1 − D), Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.
+Alpha diversity was assessed using Shannon, Simpson, Inverse Simpson, and Observed richness indices computed from relative abundance data. Differences between disease groups were tested using Kruskal–Wallis tests followed by Wilcox post-hoc tests with Benjamini–Hochberg correction. Normality assumptions were evaluated using Shapiro–Wilk tests for exploratory purposes only.
 
 # Session info
 
 ```{r}
-sessioninfo::session_info(pkgs = "attached")
+print_session_info()
 ```

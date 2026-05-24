@@ -14,22 +14,10 @@
 ---
 
 ```{r}
-#| label: plotting-theme
+#| label: setup
 #| include: false
-#| 
-source("inputData.R")
-library(viridis)
-library(ggplot2)
-
-theme_set(theme_minimal(base_size = 13))
-
-options(
-  ggplot2.discrete.fill = function(...)
-    scale_fill_viridis_d(option = "cividis", ...),
-
-  ggplot2.discrete.colour = function(...)
-    scale_color_viridis_d(option = "cividis", ...)
-)
+library(here)
+source(here("functions", "inputData.R"))
 ```
 
 ## 1. Introduction and Objectives
@@ -41,25 +29,6 @@ To ensure the statistical robustness of the inferred interactions and to elimina
 An interaction (edge) is validated in the final consensus network if it is independently confirmed by at least 2 out of the 3 methods (majority vote threshold $\ge 0.66$).
 
 The baseline `phyloseq` object used throughout this pipeline is named `metagenomics` and is automatically loaded via the Quarto preliminary inclusion file.
-
-### 1.1 Installation
-
-Before running the network analysis, you must install the `SpiecEasi` package. Since it is not available on the standard CRAN repository, it must be installed directly from GitHub using `devtools`.
-
-Please run the following code in your R console:
-
-```{r}
-#| label: install-spieceasi
-#| eval: false
-
-# Install devtools if it isn't already on your computer
-if (!requireNamespace("devtools", quietly = TRUE)) {
-    install.packages("devtools")
-}
-
-# Download and install SpiecEasi from its official GitHub repository
-devtools::install_github("zdk123/SpiecEasi")
-```
 
 ## 2. Mathematical Foundations of Consensus Network Inference
 
@@ -132,162 +101,42 @@ $$A^{mean}_{ij} = \frac{A^{MB}_{ij} + A^{Glasso}_{ij} + A^{SparCC}_{ij}}{3}$$
 To eliminate algorithmic artifacts and increase the positive predictive value of the interactions, the final network applies a strict majority vote. Any edge where $A^{mean}_{ij} < 0.66$ is dropped, ensuring that every retained connection in the final model has been mathematically validated by at least two distinct inference strategies.
 
 ```{r}
-#| label: setup
-#| include: false
-
-# Loading necessary network and data manipulation libraries
-
-library(SpiecEasi)
-library(igraph)
-library(dplyr)
-library(tibble)
-
 # Extracting unique disease cohorts from the included dataset
 groups <- unique(sample_data(metagenomics)$disease)
 ```
 
-```{r}
-#| label: core-functions
-#| echo: false
+## 3. Phylum Level Analysis 
 
-# Function to build the multi-method consensus network
-build_consensus_network <- function(ps_obj, group_name, group_var, tax_level, prevalence_threshold) {
-  
-  cat("  -> Inferring sub-network for group:", group_name, "...\n")
-  
-  # A. Subsampling and phylogenetic taxonomic agglomeration
-  sdata <- sample_data(ps_obj)
-  ps_sub <- prune_samples(sdata[[group_var]] == group_name, ps_obj)
-  ps_tax <- tax_glom(ps_sub, taxrank = tax_level)
-  ps_tax <- prune_taxa(taxa_sums(ps_tax) > 0, ps_tax)
-  
-  # B. Count matrix extraction and orientation
-  otu <- as(otu_table(ps_tax), "matrix")
-  if(!taxa_are_rows(ps_tax)) otu <- t(otu)
-  
-  # C. Prevalence filtering to control zero-inflation noise
-  prevalence <- rowMeans(otu > 0)
-  otu_filt <- otu[prevalence >= prevalence_threshold, ]
-  
-  if(nrow(otu_filt) < 3) return(NULL)
-  
-  # Transposition: SpiecEasi and SparCC require samples in rows (n x p)
-  otu_input <- t(otu_filt)
-  
-  # D. Sequential execution of inference algorithms (Silent Mode)
-  se_mb <- suppressWarnings(spiec.easi(otu_input, method = 'mb', lambda.min.ratio = 1e-2, nlambda = 20, pulsar.params = list(rep.num = 20)))
-  se_gl <- suppressWarnings(spiec.easi(otu_input, method = 'glasso', lambda.min.ratio = 1e-2, nlambda = 20, pulsar.params = list(rep.num = 20)))
-  sparcc_res <- sparcc(otu_input)
-  
-  # E. Adjacency matrix extraction and binarization
-  adj_mb <- as.matrix(getRefit(se_mb))
-  adj_gl <- as.matrix(getRefit(se_gl))
-  adj_sparcc <- ifelse(abs(sparcc_res$Cor) >= 0.4, 1, 0)
-  diag(adj_sparcc) <- 0 # Removing self-loops
-  
-  # F. Computing Majority Vote Consensus (OneNet-Mean)
-  adj_mean <- (adj_mb + adj_gl + adj_sparcc) / 3
-  adj_consensus <- ifelse(adj_mean >= 0.66, 1, 0)
-  
-  # Retaining weights only for consensus-validated edges
-  adj_weighted <- adj_mean
-  adj_weighted[adj_consensus == 0] <- 0
-  
-  # G. Creating a weighted, undirected igraph object
-  net <- graph_from_adjacency_matrix(adj_weighted, mode = "undirected", weighted = TRUE, diag = FALSE)
-  
-  # Mapping formal taxonomy to node names
-  tax_info <- as.data.frame(tax_table(ps_tax))
-  V(net)$name  <- tax_info[rownames(otu_filt), tax_level]
-  V(net)$label <- V(net)$name
-  
-  return(net)
-}
-
-# Function to compile and summarize topological metrics
-print_network_stats <- function(network_list, tax_level) {
-  stats_df <- do.call(rbind, lapply(names(network_list), function(g) {
-    net <- network_list[[g]]
-    if(is.null(net)) return(NULL)
-    
-    data.frame(
-      Tax_Level       = tax_level,
-      Disease_Cohort  = g,
-      Nodes_Count     = vcount(net),
-      Edges_Count     = ecount(net),
-      Graph_Density   = round(edge_density(net), 3),
-      Average_Degree  = round(mean(degree(net)), 2)
-    )
-  }))
-  return(stats_df)
-}
-
-plot_global_network <- function(network_list, tax_level) {
-  all_edges <- data.frame()
-  
-  # Compiling edge lists across all individual sub-networks
-  for(g in names(network_list)) {
-    net <- network_list[[g]]
-    if(!is.null(net) && ecount(net) > 0) {
-      edgelist <- igraph::as_data_frame(net, what = "edges")
-      edgelist$Disease <- g
-      all_edges <- rbind(all_edges, edgelist)
-    }
-  }
-  
-  if(nrow(all_edges) == 0) return(NULL)
-  
-  # Instantiating the master multi-edge graph
-  master_net <- graph_from_data_frame(all_edges, directed = FALSE)
-  master_net <- delete.vertices(master_net, degree(master_net) == 0) # Pruning isolated nodes
-  
-  # Mapping disease-specific color codes
-  unique_diseases <- unique(E(master_net)$Disease)
-  color_palette <- setNames(viridis(length(unique_diseases), option = "cividis"), unique_diseases)
-  E(master_net)$color <- color_palette[E(master_net)$Disease]
-  
-  # Computing geometric curvatures for parallel shared edges
-  edge_curvatures <- curve_multiple(master_net)
-  
-  # Adaptive sizing based on taxonomic rank resolution
-  if(tax_level == "Phylum") { v_size <- 8; v_cex <- 0.7 }
-  else if(tax_level == "Family") { v_size <- 5; v_cex <- 0.6 }
-  else { v_size <- 3; v_cex <- 0.45 }
-  
-# Inline HTML Quarto Report Rendering 
-  plot(master_net, layout = layout_with_fr(master_net), vertex.size = v_size,
-       vertex.color = "grey90", vertex.frame.color = "white",
-       vertex.label.color = "black", vertex.label.cex = v_cex,
-       edge.color = E(master_net)$color, edge.width = 1.5, edge.curved = edge_curvatures,
-       main = paste("Global Consensus Multi-Disease Network -", tax_level))
-  
-  legend("bottomright", title = "Diseases", legend = names(color_palette), 
-         col = color_palette, lwd = 3, bty = "n", cex = 0.6)
-  
-  return(master_net)
-}
-```
-
-## 3. Phylum Level Analysis (Macro-Ecology)
+::: panel-tabset
+### Phylum table
 
 ```{r}
 #| label: analysis-phylum
 #| message: false
 #| warning: false
-#| fig-width: 8
-#| fig-height: 8
-
 networks_phylum <- list()
 for(g in groups) {
   networks_phylum[[g]] <- build_consensus_network(metagenomics, g, "disease", "Phylum", 0.10)
 }
 
 # Displaying topological summary table
-knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
+phylum_table <- knitr::kable(print_network_stats(networks_phylum, "Phylum"), caption = "Topological Metrics at the Phylum Level")
+phylum_table
+write.csv(phylum_table, here("figures", "Network", "phylum_table.csv"), 
+          row.names = FALSE)
 
+```
+
+### Phylum plot
+
+```{r}
+#| fig-width: 9
+#| fig-height: 9
 # Plotting global network
 Network_phylum <- plot_global_network(networks_phylum, "Phylum")
+pdf(here("figures", "Network", "Network_phylum.pdf"), width = 9, height = 9)
 ```
+:::
 
 ### Biological Interpretation (Phylum)
 
@@ -295,26 +144,36 @@ At the **Phylum** level, the global consensus network exhibits extremely low den
 
 Major phyla (such as *Firmicutes* or *Bacteroidetes*) contain thousands of distinct bacterial species operating in opposing ecological niches—some acting as anti-inflammatory symbionts, others as pro-inflammatory pathobionts. Agglomerating raw counts at this macro-level forces opposing ecological signals to cancel each other out, neutralizing detectable mathematical covariances. Thus, descending to finer taxonomic resolutions is biologically mandatory.
 
-## 4. Family Level Analysis (Meso-Ecology)
+## 4. Family Level Analysis 
+
+::: panel-tabset
+### Family table
 
 ```{r}
 #| label: analysis-family
 #| message: false
 #| warning: false
-#| fig-width: 9
-#| fig-height: 9
-
+#| 
 networks_family <- list()
 for(g in groups) {
   networks_family[[g]] <- build_consensus_network(metagenomics, g, "disease", "Family", 0.15)
 }
 
-# Displaying topological summary table
-knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
-
-# Plotting global network
-Network_family <- plot_global_network(networks_family, "Family")
+family_table <- knitr::kable(print_network_stats(networks_family, "Family"), caption = "Topological Metrics at the Family Level")
+family_table
+write.csv(family_table, here("figures", "Network", "family_table.csv"), 
+          row.names = FALSE)
 ```
+
+### Family plot
+
+```{r}
+#| fig-width: 9
+#| fig-height: 9
+Network_family <- plot_global_network(networks_family, "Family")
+pdf(here("figures", "Network", "Network_family.pdf"), width = 9, height = 9)
+```
+:::
 
 ### Biological Interpretation (Family)
 
@@ -324,19 +183,17 @@ The **Family** level provides an ideal analytical sweet spot, balancing network 
 
 2.  **The Shared Core (Multi-colored Parallel Edges):** Overlapping edges across different conditions reveal that distinct diseases can trigger parallel network disruptions, often targeting the same high-degree microbial hubs.
 
-    -   **The IBD / Cancer Axis (Blue and Yellow Edges):** The preserved interactions involving *Oscillospiraceae* and *Desulfovibrionaceae* show a shared topological signature between ulcerative colitis and colorectal cancer. The fact that our multi-method consensus framework identifies the exact same conditional dependencies in both cohorts points to a common degraded microenvironment, likely driven by similar inflammatory pressures and mucosal degradation.
-    -   **The IBD / T2D Axis (Blue and Beige Edges):** Coupled interactions between families like *Bacteroidaceae* and *Streptococcaceae* highlight a common topological breakdown. This cross-disease connectivity suggests that both metabolic (T2D) and inflammatory (IBD) conditions destabilize the exact same structural pillars of the gut ecosystem, ultimately compromising its metabolic homeostasis.
-
 3.  **The IBD Inflammatory Axis (Exclusive Blue Edge):** The direct, isolated connection between *Fusobacteriaceae* and *Enterobacteriaceae* stands out as a strong statistical anomaly specific to the IBD cohort. To survive our strict 0.66 majority vote threshold across SparCC and SpiecEasi algorithms, this exclusive link requires an extraordinarily strong covariance. Rather than a random co-occurrence, this points to a highly specific and resilient bacterial alliance that thrives exclusively under the acute mucosal stress of ulcerative colitis.
 
-## 5. Genus Level Analysis (Micro-Ecology)
+## 5. Genus Level Analysis 
+
+::: panel-tabset
+### Genus table
 
 ```{r}
 #| label: analysis-genus
 #| message: false
 #| warning: false
-#| fig-width: 10
-#| fig-height: 10
 
 networks_genus <- list()
 for(g in groups) {
@@ -344,16 +201,23 @@ for(g in groups) {
 }
 
 # Displaying topological summary table
-knitr::kable(print_network_stats(networks_genus, "Genus"), caption = "Topological Metrics at the Genus Level")
+genus_table <- knitr::kable(print_network_stats(networks_genus, "Genre"), caption = "Topological Metrics at the Genus Level")
+genus_table
+write.csv(genus_table, here("figures", "Network", "genus_table.csv"), 
+          row.names = FALSE)
+```
+
+### Genus plot
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
 
 # Plotting global network
 Network_genus <- plot_global_network(networks_genus, "Genus")
+pdf(here("figures", "Network", "Network_genus.pdf"), width = 10, height = 10)
 ```
-
-```{r}
-#To save all the data/graphs for the presentation
-save(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, file = here::here("posts", "Network.RData"))
-```
+:::
 
 ### Biological Interpretation (Genus)
 
@@ -369,8 +233,13 @@ The multi-scale taxonomic analysis revealed that while macroscopic levels (Phylu
 
 Ultimately, these network topologies show that chronic diseases do not merely alter the abundance of isolated bacteria; they trigger a systemic collapse of the microbial ecosystem's connectivity and metabolic resilience.
 
+```{r}
+#To save all the data/graphs for the presentation
+save(Network_phylum, Network_family, Network_genus, networks_phylum, networks_family, networks_genus, file = here::here("posts", "Network.RData"))
+```
+
 # Session info
 
 ```{r}
-sessioninfo::session_info(pkgs = "attached")
+print_session_info()
 ```
