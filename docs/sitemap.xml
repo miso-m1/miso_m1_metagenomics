@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/resources.html</loc>
-    <lastmod>2026-05-24T18:18:41.600Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/about.html</loc>
-    <lastmod>2026-05-24T18:18:41.422Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/datapreparation.html</loc>
-    <lastmod>2026-05-24T18:18:41.599Z</lastmod>
+    <lastmod>2026-05-24T18:08:51.523Z</lastmod>
   </url>
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Network.html</loc>
-    <lastmod>2026-05-24T18:18:41.488Z</lastmod>
+    <lastmod>2026-05-24T18:08:51.423Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/datapreparation.html</loc>
+    <lastmod>2026-05-24T18:08:51.523Z</lastmod>
   </url>
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/alpha_diversity.html</loc>
-    <lastmod>2026-05-24T18:18:41.490Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/Presentation.html</loc>
-    <lastmod>2026-05-24T18:18:41.354Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/beta_diversity.html</loc>
-    <lastmod>2026-05-24T18:23:24.873Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Introduction.html</loc>
-    <lastmod>2026-05-24T18:18:41.487Z</lastmod>
-  </url>
-  <url>
-    <loc>https://miso-m1.github.io/miso_m1_metagenomics/index.html</loc>
-    <lastmod>2026-05-24T18:18:41.487Z</lastmod>
+    <lastmod>2026-05-24T18:08:51.423Z</lastmod>
   </url>
   <url>
     <loc>https://miso-m1.github.io/miso_m1_metagenomics/gettingstarted.html</loc>
-    <lastmod>2026-05-24T18:18:41.484Z</lastmod>
+    <lastmod>2026-05-24T18:08:51.407Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/about.html</loc>
+    <lastmod>2026-05-24T18:08:51.306Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/index.html</loc>
+    <lastmod>2026-05-24T18:08:51.423Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/beta_diversity.html</loc>
+    <lastmod>2026-05-24T19:39:37.522Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/posts/Introduction.html</loc>
+    <lastmod>2026-05-24T18:08:51.423Z</lastmod>
+  </url>
+  <url>
+    <loc>https://miso-m1.github.io/miso_m1_metagenomics/Presentation.html</loc>
+    <lastmod>2026-05-24T19:49:11.103Z</lastmod>
   </url>
 </urlset>

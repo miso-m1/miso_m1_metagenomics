@@ -172,15 +172,7 @@ Alpha diversity measures the diversity within a single sample. It can reflect bo
 
 Several metrics can be used, we chose 4: Observed, Shannon, Simpson and Inverted Simpson
 
-## Overview of the Alpha diversity
-
-```{r}
-#| fig-height: 4.5
-#| fig-align: center
-#| out-width: "80%"
-```
-
-## Alpha diversity in details {.smaller}
+## Overview of the Alpha diversity {.smaller}
 
 ::: panel-tabset
 ### Oberved {.smaller}
@@ -405,13 +397,14 @@ We used a consensus network approach :
 
 . . .
 
-An interaction is validates if confirmed by 2 of 3 methods
+An interaction is validated if confirmed by 2 of 3 methods
 
 We tested 3 taxonomic levels : *Phylum*, *Family* and *Genus*
 
 ## 1. Phylum Level {.smaller}
 
 ::: panel-tabset
+
 ### Network
 
 ```{r}
@@ -459,12 +452,15 @@ print_network_stats <- function(network_list, tax_level) {
   }))
   return(stats_df)
 }
+#| echo: false
+knitr::kable(print_network_stats(networks_phylum, "Phylum"))
 ```
 
 -   Low edge count (interactions)
 -   Very low density
 
 ➔ grouping of populations, lack of resolution
+
 :::
 
 ## 2. Family Level {.smaller}
