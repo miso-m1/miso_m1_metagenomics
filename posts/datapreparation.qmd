@@ -161,7 +161,7 @@ No sample composed only of zeroes was found.
 
 Missing values can bias analyses and lead to incorrect statistical results.\
 \
-We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis.
+We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis. **`is.na()`** is used to deal with missing values in the dataset. In order to check missing values, we can sum up the number of missing values of each table and if the sum equals 0, then there are no missing values.
 
 ```{r}
 sum(is.na(otu_mat))
@@ -330,6 +330,7 @@ gender_counts <- meta_df %>%
   summarise(Count = n()) %>%
   mutate(Percentage = Count / sum(Count) * 100)
 print(gender_counts)
+
 ```
 
 ```{r}
