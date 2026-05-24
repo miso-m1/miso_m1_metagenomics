@@ -173,6 +173,7 @@ Inverse Simpson Values can range from 1 (only one taxon) to S (all taxa equally 
 ```{r}
 p_observed <- ggplot(alpha_df, aes(x = Disease, y = Observed, fill = Disease)) +
   geom_boxplot()
+
 p_observed
 ggsave(here("figures", "Alpha", "alpha_observed.pdf"), p_observed)
 ```
