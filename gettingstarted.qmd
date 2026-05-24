@@ -6,11 +6,11 @@ editor: visual
 
 Welcome to our blog on the statistical analysis of metagenomic data. This website presents the different steps of our analysis pipeline, from data preparation to interpretation and network analysis.
 
-The project was carried out as part of the Master’s program in Bioinformatics at [[Université de Lille]{.underline}](https://www.univ-lille.fr/).
+The project was carried out as part of the Master’s program in Bioinformatics at [[Université de Lille]{.underline}](https://www.univ-lille.fr/){target="_blank"}.
 
-The link to our GitHub repository is here : <https://github.com/miso-m1/miso_m1_metagenomics>.
+The link to our GitHub repository is here : [https://github.com/miso-m1/miso_m1_metagenomics](https://github.com/miso-m1/miso_m1_metagenomics){target="_blank"}.
 
-Our data: <https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data>
+Our data: [https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data](https://www.kaggle.com/datasets/antaresnyc/human-metagenomics/data){target="_blank"}
 
 ## How to Navigate the Blog
 
@@ -50,6 +50,6 @@ Several resources are available through the navigation bar at the top of the web
 
 This website was developed using:
 
--   [Quarto](https://quarto.org/) for website generation and reproducible reporting.
+-   [Quarto](https://quarto.org/){target="_blank"} for website generation and reproducible reporting.
 
--   [R Project for Statistical Computing](https://www.r-project.org/) for data analysis and visualization.
+-   [R Project for Statistical Computing](https://www.r-project.org/){target="_blank"} for data analysis and visualization.

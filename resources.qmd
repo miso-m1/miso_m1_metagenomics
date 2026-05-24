@@ -20,10 +20,10 @@ page-layout: full
 
 ### Links
 
--   <https://clement.poupelin.pages-forge.inrae.fr/blog_open16s/>{target="_blank"}
+-   [https://clement.poupelin.pages-forge.inrae.fr/blog_open16s/](https://clement.poupelin.pages-forge.inrae.fr/blog_open16s/){target="_blank"}
 
--   <https://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html>{target="_blank"}
+-   [https://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html](https://bioc.r-universe.dev/articles/SpiecEasi/SpiecEasi.html){target="_blank"}
 
--   <https://joey711.github.io/phyloseq/>{target="_blank"}
+-   [https://joey711.github.io/phyloseq/](https://joey711.github.io/phyloseq/){target="_blank"}
 
--   <https://cran.r-project.org/web/packages/vegan/index.html>{target="_blank"}
+-   [https://cran.r-project.org/web/packages/vegan/index.html](https://cran.r-project.org/web/packages/vegan/index.html){target="_blank"}
