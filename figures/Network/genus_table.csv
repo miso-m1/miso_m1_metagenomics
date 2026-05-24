@@ -4,6 +4,6 @@
 "|Tax_Level |Disease_Cohort         | Nodes_Count| Edges_Count| Graph_Density| Average_Degree|"
 "|:---------|:----------------------|-----------:|-----------:|-------------:|--------------:|"
 "|Genre     |ibd_ulcerative_colitis |          64|          46|         0.023|           1.44|"
-"|Genre     |cirrhosis              |          70|          50|         0.021|           1.43|"
+"|Genre     |cirrhosis              |          70|          31|         0.013|           0.89|"
 "|Genre     |t2d                    |          64|          34|         0.017|           1.06|"
 "|Genre     |cancer                 |          73|          29|         0.011|           0.79|"

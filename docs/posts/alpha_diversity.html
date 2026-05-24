@@ -260,6 +260,7 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -373,6 +374,8 @@ window.Quarto = {
 <section id="alpha-diversity-formulas" class="level2">
 <h2 class="anchored" data-anchor-id="alpha-diversity-formulas">Alpha Diversity Formulas</h2>
 <p>Because our data only contains only relative abundance, we will create functions to calculate these metrics manually using using the formulas:</p>
+<p><span class="math inline">\(R\)</span> = the number of different taxa observed in a sample</p>
+<p><span class="math inline">\(p_i\)</span>​ = proportion of observations belonging to the <span class="math inline">\(i\)</span>th species</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Observed (Richness)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Shannon</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Simpson (<strong>Gini–Simpson)</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Inverse Simpson</a></li></ul>
 <div class="tab-content">
@@ -380,7 +383,7 @@ window.Quarto = {
 <p><span class="math display">\[
 R = \sum I(p_i &gt; 0)
 \]</span></p>
-<p>where <span class="math inline">\(I(pi​&gt;0)\)</span> is an indicator:</p>
+<p>where <span class="math inline">\(1_{p_i &gt;0}\)</span> is an indicator:</p>
 <ul>
 <li><p>= 1 if taxon i is present</p></li>
 <li><p>= 0 if absent</p></li>
@@ -395,18 +398,15 @@ H' = -\sum_{i=1}^{R} p_i \log(p_i)
 <p><span class="math display">\[
 D = 1 - \lambda
 \]</span></p>
-<p>where <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\sum_{i=1}^{R}p_i^2\)</span></p>
+<p><span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\sum_{i=1}^{R} p_i^2\)</span> (the probability that two individuals taken from the sample at random represent the same species). Therefore, <span class="math inline">\(1-\lambda\)</span> is the probability that two individuls taken from the sample at random represent different species.</p>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
 <p><span class="math display">\[
 \frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}
-\]</span></p>
+\]</span> <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\sum_{i=1}^{R} p_i^2\)</span> (the probability that two individuals taken from the sample at random represent the same species). Therefore, <span class="math inline">\(1-\lambda\)</span> is the probability that two individuls taken from the sample at random represent different species.</p>
 </div>
 </div>
 </div>
-<p><span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\sum_{i=1}^{R} p_i^2\)</span> (the probability that two individuals taken from the sample at random represent the same species). Therefore, <span class="math inline">\(1-\lambda\)</span> is the probability that two individuls taken from the sample at random represent different species.</p>
-<p><span class="math inline">\(R\)</span> = the number of different taxa observed in a sample</p>
-<p><span class="math inline">\(p_i\)</span>​ = proportion of observations belonging to the <span class="math inline">\(i\)</span>th species</p>
 </section>
 <section id="calculate-alpha-diversity" class="level2">
 <h2 class="anchored" data-anchor-id="calculate-alpha-diversity">Calculate alpha diversity</h2>
@@ -1276,45 +1276,45 @@ loaded via a namespace (and not attached):
 <span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a>Because our data only contains only relative abundance, we will create functions to calculate these metrics manually using using the formulas:</span>
 <span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Observed (Richness)</span></span>
-<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a>R = \sum I(p_i &gt; 0)</span>
-<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a>$R$ = the number of different taxa observed in a sample</span>
+<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a>$p_i$​ = proportion of observations belonging to the $i$th species</span>
+<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### Observed (Richness)</span></span>
 <span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a>where $I(pi​&gt;0)$ is an indicator:</span>
-<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>= 1 if taxon i is present</span>
+<span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a>R = \sum I(p_i &gt; 0)</span>
+<span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>= 0 if absent</span>
+<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a>where $1_{p_i &gt;0}$ is an indicator:</span>
 <span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### Shannon</span></span>
+<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>= 1 if taxon i is present</span>
 <span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a>H' = -\sum_{i=1}^{R} p_i \log(p_i)</span>
-<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>= 0 if absent</span>
+<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a><span class="fu">### Shannon</span></span>
 <span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Simpson (**Gini–Simpson)**</span></span>
-<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a>H' = -\sum_{i=1}^{R} p_i \log(p_i)</span>
 <span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a>D = 1 - \lambda</span>
-<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Simpson (**Gini–Simpson)**</span></span>
 <span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a>where $\lambda$ = $\sum_{i=1}^{R}p_i^2$</span>
-<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inverse Simpson</span></span>
+<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a>D = 1 - \lambda</span>
+<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a>\frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}</span>
-<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.</span>
-<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a>$R$ = the number of different taxa observed in a sample</span>
+<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a>$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.</span>
+<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inverse Simpson</span></span>
+<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>\frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}</span>
+<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a>$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.</span>
 <span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a>$p_i$​ = proportion of observations belonging to the $i$th species</span>
+<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculate alpha diversity</span></span>
 <span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a></span>

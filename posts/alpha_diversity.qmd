@@ -83,6 +83,10 @@ The `phyloseq` package in R already has built in functions to calculate these me
 
 Because our data only contains only relative abundance, we will create functions to calculate these metrics manually using using the formulas:
 
+$R$ = the number of different taxa observed in a sample
+
+$p_i$​ = proportion of observations belonging to the $i$th species
+
 ::: panel-tabset
 ### Observed (Richness)
 
@@ -90,7 +94,7 @@ $$
 R = \sum I(p_i > 0)
 $$
 
-where $I(pi​>0)$ is an indicator:
+where $1_{p_i >0}$ is an indicator:
 
 -   = 1 if taxon i is present
 
@@ -108,20 +112,16 @@ $$
 D = 1 - \lambda
 $$
 
-where $\lambda$ = $\sum_{i=1}^{R}p_i^2$
+$\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.
 
 ### Inverse Simpson
 
 $$
 \frac{1}{\lambda} = \frac{1}{\sum_{i=1}^{R} p_i^2}
 $$
-:::
-
 $\lambda$ = $\sum_{i=1}^{R} p_i^2$ (the probability that two individuals taken from the sample at random represent the same species). Therefore, $1-\lambda$ is the probability that two individuls taken from the sample at random represent different species.
 
-$R$ = the number of different taxa observed in a sample
-
-$p_i$​ = proportion of observations belonging to the $i$th species
+:::
 
 ## Calculate alpha diversity
 
