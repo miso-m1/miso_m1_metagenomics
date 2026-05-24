@@ -164,21 +164,20 @@ Missing values can bias analyses and lead to incorrect statistical results.\
 We therefore verify that the OTU table, taxonomy table, and sample metadata do not contain missing entries before continuing the analysis.
 
 ```{r}
-#Check for missing values
 sum(is.na(otu_mat))
 sum(is.na(tax_mat))
 sum(is.na(samples_df))
 
-#visualize missingness
 colSums(is.na(samples_df))
 
 ```
 
-We can see that there is no missing values.
+We can see that there are no missing values.
 
 ## Distribution of Sequencing Depth.
 
-Sequencing depth corresponds to the total number of reads obtained for each sample.\
+Sequencing depth corresponds to the total number of reads obtained for each sample.
+
 \
 Large differences in sequencing depth may introduce technical bias in diversity analyses. Samples with extremely low read counts are sometimes removed because they may not accurately represent the microbial community.
 
@@ -200,7 +199,7 @@ bp_seq_depth <- ggplot(data.frame(depth = sample_depth), aes(x = depth)) +
 bp_seq_depth
 ```
 
-Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been normalized to relative abundances.
+Sequencing depth across samples is fairly consistent, with most samples summing to approximately 100, indicating that the dataset had been probably normalized to relative abundances.
 
 However, we can notice one potential outlier, a sample exhibiting a lower total (50.91), let's try to identify it.
 
@@ -208,7 +207,7 @@ However, we can notice one potential outlier, a sample exhibiting a lower total 
 sample_sums(metagenomics)[sample_sums(metagenomics) < 90]
 ```
 
-Most samples show similar sequencing depth values, suggesting that the dataset was already normalized before analysis.\
+Most samples show similar sequencing depth values, confirming that the dataset was already normalized before analysis.\
 \
 One sample (**Sample_3482**) exhibits a lower sequencing depth than the others. However, since the difference remains moderate, the sample was retained for the study.
 
