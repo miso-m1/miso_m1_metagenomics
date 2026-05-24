@@ -224,9 +224,11 @@ Tax_phyllum <- plot_bar(metagenomics_phylum_per, fill = "Phylum") +
   geom_bar(stat = "identity") +
   theme_minimal() +
   labs(title = "Taxonomic composition at Phylum level") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(text=element_text(size=8), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size=1))
 Tax_phyllum
 ```
+
+Let's do a barplot as to get a clearer visualization, using the disease groups.
 
 ```{r}
 Tax_disease_group <- plot_bar(metagenomics_phylum_per, x = "disease", fill = "Phylum") +
@@ -235,6 +237,8 @@ Tax_disease_group <- plot_bar(metagenomics_phylum_per, x = "disease", fill = "Ph
   labs(title = "Phylum composition by disease group")
 Tax_disease_group
 ```
+
+it seems that the most present phylum are Bacteroidetes and Actinobacteria, for all diseases.
 
 To improve readability, only the 10 most abundant genera were retained in the following visualization.
 
@@ -255,9 +259,11 @@ Top10b_disease <- plot_bar(metagenomics_genus_top, x = "disease", fill = "Genus"
 Top10b_disease
 ```
 
+We observe that Bacteroides, a genus within the Bacteroidetes phylum, is the most abundant genus across all disease groups in the dataset. This confirms the high abundance of the Bacteroidetes phylum in these samples.
+
 ## Beta Diversity - PCoA
 
-Beta diversity measures differences in microbial composition between samples.\
+We can use Beta diversity to measure differences in microbial composition between samples.\
 Bray-Curtis distance is a statistic used to quantify the dissimilarity in composition between samples, based on abundance data. 
 
 We then visualise sample similarities via Principal Coordinate Analysis (PCoA). Samples positioned close together have more similar microbial compositions, whereas distant samples are more dissimilar.
@@ -367,7 +373,6 @@ Ulcerative colitis (IBD) has the highest number of samples with more than 75 cou
 Number of samples of diseases for males:
 
 ```{r}
-
 SampleM_dist_disease <- ggplot(disease_counts %>% filter(gender == "male"),
        aes(x = disease, y = Count, fill = disease)) +
   geom_bar(stat = "identity") +
