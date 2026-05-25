@@ -1058,7 +1058,7 @@ One sample (<strong>Sample_3482</strong>) exhibits a lower sequencing depth than
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"datapreparation.RData"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, Sample_dist_country, Sample_dist_country_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"datapreparation.RData"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -1631,12 +1631,12 @@ loaded via a namespace (and not attached):
 <span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:</span>
 <span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>importing OTU, taxonomy, and metadata tables,</span>
-<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>creating a phyloseq object,</span>
-<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>checking for missing values,</span>
-<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>verifying sequencing depth consistency,</span>
-<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>exploring taxonomic composition,</span>
-<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>and visualizing global similarities between samples.</span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>importing OTU, taxonomy, and metadata tables,</span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>creating a phyloseq object,</span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>checking for missing values,</span>
+<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>verifying sequencing depth consistency,</span>
+<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>exploring taxonomic composition,</span>
+<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>and visualizing global similarities between samples.</span>
 <span id="cb63-36"><a href="#cb63-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb63-37"><a href="#cb63-37" aria-hidden="true" tabindex="-1"></a>These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.</span>
 <span id="cb63-38"><a href="#cb63-38" aria-hidden="true" tabindex="-1"></a></span>
@@ -2010,7 +2010,7 @@ loaded via a namespace (and not attached):
 <span id="cb63-438"><a href="#cb63-438" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb63-441"><a href="#cb63-441" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb63-442"><a href="#cb63-442" aria-hidden="true" tabindex="-1"></a><span class="co">#To save all the data/graphs for the presentation</span></span>
-<span id="cb63-443"><a href="#cb63-443" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"datapreparation.RData"</span>))</span>
+<span id="cb63-443"><a href="#cb63-443" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, Sample_dist_country, Sample_dist_country_disease, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"datapreparation.RData"</span>))</span>
 <span id="cb63-444"><a href="#cb63-444" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb63-445"><a href="#cb63-445" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb63-446"><a href="#cb63-446" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>

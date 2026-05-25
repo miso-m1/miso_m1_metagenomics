@@ -25,12 +25,12 @@ dir.create(here("figures", "dataPrep"), recursive = TRUE, showWarnings = FALSE)
 
 Before performing metagenomic analyses, it is important to explore and clean the dataset. This step includes:
 
-- importing OTU, taxonomy, and metadata tables,
-- creating a phyloseq object,
-- checking for missing values,
-- verifying sequencing depth consistency,
-- exploring taxonomic composition,
-- and visualizing global similarities between samples.
+-   importing OTU, taxonomy, and metadata tables,
+-   creating a phyloseq object,
+-   checking for missing values,
+-   verifying sequencing depth consistency,
+-   exploring taxonomic composition,
+-   and visualizing global similarities between samples.
 
 These exploratory analyses help detect potential issues in the dataset and provide an overview of the microbial communities before more advanced statistical analyses.
 
@@ -405,7 +405,7 @@ These checks helped confirm data quality, identify potential biases, and ensure 
 
 ```{r}
 #To save all the data/graphs for the presentation
-save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, file = here::here("posts", "datapreparation.RData"))
+save(metagenomics, B10class_dist_gender, Bclass_dist_gender, bp_seq_depth, Sample_dist_gender, SampleF_dist_disease, SampleM_dist_disease, Tax_disease_group, Tax_phyllum, Top10b_disease, Sample_dist_country, Sample_dist_country_disease, file = here::here("posts", "datapreparation.RData"))
 ```
 
 # Session info

@@ -15,7 +15,7 @@ format:
 #| include: false
 library(here)
 source(here("functions", "inputData.R"))
-load(here::here("posts", "data_preparation.RData"))
+load(here::here("posts", "datapreparation.RData"))
 load(here::here("posts", "alpha_diversity.RData"))
 load(here::here("posts", "beta_diversity.RData"))
 load(here::here("posts", "Network.RData"))
@@ -28,9 +28,9 @@ load(here::here("posts", "Network.RData"))
 ::: incremental
 -   Goal: Building a reproducible pipeline ➔ reliable conclusions on microbial interaction from metagenomic data.
 
--   Data : Bacteria population abundance from patient's gut microbiome with differing diseases
+-   Data : Bacteria population abundance from patients' gut microbiome with differing diseases
 
--   Problem from microbiome sequencing :
+-   Problems from microbiome sequencing :
 
     -   High dimensionnality
     -   Sparsity
@@ -144,6 +144,27 @@ SampleM_dist_disease
 #| out-width: "80%"
 SampleF_dist_disease
 ```
+#### Country {.smaller}
+
+```{r}
+#| cache: false
+#| fig-height: 4.5
+#| fig-align: center
+#| out-width: "80%"
+Sample_dist_country
+```
+
+
+#### Country - diseases {.smaller}
+
+```{r}
+#| cache: false
+#| fig-height: 4.5
+#| fig-align: center
+#| out-width: "80%"
+Sample_dist_country_disease
+```
+
 :::
 
 ## 2. Data Overview {.smaller}
@@ -199,7 +220,7 @@ p_shannon
 
 ### Simpson {.smaller}
 
-Probability : two random individuals from a community belong to the same species
+Probability : two random individuals from a community belong to the different species
 
 ```{r}
 #| fig-height: 4
@@ -230,8 +251,14 @@ All of those differences in diversity needs to be **statistically significant**
 Assess the normality = Shapiro test
 
 ```{r}
+ordre_metriques <- c("Observed", "Shannon", "Simpson", "InvSimpson")
+
+shapiro_table <- shapiro_table %>%
+  mutate(Metric = factor(Metric, levels = ordre_metriques)) %>%
+  arrange(Metric) %>% 
+  select(Metric, method, statistic, p.value)
 knitr::kable(shapiro_table, 
-              digits = 4, # Arrondir les p-values à 4 décimales
+              digits = 4, 
               )
 ```
 
@@ -242,6 +269,12 @@ knitr::kable(shapiro_table,
 Assess the significant differences in microbial diversity across disease groups = Kruskal-Wallis test
 
 ```{r}
+ordre_metriques <- c("Observed", "Shannon", "Simpson", "InvSimpson")
+
+kw_table <- kw_table %>%
+  mutate(Metric = factor(Metric, levels = ordre_metriques)) %>%
+  arrange(Metric) %>% 
+  select(Metric, method, parameter, statistic, p.value)
 knitr::kable(kw_table, 
               digits = 4, 
               )
@@ -255,14 +288,13 @@ KW = difference somewhere among the groups ➔ post-hoc pairwise comparisons to 
 
 ```{r}
 
-PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[[4]], decreasing = TRUE), ]
+PW_Wilcox_sorted <- PW_Wilcox_table[order(PW_Wilcox_table[[3]], decreasing = TRUE), ]
 
-PW_Wilcox_extremes <- rbind(head(PW_Wilcox_sorted, 2), tail(PW_Wilcox_sorted, 2))
 
-knitr::kable(PW_Wilcox_extremes,
+knitr::kable(PW_Wilcox_sorted,
              digits = 4,
              row.names = FALSE,
-             col.names = c("Metric", "Group A", "Group B", "P-value (BH)"))
+             col.names = c("Group A", "Group B", "P-value (BH)",  "Metric"))
 ```
 
 -   p-value \< 0.05 = significative difference in diversity beetween the 2 communities
@@ -374,6 +406,7 @@ combined_table <- rbind(bray_tab, jaccard_tab)
 kable(combined_table, 
       caption = "Pairwise comparisons of multivariate dispersions (permutest.betadisper)",
       col.names = c("Comparison", "Observed diff.", "p-value", "Distance"),
+      row.names = FALSE,
       digits = 4,
       booktabs = TRUE)
 ```
