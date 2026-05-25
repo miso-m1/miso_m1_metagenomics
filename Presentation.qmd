@@ -158,6 +158,7 @@ Sample_dist_country
 #### Country - diseases {.smaller}
 
 ```{r}
+#| label: disease-country
 #| cache: false
 #| fig-height: 4.5
 #| fig-align: center
@@ -201,6 +202,7 @@ Several metrics can be used, we chose 4: Observed, Shannon, Simpson and Inverted
 Unique OTUs present per diseases
 
 ```{r}
+#| label: observed
 #| fig-height: 4
 #| fig-align: center
 #| out-width: "80%"
