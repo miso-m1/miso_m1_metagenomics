@@ -4,6 +4,6 @@
 "|Tax_Level |Disease_Cohort         | Nodes_Count| Edges_Count| Graph_Density| Average_Degree|"
 "|:---------|:----------------------|-----------:|-----------:|-------------:|--------------:|"
 "|Family    |ibd_ulcerative_colitis |          34|          24|         0.043|           1.41|"
-"|Family    |cirrhosis              |          37|          15|         0.023|           0.81|"
-"|Family    |t2d                    |          36|          16|         0.025|           0.89|"
+"|Family    |cirrhosis              |          37|          14|         0.021|           0.76|"
+"|Family    |t2d                    |          36|          17|         0.027|           0.94|"
 "|Family    |cancer                 |          37|          16|         0.024|           0.86|"
