@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,14 +74,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-46dfdc4933501eb0228b819ce2b9b0b9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-3a81b2234975a201a5ed753091d7a3cd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d2c2ab618e1d480427a49d1ad2dc38f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-792179fa6f5e867ef93c0d1b175e11f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-d2c2ab618e1d480427a49d1ad2dc38f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -751,8 +751,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Pairwise comparisons:
 (Observed p-value below diagonal, permuted p-value above diagonal)
                            cancer  cirrhosis ibd_ulcerative_colitis   t2d
-cancer                            1.9500e-01             1.3000e-02 0.034
-cirrhosis              1.8713e-01                        1.0000e-03 0.301
+cancer                            1.9700e-01             1.0000e-02 0.028
+cirrhosis              1.8713e-01                        1.0000e-03 0.290
 ibd_ulcerative_colitis 1.3615e-02 2.4127e-07                        0.001
 t2d                    3.0887e-02 3.0252e-01             1.4536e-11      </code></pre>
 </div>
@@ -783,8 +783,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Pairwise comparisons:
 (Observed p-value below diagonal, permuted p-value above diagonal)
                            cancer  cirrhosis ibd_ulcerative_colitis   t2d
-cancer                            2.2200e-01             1.6000e-02 0.023
-cirrhosis              2.1996e-01                        1.0000e-03 0.192
+cancer                            2.1300e-01             1.7000e-02 0.019
+cirrhosis              2.1996e-01                        1.0000e-03 0.190
 ibd_ulcerative_colitis 1.4762e-02 6.1841e-07                        0.001
 t2d                    2.1386e-02 1.9695e-01             5.0089e-12      </code></pre>
 </div>
@@ -876,7 +876,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_bray <span class="ot">&lt;-</span> <span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_bray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$parent_call
@@ -939,7 +940,8 @@ attr(,"class")
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_jaccard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$parent_call
@@ -1021,7 +1023,31 @@ attr(,"class")
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract pairwise PERMANOVA results into data frames</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>extract_pairwise_permanova <span class="ot">&lt;-</span> <span class="cf">function</span>(pairwise_output, metric_name) {</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify which list elements are data frames (exclude fdr, etc.)</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  is_df <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pairwise_output, is.data.frame)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  comp_names <span class="ot">&lt;-</span> <span class="fu">names</span>(pairwise_output)[is_df]</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(comp_names, <span class="cf">function</span>(comp) {</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> pairwise_output[[comp]]</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure required columns exist</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">"R2"</span>, <span class="st">"F"</span>, <span class="st">"Pr(&gt;F)"</span>) <span class="sc">%in%</span> <span class="fu">colnames</span>(res))) {</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>(</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">Comparison =</span> comp,</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">R2 =</span> <span class="fu">round</span>(res<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">4</span>),</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">F =</span> <span class="fu">round</span>(res<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">P_value =</span> res<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>],</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">Distance =</span> metric_name,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NULL</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1084,49 +1110,48 @@ attr(,"class")
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.5.3 (2026-03-11 ucrt)
- os       Windows 11 x64 (build 26200)
- system   x86_64, mingw32
- ui       RTerm
+ version  R version 4.6.0 (2026-04-24)
+ os       macOS Tahoe 26.4
+ system   aarch64, darwin23
+ ui       X11
  language (EN)
- collate  French_France.utf8
- ctype    French_France.utf8
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
  tz       Europe/Paris
- date     2026-05-25
- pandoc   3.9.0.2 @ C:/PROGRA~1/Pandoc/ (via rmarkdown)
- quarto   1.8.25 @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe
+ date     2026-05-26
+ pandoc   3.9.0.2 @ /opt/homebrew/bin/ (via rmarkdown)
+ quarto   1.8.27 @ /usr/local/bin/quarto
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package        * version date (UTC) lib source
- broom          * 1.0.12  2026-01-27 [1] CRAN (R 4.5.3)
- cluster        * 2.1.8.2 2026-02-05 [2] CRAN (R 4.5.3)
- dplyr          * 1.2.0   2026-02-03 [1] CRAN (R 4.5.3)
- forcats        * 1.0.1   2025-09-25 [1] CRAN (R 4.5.3)
- FSA            * 0.10.1  2026-01-10 [1] CRAN (R 4.5.3)
- ggplot2        * 4.0.3   2026-04-22 [1] CRAN (R 4.5.3)
- gridExtra      * 2.3     2017-09-09 [1] CRAN (R 4.5.3)
- here           * 1.0.2   2025-09-15 [1] CRAN (R 4.5.3)
- igraph         * 2.2.2   2026-02-12 [1] CRAN (R 4.5.3)
- knitr          * 1.51    2025-12-20 [1] CRAN (R 4.5.3)
- lubridate      * 1.9.5   2026-02-04 [1] CRAN (R 4.5.3)
+ broom          * 1.0.13  2026-05-14 [1] CRAN (R 4.6.0)
+ cluster        * 2.1.8.2 2026-02-05 [1] CRAN (R 4.6.0)
+ dplyr          * 1.2.1   2026-04-03 [1] CRAN (R 4.6.0)
+ forcats        * 1.0.1   2025-09-25 [1] CRAN (R 4.6.0)
+ FSA            * 0.10.1  2026-01-10 [1] CRAN (R 4.6.0)
+ ggplot2        * 4.0.3   2026-04-22 [1] CRAN (R 4.6.0)
+ gridExtra      * 2.3     2017-09-09 [1] CRAN (R 4.6.0)
+ here           * 1.0.2   2025-09-15 [1] CRAN (R 4.6.0)
+ igraph         * 2.3.1   2026-05-04 [1] CRAN (R 4.6.0)
+ knitr          * 1.51    2025-12-20 [1] CRAN (R 4.6.0)
+ lubridate      * 1.9.5   2026-02-04 [1] CRAN (R 4.6.0)
  pairwiseAdonis * 0.4.1   2026-05-24 [1] Github (pmartinezarbizu/pairwiseAdonis@cb190f7)
- patchwork      * 1.3.2   2025-08-25 [1] CRAN (R 4.5.3)
- permute        * 0.9-10  2026-02-06 [1] CRAN (R 4.5.3)
- phyloseq       * 1.54.2  2026-02-27 [1] https://bioc-release.r-universe.dev (R 4.5.2)
- purrr          * 1.2.1   2026-01-09 [1] CRAN (R 4.5.3)
- readr          * 2.2.0   2026-02-19 [1] CRAN (R 4.5.3)
- readxl         * 1.4.5   2025-03-07 [1] CRAN (R 4.5.3)
- SpiecEasi      * 1.99.0  2026-04-02 [1] Github (zdk123/SpiecEasi@faed6a4)
- stringr        * 1.6.0   2025-11-04 [1] CRAN (R 4.5.3)
- tibble         * 3.3.1   2026-01-11 [1] CRAN (R 4.5.3)
- tidyr          * 1.3.2   2025-12-19 [1] CRAN (R 4.5.3)
- tidyverse      * 2.0.0   2023-02-22 [1] CRAN (R 4.5.3)
- vegan          * 2.7-3   2026-03-04 [1] CRAN (R 4.5.3)
- viridis        * 0.6.5   2024-01-29 [1] CRAN (R 4.5.3)
- viridisLite    * 0.4.3   2026-02-04 [1] CRAN (R 4.5.3)
+ patchwork      * 1.3.2   2025-08-25 [1] CRAN (R 4.6.0)
+ permute        * 0.9-10  2026-02-06 [1] CRAN (R 4.6.0)
+ phyloseq       * 1.56.0  2026-04-28 [1] Bioconductor 3.23 (R 4.6.0)
+ purrr          * 1.2.2   2026-04-10 [1] CRAN (R 4.6.0)
+ readr          * 2.2.0   2026-02-19 [1] CRAN (R 4.6.0)
+ readxl         * 1.5.0   2026-05-16 [1] CRAN (R 4.6.0)
+ SpiecEasi      * 2.0.0   2026-04-28 [1] Bioconductor 3.23 (R 4.6.0)
+ stringr        * 1.6.0   2025-11-04 [1] CRAN (R 4.6.0)
+ tibble         * 3.3.1   2026-01-11 [1] CRAN (R 4.6.0)
+ tidyr          * 1.3.2   2025-12-19 [1] CRAN (R 4.6.0)
+ tidyverse      * 2.0.0   2023-02-22 [1] CRAN (R 4.6.0)
+ vegan          * 2.7-3   2026-03-04 [1] CRAN (R 4.6.0)
+ viridis        * 0.6.5   2024-01-29 [1] CRAN (R 4.6.0)
+ viridisLite    * 0.4.3   2026-02-04 [1] CRAN (R 4.6.0)
 
- [1] C:/Users/paull/AppData/Local/R/win-library/4.5
- [2] C:/Program Files/R/R-4.5.3/library
+ [1] /Library/Frameworks/R.framework/Versions/4.6/Resources/library
  * ── Packages attached to the search path.
 
 ──────────────────────────────────────────────────────────────────────────────</code></pre>
@@ -1858,77 +1883,103 @@ attr(,"class")
 <span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Bray</span></span>
 <span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
-<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA (999 permutations) revealed that all disease groups were significantly different from each other for both Bray‑Curtis (p = 0.001 for all comparisons) and Jaccard (p = 0.001 for all comparisons) distances. However, because the PERMDISP test showed heterogeneous multivariate dispersions (driven primarily by the IBD group), the significant pairwise PERMANOVA results may reflect a combination of differences in both centroid location and within‑group dispersion.</span>
+<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_bray <span class="ot">&lt;-</span> <span class="fu">pairwise.adonis2</span>(dist_bray <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_bray</span>
+<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jaccard</span></span>
+<span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_jaccard <span class="ot">&lt;-</span> <span class="fu">pairwise.adonis2</span>(dist_jaccard <span class="sc">~</span> disease, <span class="at">data =</span> samples_df, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a>pairwise_permanova_jaccard</span>
+<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a>Pairwise PERMANOVA (999 permutations) revealed that all disease groups were significantly different from each other for both Bray‑Curtis (p = 0.001 for all comparisons) and Jaccard (p = 0.001 for all comparisons) distances. However, because the PERMDISP test showed heterogeneous multivariate dispersions (driven primarily by the IBD group), the significant pairwise PERMANOVA results may reflect a combination of differences in both centroid location and within‑group dispersion.</span>
 <span id="cb31-295"><a href="#cb31-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
-<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(<span class="st">"Bray-Curtis"</span>, <span class="st">"Jaccard"</span>),</span>
-<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>)),</span>
-<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
-<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
-<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a>                <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>)),</span>
-<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Dispersion p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(disp_test_bray<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
-<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
-<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span>
+<span id="cb31-296"><a href="#cb31-296" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
+<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a>  <span class="at">Metric =</span> <span class="fu">c</span>(<span class="st">"Bray-Curtis"</span>, <span class="st">"Jaccard"</span>),</span>
+<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">3</span>)),</span>
+<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">c</span>(<span class="fu">round</span>(permanova_bray<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(permanova_jaccard<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
+<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(permanova_bray<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a>                <span class="fu">format</span>(permanova_jaccard<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>)),</span>
+<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Dispersion p-value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">format</span>(disp_test_bray<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>),</span>
+<span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">format</span>(disp_test_jaccard<span class="sc">$</span>tab<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>], <span class="at">digits =</span> <span class="dv">4</span>))</span>
+<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-316"><a href="#cb31-316" aria-hidden="true" tabindex="-1"></a>The table summarizes:</span>
-<span id="cb31-317"><a href="#cb31-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-318"><a href="#cb31-318" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>effect size (R²)</span>
-<span id="cb31-319"><a href="#cb31-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-320"><a href="#cb31-320" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>PERMANOVA significance</span>
-<span id="cb31-321"><a href="#cb31-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-322"><a href="#cb31-322" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>homogeneity of dispersion testing</span>
-<span id="cb31-323"><a href="#cb31-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-324"><a href="#cb31-324" aria-hidden="true" tabindex="-1"></a>Higher R² values indicate stronger disease-associated microbial differences.</span>
-<span id="cb31-325"><a href="#cb31-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-326"><a href="#cb31-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
-<span id="cb31-327"><a href="#cb31-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-328"><a href="#cb31-328" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test. Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion testing and pairwise PERMANOVA were evaluated to identify which disease groups differed in dispersion.</span>
-<span id="cb31-329"><a href="#cb31-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-330"><a href="#cb31-330" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
-<span id="cb31-331"><a href="#cb31-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-332"><a href="#cb31-332" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
-<span id="cb31-333"><a href="#cb31-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-334"><a href="#cb31-334" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
-<span id="cb31-335"><a href="#cb31-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-336"><a href="#cb31-336" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, primarily due to the IBD group differing in variance from the others.</span>
+<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract pairwise PERMANOVA results into data frames</span></span>
+<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a>extract_pairwise_permanova <span class="ot">&lt;-</span> <span class="cf">function</span>(pairwise_output, metric_name) {</span>
+<span id="cb31-316"><a href="#cb31-316" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify which list elements are data frames (exclude fdr, etc.)</span></span>
+<span id="cb31-317"><a href="#cb31-317" aria-hidden="true" tabindex="-1"></a>  is_df <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pairwise_output, is.data.frame)</span>
+<span id="cb31-318"><a href="#cb31-318" aria-hidden="true" tabindex="-1"></a>  comp_names <span class="ot">&lt;-</span> <span class="fu">names</span>(pairwise_output)[is_df]</span>
+<span id="cb31-319"><a href="#cb31-319" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-320"><a href="#cb31-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(comp_names, <span class="cf">function</span>(comp) {</span>
+<span id="cb31-321"><a href="#cb31-321" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> pairwise_output[[comp]]</span>
+<span id="cb31-322"><a href="#cb31-322" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure required columns exist</span></span>
+<span id="cb31-323"><a href="#cb31-323" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">"R2"</span>, <span class="st">"F"</span>, <span class="st">"Pr(&gt;F)"</span>) <span class="sc">%in%</span> <span class="fu">colnames</span>(res))) {</span>
+<span id="cb31-324"><a href="#cb31-324" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>(</span>
+<span id="cb31-325"><a href="#cb31-325" aria-hidden="true" tabindex="-1"></a>        <span class="at">Comparison =</span> comp,</span>
+<span id="cb31-326"><a href="#cb31-326" aria-hidden="true" tabindex="-1"></a>        <span class="at">R2 =</span> <span class="fu">round</span>(res<span class="sc">$</span>R2[<span class="dv">1</span>], <span class="dv">4</span>),</span>
+<span id="cb31-327"><a href="#cb31-327" aria-hidden="true" tabindex="-1"></a>        <span class="at">F =</span> <span class="fu">round</span>(res<span class="sc">$</span>F[<span class="dv">1</span>], <span class="dv">2</span>),</span>
+<span id="cb31-328"><a href="#cb31-328" aria-hidden="true" tabindex="-1"></a>        <span class="at">P_value =</span> res<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>],</span>
+<span id="cb31-329"><a href="#cb31-329" aria-hidden="true" tabindex="-1"></a>        <span class="at">Distance =</span> metric_name,</span>
+<span id="cb31-330"><a href="#cb31-330" aria-hidden="true" tabindex="-1"></a>        <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb31-331"><a href="#cb31-331" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb31-332"><a href="#cb31-332" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb31-333"><a href="#cb31-333" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NULL</span></span>
+<span id="cb31-334"><a href="#cb31-334" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb31-335"><a href="#cb31-335" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb31-336"><a href="#cb31-336" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb31-337"><a href="#cb31-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-338"><a href="#cb31-338" aria-hidden="true" tabindex="-1"></a>Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.</span>
+<span id="cb31-338"><a href="#cb31-338" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results_df, <span class="at">caption =</span> <span class="st">"PERMANOVA and beta dispersion test results"</span>)</span>
 <span id="cb31-339"><a href="#cb31-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-342"><a href="#cb31-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-343"><a href="#cb31-343" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: save-beta-div</span></span>
-<span id="cb31-344"><a href="#cb31-344" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb31-345"><a href="#cb31-345" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb31-346"><a href="#cb31-346" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb31-347"><a href="#cb31-347" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb31-348"><a href="#cb31-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-349"><a href="#cb31-349" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"beta_diversity.RData"</span>))</span>
-<span id="cb31-350"><a href="#cb31-350" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-340"><a href="#cb31-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-341"><a href="#cb31-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-342"><a href="#cb31-342" aria-hidden="true" tabindex="-1"></a>The table summarizes:</span>
+<span id="cb31-343"><a href="#cb31-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-344"><a href="#cb31-344" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>effect size (R²)</span>
+<span id="cb31-345"><a href="#cb31-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-346"><a href="#cb31-346" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>PERMANOVA significance</span>
+<span id="cb31-347"><a href="#cb31-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-348"><a href="#cb31-348" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>homogeneity of dispersion testing</span>
+<span id="cb31-349"><a href="#cb31-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-350"><a href="#cb31-350" aria-hidden="true" tabindex="-1"></a>Higher R² values indicate stronger disease-associated microbial differences.</span>
 <span id="cb31-351"><a href="#cb31-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-352"><a href="#cb31-352" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
+<span id="cb31-352"><a href="#cb31-352" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
 <span id="cb31-353"><a href="#cb31-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-356"><a href="#cb31-356" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-357"><a href="#cb31-357" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
-<span id="cb31-358"><a href="#cb31-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-354"><a href="#cb31-354" aria-hidden="true" tabindex="-1"></a>Beta diversity was assessed using Bray–Curtis and Jaccard distance metrics. Principal Coordinate Analysis (PCoA) was used to visualize microbial community differences between disease groups. Group differences were evaluated using PERMANOVA (<span class="in">`adonis2`</span>, 999 permutations). A key assumption of PERMANOVA is homogeneity of multivariate dispersions. We check this with a beta dispersion test. Homogeneity of multivariate dispersion was assessed using <span class="in">`betadisper()`</span> followed by permutation testing. Pairwise dispersion testing and pairwise PERMANOVA were evaluated to identify which disease groups differed in dispersion.</span>
+<span id="cb31-355"><a href="#cb31-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-356"><a href="#cb31-356" aria-hidden="true" tabindex="-1"></a>Beta diversity analysis revealed significant differences in microbial community composition between disease groups.</span>
+<span id="cb31-357"><a href="#cb31-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-358"><a href="#cb31-358" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bray–Curtis explained more variation than Jaccard, suggesting that abundance shifts contributed more strongly than simple taxon presence/absence.</span>
+<span id="cb31-359"><a href="#cb31-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-360"><a href="#cb31-360" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant PERMANOVA results indicate disease-associated differences in microbiome composition.</span>
+<span id="cb31-361"><a href="#cb31-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-362"><a href="#cb31-362" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Significant beta dispersion tests indicate unequal within-group variability, primarily due to the IBD group differing in variance from the others.</span>
+<span id="cb31-363"><a href="#cb31-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-364"><a href="#cb31-364" aria-hidden="true" tabindex="-1"></a>Nevertheless, the consistent pairwise PERMANOVA results suggest true differences in community composition across diseases.</span>
+<span id="cb31-365"><a href="#cb31-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-368"><a href="#cb31-368" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-369"><a href="#cb31-369" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: save-beta-div</span></span>
+<span id="cb31-370"><a href="#cb31-370" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb31-371"><a href="#cb31-371" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-372"><a href="#cb31-372" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb31-373"><a href="#cb31-373" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb31-374"><a href="#cb31-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-375"><a href="#cb31-375" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, pairwise_permanova_bray, pairwise_permanova_jaccard, disp_test_bray, disp_test_jaccard, <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts"</span>, <span class="st">"beta_diversity.RData"</span>))</span>
+<span id="cb31-376"><a href="#cb31-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-377"><a href="#cb31-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-378"><a href="#cb31-378" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
+<span id="cb31-379"><a href="#cb31-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-382"><a href="#cb31-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-383"><a href="#cb31-383" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb31-384"><a href="#cb31-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

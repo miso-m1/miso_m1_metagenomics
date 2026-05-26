@@ -254,13 +254,15 @@ Pairwise PERMANOVA is a post‑hoc test used after a significant PERMANOVA (whic
 #### Bray
 
 ```{r}
-pairwise.adonis2(dist_bray ~ disease, data = samples_df, nperm = 999)
+pairwise_permanova_bray <- pairwise.adonis2(dist_bray ~ disease, data = samples_df, nperm = 999)
+pairwise_permanova_bray
 ```
 
 #### Jaccard
 
 ```{r}
-pairwise.adonis2(dist_jaccard ~ disease, data = samples_df, nperm = 999)
+pairwise_permanova_jaccard <- pairwise.adonis2(dist_jaccard ~ disease, data = samples_df, nperm = 999)
+pairwise_permanova_jaccard
 ```
 :::
 
@@ -281,6 +283,30 @@ results_df <- data.frame(
   `Dispersion p-value` = c(format(disp_test_bray$tab$`Pr(>F)`[1], digits = 4),
                            format(disp_test_jaccard$tab$`Pr(>F)`[1], digits = 4))
 )
+
+# Extract pairwise PERMANOVA results into data frames
+extract_pairwise_permanova <- function(pairwise_output, metric_name) {
+  # Identify which list elements are data frames (exclude fdr, etc.)
+  is_df <- sapply(pairwise_output, is.data.frame)
+  comp_names <- names(pairwise_output)[is_df]
+  
+  do.call(rbind, lapply(comp_names, function(comp) {
+    res <- pairwise_output[[comp]]
+    # Ensure required columns exist
+    if (all(c("R2", "F", "Pr(>F)") %in% colnames(res))) {
+      data.frame(
+        Comparison = comp,
+        R2 = round(res$R2[1], 4),
+        F = round(res$F[1], 2),
+        P_value = res$`Pr(>F)`[1],
+        Distance = metric_name,
+        stringsAsFactors = FALSE
+      )
+    } else {
+      NULL
+    }
+  }))
+}
 
 kable(results_df, caption = "PERMANOVA and beta dispersion test results")
 
@@ -317,7 +343,7 @@ Nevertheless, the consistent pairwise PERMANOVA results suggest true differences
 #| warning: false
 #| message: false
 
-save(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
+save(disp_bray, disp_jaccard, results_df, pairwise_bray, pairwise_jaccard, p_bray, p_jaccard, permanova_bray, permanova_jaccard, pairwise_permanova_bray, pairwise_permanova_jaccard, disp_test_bray, disp_test_jaccard, file = here::here("posts", "beta_diversity.RData"))
 ```
 
 # Session info

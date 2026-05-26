@@ -7,8 +7,8 @@
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.25">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Ines BAKLI, Alden SNEATH, Paul LEMONNIER">
   <title>Statistical Analysis of Metagenomic Data – A robust pipeline for statistical metagenomic data analysis</title>
@@ -482,7 +482,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 </div>
 </div>
 <div id="tabset-3-2">
-<p>Mesure the richness and evenness of species in a community</p>
+<p>Measure the richness and evenness of species in a community</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -506,7 +506,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 </div>
 </div>
 <div id="tabset-3-4">
-<p>Reciprocal of the Simpson = emphasize the importance of rare species in a community</p>
+<p>Variation of the Simpson = microbial interpretation of diversity in terms of equivalent species numbers</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -519,7 +519,6 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 </div>
 </div>
 </div>
-<p>All of those differences in diversity needs to be <strong>statistically significant</strong></p>
 </section>
 <section id="statistical-analysis" class="slide level2 smaller">
 <h2>Statistical analysis</h2>
@@ -847,7 +846,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <section id="statistical-analysis-1" class="slide level2 smaller">
 <h2>Statistical Analysis</h2>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">1. Permutation test</a></li><li><a href="#tabset-6-2">2. Permanova</a></li><li><a href="#tabset-6-3">3. Pairwise comparaison</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">1. Permutation test</a></li><li><a href="#tabset-6-2">2. Pairwise Dispersions</a></li><li><a href="#tabset-6-3">3. PERMANOVA</a></li><li><a href="#tabset-6-4">4. Pairwise PERMANOVA</a></li></ul>
 <div class="tab-content">
 <div id="tabset-6-1">
 <p>Needed to verify the homogeneity of multivariate dispersions</p>
@@ -879,6 +878,104 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <p>➔ p-value &lt; 0.05 = heterogeneity in the groups multivariate dispersion</p>
 </div>
 <div id="tabset-6-2">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Pairwise comparisons of multivariate dispersions (permutest.betadisper)</caption>
+<colgroup>
+<col style="width: 48%">
+<col style="width: 22%">
+<col style="width: 11%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Comparison</th>
+<th style="text-align: right;">Observed diff.</th>
+<th style="text-align: right;">p-value</th>
+<th style="text-align: left;">Distance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">cancer-cirrhosis</td>
+<td style="text-align: right;">0.1871</td>
+<td style="text-align: right;">0.199</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cancer-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0136</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cancer-t2d</td>
+<td style="text-align: right;">0.0309</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cirrhosis-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cirrhosis-t2d</td>
+<td style="text-align: right;">0.3025</td>
+<td style="text-align: right;">0.303</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ibd_ulcerative_colitis-t2d</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Bray-Curtis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cancer-cirrhosis</td>
+<td style="text-align: right;">0.2200</td>
+<td style="text-align: right;">0.214</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cancer-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0148</td>
+<td style="text-align: right;">0.014</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cancer-t2d</td>
+<td style="text-align: right;">0.0214</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cirrhosis-ibd_ulcerative_colitis</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cirrhosis-t2d</td>
+<td style="text-align: right;">0.1970</td>
+<td style="text-align: right;">0.189</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ibd_ulcerative_colitis-t2d</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>➔ Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p &lt; 0.05 for all comparisons)</p>
+</div>
+<div id="tabset-6-3">
 <p>Asses whether the centroids of the groups (disease status) are significantly different</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -911,95 +1008,109 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <p>➔ p-value &lt; 0.05 = Significant differences in community structure</p>
 <p>➔ R2 Bray-Curtis &gt; R2 Jaccard = abundance differences are more discriminative than just presence/absence</p>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-6-4">
 <div class="cell">
 <div class="cell-output-display">
-<table class="caption-top">
-<caption>Pairwise comparisons of multivariate dispersions (permutest.betadisper)</caption>
+<table class="caption-top" style="width:100%;">
+<caption>Pairwise PERMANOVA results (999 permutations)</caption>
 <colgroup>
-<col style="width: 48%">
-<col style="width: 22%">
+<col style="width: 50%">
+<col style="width: 9%">
 <col style="width: 11%">
-<col style="width: 17%">
+<col style="width: 11%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Comparison</th>
-<th style="text-align: right;">Observed diff.</th>
+<th style="text-align: right;">R²</th>
+<th style="text-align: right;">F-value</th>
 <th style="text-align: right;">p-value</th>
 <th style="text-align: left;">Distance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">cancer-cirrhosis</td>
-<td style="text-align: right;">0.1871</td>
-<td style="text-align: right;">0.195</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_cirrhosis</td>
+<td style="text-align: right;">0.1019</td>
+<td style="text-align: right;">29.95</td>
+<td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">cancer-ibd_ulcerative_colitis</td>
-<td style="text-align: right;">0.0136</td>
-<td style="text-align: right;">0.013</td>
-<td style="text-align: left;">Bray-Curtis</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">cancer-t2d</td>
-<td style="text-align: right;">0.0309</td>
-<td style="text-align: right;">0.034</td>
-<td style="text-align: left;">Bray-Curtis</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">cirrhosis-ibd_ulcerative_colitis</td>
-<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_t2d</td>
+<td style="text-align: right;">0.0631</td>
+<td style="text-align: right;">21.27</td>
 <td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">cirrhosis-t2d</td>
-<td style="text-align: right;">0.3025</td>
-<td style="text-align: right;">0.301</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_cancer</td>
+<td style="text-align: right;">0.0262</td>
+<td style="text-align: right;">5.22</td>
+<td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">ibd_ulcerative_colitis-t2d</td>
-<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">cirrhosis_vs_t2d</td>
+<td style="text-align: right;">0.0371</td>
+<td style="text-align: right;">11.01</td>
 <td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">cancer-cirrhosis</td>
-<td style="text-align: right;">0.2200</td>
-<td style="text-align: right;">0.222</td>
-<td style="text-align: left;">Jaccard</td>
+<td style="text-align: left;">cirrhosis_vs_cancer</td>
+<td style="text-align: right;">0.0704</td>
+<td style="text-align: right;">12.43</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">cancer-ibd_ulcerative_colitis</td>
-<td style="text-align: right;">0.0148</td>
-<td style="text-align: right;">0.016</td>
-<td style="text-align: left;">Jaccard</td>
+<td style="text-align: left;">t2d_vs_cancer</td>
+<td style="text-align: right;">0.0286</td>
+<td style="text-align: right;">6.35</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Bray-Curtis</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">cancer-t2d</td>
-<td style="text-align: right;">0.0214</td>
-<td style="text-align: right;">0.023</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_cirrhosis</td>
+<td style="text-align: right;">0.0626</td>
+<td style="text-align: right;">17.63</td>
+<td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Jaccard</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">cirrhosis-ibd_ulcerative_colitis</td>
-<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_t2d</td>
+<td style="text-align: right;">0.0401</td>
+<td style="text-align: right;">13.22</td>
 <td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Jaccard</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">cirrhosis-t2d</td>
-<td style="text-align: right;">0.1970</td>
-<td style="text-align: right;">0.192</td>
+<td style="text-align: left;">ibd_ulcerative_colitis_vs_cancer</td>
+<td style="text-align: right;">0.0180</td>
+<td style="text-align: right;">3.55</td>
+<td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Jaccard</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">ibd_ulcerative_colitis-t2d</td>
-<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">cirrhosis_vs_t2d</td>
+<td style="text-align: right;">0.0234</td>
+<td style="text-align: right;">6.86</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cirrhosis_vs_cancer</td>
+<td style="text-align: right;">0.0444</td>
+<td style="text-align: right;">7.62</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: left;">Jaccard</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">t2d_vs_cancer</td>
+<td style="text-align: right;">0.0192</td>
+<td style="text-align: right;">4.22</td>
 <td style="text-align: right;">0.001</td>
 <td style="text-align: left;">Jaccard</td>
 </tr>
@@ -1007,7 +1118,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 </table>
 </div>
 </div>
-<p>➔ Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p &lt; 0.05 for all comparisons)</p>
+<p>Pairwise PERMANOVA revealed that all disease groups were significantly different from each other.</p>
 </div>
 </div>
 </div>
@@ -1036,7 +1147,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-21-1.png" width="960"></p>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1120,7 +1231,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-23-1.png" width="960"></p>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1204,7 +1315,7 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-25-1.png" width="960"></p>
+<p><img data-src="Presentation_files/figure-revealjs/unnamed-chunk-26-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1508,80 +1619,42 @@ Ines BAKLI, Alden SNEATH, Paul LEMONNIER
       });
     </script>
     
-
     <script>
-
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
       // slide changes (different for each slide format).
-
       (function () {
-
         // dispatch for htmlwidgets
-
         function fireSlideEnter() {
-
           const event = window.document.createEvent("Event");
-
           event.initEvent("slideenter", true, true);
-
           window.document.dispatchEvent(event);
-
         }
-
-    
 
         function fireSlideChanged(previousSlide, currentSlide) {
-
           fireSlideEnter();
 
-    
-
           // dispatch for shiny
-
           if (window.jQuery) {
-
             if (previousSlide) {
-
               window.jQuery(previousSlide).trigger("hidden");
-
             }
-
             if (currentSlide) {
-
               window.jQuery(currentSlide).trigger("shown");
-
             }
-
           }
-
         }
-
-    
 
         // hookup for slidy
-
         if (window.w3c_slidy) {
-
           window.w3c_slidy.add_observer(function (slide_num) {
-
             // slide_num starts at position 1
-
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
           });
-
         }
 
-    
-
       })();
-
     </script>
-
-    
 
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {

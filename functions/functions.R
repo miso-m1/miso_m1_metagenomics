@@ -143,6 +143,34 @@ pairwise_wilcox_tests <- function(alpha_df, metrics) {
 }
 
 # =========================================================
+# Beta diversity functions
+# =========================================================
+
+# Extract pairwise PERMANOVA results into data frames
+extract_pairwise_permanova <- function(pairwise_output, metric_name) {
+  # Identify which list elements are data frames (exclude fdr, etc.)
+  is_df <- sapply(pairwise_output, is.data.frame)
+  comp_names <- names(pairwise_output)[is_df]
+  
+  do.call(rbind, lapply(comp_names, function(comp) {
+    res <- pairwise_output[[comp]]
+    # Ensure required columns exist
+    if (all(c("R2", "F", "Pr(>F)") %in% colnames(res))) {
+      data.frame(
+        Comparison = comp,
+        R2 = round(res$R2[1], 4),
+        F = round(res$F[1], 2),
+        P_value = res$`Pr(>F)`[1],
+        Distance = metric_name,
+        stringsAsFactors = FALSE
+      )
+    } else {
+      NULL
+    }
+  }))
+}
+
+# =========================================================
 # Network analysis functions
 # =========================================================
 

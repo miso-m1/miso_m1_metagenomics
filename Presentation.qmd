@@ -144,6 +144,7 @@ SampleM_dist_disease
 #| out-width: "80%"
 SampleF_dist_disease
 ```
+
 #### Country {.smaller}
 
 ```{r}
@@ -153,7 +154,6 @@ SampleF_dist_disease
 #| out-width: "80%"
 Sample_dist_country
 ```
-
 
 #### Country - diseases {.smaller}
 
@@ -165,7 +165,6 @@ Sample_dist_country
 #| out-width: "80%"
 Sample_dist_country_disease
 ```
-
 :::
 
 ## 2. Data Overview {.smaller}
@@ -211,7 +210,7 @@ p_observed
 
 ### Shannon {.smaller}
 
-Mesure the richness and evenness of species in a community
+Measure the richness and evenness of species in a community
 
 ```{r}
 #| fig-height: 4
@@ -233,7 +232,7 @@ p_simpson
 
 ### Inverted Simpson {.smaller}
 
-Reciprocal of the Simpson = emphasize the importance of rare species in a community
+Variation of the Simpson = microbial interpretation of diversity in terms of equivalent species numbers
 
 ```{r}
 #| fig-height: 4
@@ -242,8 +241,6 @@ Reciprocal of the Simpson = emphasize the importance of rare species in a commun
 p_invsimpson
 ```
 :::
-
-All of those differences in diversity needs to be **statistically significant**
 
 ## Statistical analysis {.smaller}
 
@@ -356,7 +353,39 @@ knitr::kable(disp_results,
 
 ➔ p-value \< 0.05 = heterogeneity in the groups multivariate dispersion
 
-### 2. Permanova {.smaller}
+### 2. Pairwise Dispersions
+
+```{r}
+# Bray-Curtis table
+bray_tab <- data.frame(
+  Comparison = names(pairwise_bray$pairwise$observed),
+  Observed_Difference = pairwise_bray$pairwise$observed,
+  P_value = pairwise_bray$pairwise$permuted,
+  Distance = "Bray-Curtis"
+)
+
+# Jaccard table
+jaccard_tab <- data.frame(
+  Comparison = names(pairwise_jaccard$pairwise$observed),
+  Observed_Difference = pairwise_jaccard$pairwise$observed,
+  P_value = pairwise_jaccard$pairwise$permuted,
+  Distance = "Jaccard"
+)
+
+# Combine and display with kable
+combined_table <- rbind(bray_tab, jaccard_tab)
+
+kable(combined_table, 
+      caption = "Pairwise comparisons of multivariate dispersions (permutest.betadisper)",
+      col.names = c("Comparison", "Observed diff.", "p-value", "Distance"),
+      row.names = FALSE,
+      digits = 4,
+      booktabs = TRUE)
+```
+
+➔ Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p \< 0.05 for all comparisons)
+
+### 3. PERMANOVA {.smaller}
 
 Asses whether the centroids of the groups (disease status) are significantly different
 
@@ -382,38 +411,23 @@ knitr::kable(perm_result,
 
 ➔ R2 Bray-Curtis \> R2 Jaccard = abundance differences are more discriminative than just presence/absence
 
-### 3. Pairwise comparaison
+### 4. Pairwise PERMANOVA
 
 ```{r}
-# Bray-Curtis table
-bray_tab <- data.frame(
-  Comparison = names(pairwise_bray$pairwise$observed),
-  Observed_Difference = pairwise_bray$pairwise$observed,
-  P_value = pairwise_bray$pairwise$permuted,
-  Distance = "Bray-Curtis"
-)
+pairwise_bray_df <- extract_pairwise_permanova(pairwise_permanova_bray, "Bray-Curtis")
+pairwise_jaccard_df <- extract_pairwise_permanova(pairwise_permanova_jaccard, "Jaccard")
 
-# Jaccard table
-jaccard_tab <- data.frame(
-  Comparison = names(pairwise_jaccard$pairwise$observed),
-  Observed_Difference = pairwise_jaccard$pairwise$observed,
-  P_value = pairwise_jaccard$pairwise$permuted,
-  Distance = "Jaccard"
-)
+pairwise_perm_table <- rbind(pairwise_bray_df, pairwise_jaccard_df)
 
-# Combine and display with kable
-library(knitr)
-combined_table <- rbind(bray_tab, jaccard_tab)
-
-kable(combined_table, 
-      caption = "Pairwise comparisons of multivariate dispersions (permutest.betadisper)",
-      col.names = c("Comparison", "Observed diff.", "p-value", "Distance"),
-      row.names = FALSE,
+kable(pairwise_perm_table,
+      caption = "Pairwise PERMANOVA results (999 permutations)",
+      col.names = c("Comparison", "R²", "F-value", "p-value", "Distance"),
       digits = 4,
+      row.names = FALSE,
       booktabs = TRUE)
 ```
 
-➔ Pairwise comparisons revealed that the IBD group had significantly different multivariate dispersion compared to all other diseases (p \< 0.05 for all comparisons)
+Pairwise PERMANOVA revealed that all disease groups were significantly different from each other.
 :::
 
 ## Metagenomic networks analysis {.smaller}
@@ -439,7 +453,6 @@ We tested 3 taxonomic levels : *Phylum*, *Family* and *Genus*
 ## 1. Phylum Level {.smaller}
 
 ::: panel-tabset
-
 ### Network
 
 ```{r}
@@ -495,7 +508,6 @@ knitr::kable(print_network_stats(networks_phylum, "Phylum"))
 -   Very low density
 
 ➔ grouping of populations, lack of resolution
-
 :::
 
 ## 2. Family Level {.smaller}
